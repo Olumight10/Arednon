@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nondera Energy Solutions - Home</title>
+    <title>Nondera Energy - Inspection Services</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -30,7 +30,7 @@
                 </div>
 
                 <nav class="hidden md:flex space-x-8 items-center text-sm font-semibold text-gray-700">
-                    <a href="index.html" class="text-orange-500 border-b-2 border-orange-500 pb-1 transition">Home</a>
+                    <a href="index.html" class="hover:text-orange-500 transition">Home</a>
                     
                     <div class="relative group cursor-pointer py-6">
                         <a href="whoweare.html" class="hover:text-orange-500 transition flex items-center">
@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="relative group cursor-pointer py-6">
-                        <a href="whatwedo.html" class="hover:text-orange-500 transition flex items-center">
+                        <a href="whatwedo.html" class="text-orange-500 border-b-2 border-orange-500 pb-1 transition flex items-center">
                             What we do 
                             <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </a>
@@ -53,7 +53,7 @@
                             <a href="oilfield.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Oilfield Services</a>
                             <a href="operations.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Operations Support Services</a>
                             <a href="engineering.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Engineering Services</a>
-                            <a href="inspection.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500">Inspection Services</a>
+                            <a href="inspection.html" class="block px-4 py-3 text-sm text-orange-500 bg-orange-50 font-semibold">Inspection Services</a>
                         </div>
                     </div>
 
@@ -72,7 +72,7 @@
         </div>
 
         <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 pb-4 shadow-lg absolute w-full">
-            <a href="index.html" class="block px-4 py-3 text-sm font-medium text-orange-500 bg-orange-50 border-l-4 border-orange-500">Home</a>
+            <a href="index.html" class="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent">Home</a>
             
             <div>
                 <div class="mobile-dropdown-toggle flex justify-between items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent cursor-pointer" data-target="who-we-are-menu">
@@ -87,15 +87,15 @@
             </div>
 
             <div>
-                <div class="mobile-dropdown-toggle flex justify-between items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent cursor-pointer" data-target="what-we-do-menu">
+                <div class="mobile-dropdown-toggle flex justify-between items-center px-4 py-3 text-sm font-medium text-orange-500 bg-orange-50 border-l-4 border-orange-500 cursor-pointer" data-target="what-we-do-menu">
                     <span class="flex-grow">What we do</span>
                     <svg class="dropdown-icon w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
-                <div id="what-we-do-menu" class="hidden bg-gray-50 border-l-4 border-transparent pl-4 py-2 space-y-2">
+                <div id="what-we-do-menu" class="hidden bg-gray-50 border-l-4 border-orange-500 pl-4 py-2 space-y-2">
                     <a href="oilfield.html" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Oilfield Services</a>
                     <a href="operations.html" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Operations Support Services</a>
                     <a href="engineering.html" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Engineering Services</a>
-                    <a href="inspection.html" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Inspection Services</a>
+                    <a href="inspection.html" class="block px-4 py-2 text-sm text-orange-500 font-semibold mobile-submenu-link">Inspection Services</a>
                 </div>
             </div>
 
@@ -106,121 +106,159 @@
         </div>
     </header>
 
-    <section class="relative bg-black h-[500px] md:h-[600px] flex items-center">
-        <div class="absolute inset-0">
-            <img class="w-full h-full object-cover opacity-50" src="./hero_img.png" alt="Hero Background">
-        </div>
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div class="max-w-2xl">
-                <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight mb-4 tracking-wide">
-                    INTEGRATED ENERGY <br> SOLUTIONS
-                </h1>
-                <p class="text-lg md:text-xl text-gray-200 mb-8 font-light">
-                    We don't just provide services;<br>
-                    we create lasting value.
-                </p>
-                <a href="whoweare.html" class="inline-flex items-center bg-orange-500 text-white px-8 py-3 rounded font-medium shadow-lg hover:bg-orange-600 transition">
-                    Who we are 
-                    <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </a>
-            </div>
+    <section class="w-full bg-gradient-to-r from-orange-600 via-orange-500 to-yellow-400 py-16 md:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-wide">Inspection Services</h1>
         </div>
     </section>
 
-    <section class="py-16 bg-white text-center px-4">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-xl font-bold text-gray-900 mb-6 relative inline-block">
-                Who we are
-            </h2>
-            <p class="text-gray-600 leading-relaxed mb-8 text-sm md:text-base">
-                Nondera Energy Solutions is a dynamic indigenous company providing sustainable energy solutions, technical support, procurement, and inspection services across the energy value chain. Driven by innovation, excellence, and a deep commitment to environmental sustainability, we deliver world-class expertise adapted to the unique needs of the regions we operate in.
-            </p>
-            <h3 class="text-lg md:text-xl font-bold text-gray-800">
-                BEYOND SERVICES, WE BUILD <span class="text-red-600">PARTNERSHIP</span>
-            </h3>
-        </div>
-    </section>
-
-    <section class="py-16 bg-gray-50 px-4">
+    <section class="py-16 md:py-24 px-4 bg-white">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">What we do in a nutshell</h2>
-                <div class="h-1 w-16 bg-orange-500 mx-auto mb-4"></div>
-                <p class="text-gray-600 max-w-2xl mx-auto">
-                    We offer a diverse range of innovative and sustainable energy solutions, ensuring efficiency, reliability, and global standards across our operations.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+            <div class="flex flex-col-reverse md:flex-row gap-8 md:gap-16 items-start">
                 
-                <div class="bg-white rounded-xl shadow-md border border-gray-100 flex flex-col overflow-hidden">
-                    <div class="relative overflow-hidden group">
-                        <img src="./oil_services_img.png" alt="Oilfield Services" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
-                        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/90 via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-6">
-                            <a href="oilfield.html" class="text-black font-semibold text-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 hover:underline cursor-pointer">Read more</a>
+                <div class="w-full md:w-1/2 flex flex-col">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Inspection Services</h2>
+                    <hr class="border-t-2 border-orange-400 w-full mb-6 opacity-80">
+                    
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                        We offer all necessary instrument needed for Inspection works including calibrated instrument and loggers needed for air balancing HVAC, manometers, anemometers and sensors for measuring static pressure, dynamic pressure, temperatures, humidity and decibel. In collaboration with our international partners, we have the equipment and experience to execute test for determining air leakage rates and test the integrity of temporary refuge and LQ 's (TR-test).
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                        We provide complete inspection services including:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6 text-sm text-gray-600">
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Pre-Commissioning</span>
                         </div>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-orange-500 text-xl font-bold mb-3">Oilfield Services</h3>
-                        <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">
-                            We offer specialized services spanning drilling support, well intervention, facility maintenance, and subsurface engineering.
-                        </p>
-                        <div class="mt-auto text-right">
-                            <a href="oilfield.html" class="inline-block bg-orange-500 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-300 shadow-sm hover:bg-[#facc15] hover:text-gray-900">Read more</a>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Clean Room Testing</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Environmental Tests</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Temperature Mapping</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Sound Readings</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>BMS/Controls</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Balancing and Regulation</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Commissioning and Testing</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Electrical Testing</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>TR and LEV Testing</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Rapid Response Shut Down Testing</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Demonstrations</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Pressure Regimes Airflow Direction Checks</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Preparation of Detailed Reports</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-md border border-gray-100 flex flex-col overflow-hidden">
-                    <div class="relative overflow-hidden group">
-                        <img src="./operation_support_img.png" alt="Operations Support Services" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
-                        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/90 via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-6">
-                            <a href="operations.html" class="text-black font-semibold text-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 hover:underline cursor-pointer">Read more</a>
-                        </div>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-orange-500 text-xl font-bold mb-3">Operations Support Services</h3>
-                        <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">
-                            Our comprehensive operations support spans manpower supply, logistics management, procurement, and facility optimization.
-                        </p>
-                        <div class="mt-auto text-right">
-                            <a href="operations.html" class="inline-block bg-orange-500 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-300 shadow-sm hover:bg-[#facc15] hover:text-gray-900">Read more</a>
-                        </div>
-                    </div>
+                <div class="w-full md:w-1/2">
+                    <img src="./inspection_img.jpg" alt="Inspection Services" class="w-full h-64 md:h-[500px] object-cover rounded-sm shadow-sm">
                 </div>
 
-                <div class="bg-white rounded-xl shadow-md border border-gray-100 flex flex-col overflow-hidden">
-                    <div class="relative overflow-hidden group">
-                        <img src="./eng_service_img.png" alt="Engineering Services" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-105">
-                        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/90 via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-6">
-                            <a href="engineering.html" class="text-black font-semibold text-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 hover:underline cursor-pointer">Read more</a>
-                        </div>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-orange-500 text-xl font-bold mb-3">Engineering Services</h3>
-                        <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">
-                            We deliver end-to-end engineering, fabrication, and maintenance solutions tailored to enhance operational efficiency.
-                        </p>
-                        <div class="mt-auto text-right">
-                            <a href="engineering.html" class="inline-block bg-orange-500 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-300 shadow-sm hover:bg-[#facc15] hover:text-gray-900">Read more</a>
-                        </div>
-                    </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="w-full bg-orange-50 py-16 md:py-24 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row gap-8 md:gap-16 items-start">
+                
+                <div class="w-full md:w-1/2">
+                    <img src="./tr_img.png" alt="TR Integrity Testing" class="w-full h-64 md:h-[450px] object-cover rounded-sm shadow-sm">
                 </div>
 
-                <div class="bg-white rounded-xl shadow-md border border-gray-100 flex flex-col overflow-hidden">
-                    <div class="relative overflow-hidden group">
-                        <img src="./inspection_service_img.png" alt="Inspection Services" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
-                        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/90 via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-6">
-                            <a href="inspection.html" class="text-black font-semibold text-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 hover:underline cursor-pointer">Read more</a>
+                <div class="w-full md:w-1/2 flex flex-col">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">TR Integrity and PFEER Testing</h2>
+                    <hr class="border-t-2 border-orange-400 w-full mb-6 opacity-80">
+                    
+                    <p class="text-gray-700 text-sm leading-relaxed mb-6">
+                        To guarantee our clients' full compliance with SI 1995 No 743, the Offshore Installations (Prevention of Fire and Explosion, and Emergency Response) Regulations 1995, our specialists have extensive experience in the evaluation and testing of the porosity of TRs against the infiltration of smoke, fume and noxious gas. We will conduct the required testing according to COSHH procedures to meet the relevant regulations and each test is adapted to suit individual situations:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6 text-sm text-gray-700">
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>PFEER, Smoke & Gas Ingress, TR, TSR Integrity Testing</span>
                         </div>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-orange-500 text-xl font-bold mb-3">Inspection Services</h3>
-                        <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">
-                            We utilize advanced non-destructive testing (NDT), quality assurance, and compliance checks to maintain strict industry safety standards.
-                        </p>
-                        <div class="mt-auto text-right">
-                            <a href="inspection.html" class="inline-block bg-orange-500 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-300 shadow-sm hover:bg-[#facc15] hover:text-gray-900">Read more</a>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Thermal Imaging</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Definitions of TR Boundary</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Smoke testing</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Unique Acoustic Service for noise control</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Repairs to or replacement of modular doors</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Pre-test surveys</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Repair to or upgrades of HVAC systems and components</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Testing and Verification</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span class="leading-snug">Develop and provide a maintenance plan to minimize future problems</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Investigation of leakage paths</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Hand over a full valid test report</span>
                         </div>
                     </div>
                 </div>
@@ -229,30 +267,57 @@
         </div>
     </section>
 
-    <section class="py-16 bg-white px-4 border-b border-gray-100">
-        <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-2xl font-bold text-gray-900 mb-10">Our Partners</h2>
-            
-            <div class="flex flex-wrap justify-center items-center gap-4 md:gap-8 max-w-5xl mx-auto">
+    <section class="py-16 md:py-24 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col-reverse md:flex-row gap-8 md:gap-16 items-start">
                 
-                <div class="w-24 h-24 md:w-36 md:h-36 bg-white rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
-                    <img src="https://logo.clearbit.com/petroit.com" alt="Petro IT" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'40\'%3E%3Crect width=\'120\' height=\'40\' fill=\'%2310b981\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'14\' font-weight=\'bold\' fill=\'%23ffffff\'%3EPetro IT%3C/text%3E%3C/svg%3E'" class="max-w-full max-h-full object-contain">
+                <div class="w-full md:w-1/2 flex flex-col">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Pipeline Tracking Solution</h2>
+                    <hr class="border-t-2 border-orange-400 w-full mb-6 opacity-80">
+                    
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                        Nondera Energy Services in partnership with Petro IT UAE, delivers Pipetrak IT, a pipeline data management system that allows owners, operators and engineering firms to track, manage and report real-time data throughout the entire pipeline construction process.
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                        Using the latest in web and mobile technologies, Pipetrak IT provides traceability of materials, inspection and construction quality, capturing data and documentation that assists in project management and meets all compliance reporting requirements.
+                    </p>
+                    
+                    <p class="text-gray-800 text-sm font-semibold mb-4">Features:</p>
+
+                    <div class="flex flex-col space-y-3 text-sm text-gray-600">
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Real-time Material Tracking (MTS) right from Pipe mill</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Construction Management System (CMS)</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Web GIS (Database) Visualization</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Data Process Workflow</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Project Completions Management</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>Electronic Document Database management</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-3 mt-1.5 flex-shrink-0"></span> 
+                            <span>PipetrakMobile App for Field Data Capture for Android & iOS</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="w-24 h-24 md:w-36 md:h-36 bg-white rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
-                    <img src="https://logo.clearbit.com/joypipeusa.com" alt="Joy Pipe USA" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'40\'%3E%3Crect width=\'120\' height=\'40\' fill=\'%23ef4444\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'12\' font-weight=\'bold\' fill=\'%23ffffff\'%3EJOY PIPE%3C/text%3E%3C/svg%3E'" class="max-w-full max-h-full object-contain">
-                </div>
-
-                <div class="w-24 h-24 md:w-36 md:h-36 bg-white rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
-                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cisco_logo_blue_2016.svg" alt="Cisco" class="max-w-full max-h-full object-contain">
-                </div>
-
-                <div class="w-24 h-24 md:w-36 md:h-36 bg-white rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
-                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Samson_logo_wiki.png" alt="Samson" class="max-w-full max-h-full object-contain">
-                </div>
-
-                <div class="w-24 h-24 md:w-36 md:h-36 bg-white rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
-                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Motorola_Logo.svg" alt="Motorola" class="max-w-full max-h-full object-contain">
+                <div class="w-full md:w-1/2">
+                    <img src="./pipeline_img.png" alt="Pipeline Tracking Interface" class="w-full h-auto object-contain rounded-sm shadow-sm">
                 </div>
 
             </div>
@@ -297,14 +362,14 @@
                         <li><a href="oilfield.html" class="hover:text-orange-500 transition">Oilfield Services</a></li>
                         <li><a href="operations.html" class="hover:text-orange-500 transition">Operations Support Services</a></li>
                         <li><a href="engineering.html" class="hover:text-orange-500 transition">Engineering Services</a></li>
-                        <li><a href="inspection.html" class="hover:text-orange-500 transition">Inspection Services</a></li>
+                        <li><a href="inspection.html" class="hover:text-orange-500 transition text-orange-500 font-semibold">Inspection Services</a></li>
                     </ul>
                 </div>
 
                 <div>
                     <h4 class="font-bold text-gray-900 mb-6">Menu</h4>
                     <ul class="space-y-3 text-sm text-gray-600">
-                        <li><a href="index.html" class="hover:text-orange-500 transition text-orange-500 font-semibold">Home</a></li>
+                        <li><a href="index.html" class="hover:text-orange-500 transition">Home</a></li>
                         <li><a href="whoweare.html" class="hover:text-orange-500 transition">Who we are</a></li>
                         <li><a href="whatwedo.html" class="hover:text-orange-500 transition">What we do</a></li>
                         <li><a href="#" class="hover:text-orange-500 transition">Join us</a></li>
