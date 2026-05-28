@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply - Nondera Energy Solutions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .footer-vector {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none"><path fill="%23f3f4f6" fill-opacity="0.3" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,245,1152,213.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+      background-size: cover; background-position: bottom; background-repeat: no-repeat;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.8s linear infinite; }
+    .drop-zone { transition: border-color 0.2s, background 0.2s; }
+    .drop-zone.drag-over { border-color: #f97316; background: #fff7ed; }
+    .toast { animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  </style>
+</head>
+<body class="text-gray-800 antialiased bg-white">
+
+<!-- ===== HEADER ===== -->
+<header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-20">
+      <div class="flex-shrink-0 flex items-center">
+        <a href="index.html">
+          <img class="h-10 w-auto" src="./logo_img.png" alt="Nondera Logo"
+            onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'50\'%3E%3Crect width=\'150\' height=\'50\' fill=\'%23f3f4f6\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16\' font-weight=\'bold\' fill=\'%239ca3af\'%3ENONDERA%3C/text%3E%3C/svg%3E'">
+        </a>
+      </div>
+      <nav class="hidden md:flex space-x-8 items-center text-sm font-semibold text-gray-700">
+        <a href="index.html" class="hover:text-orange-500 transition">Home</a>
+        <div class="relative group cursor-pointer py-6">
+          <a href="whoweare.html" class="hover:text-orange-500 transition flex items-center">Who we are
+            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </a>
+          <div class="absolute left-0 top-full mt-0 w-48 bg-white border border-gray-100 shadow-lg rounded-b-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <a href="whoweare.html#vision" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Vision</a>
+            <a href="whoweare.html#mission" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Mission</a>
+            <a href="whoweare.html#core-values" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500">Core Values</a>
+          </div>
+        </div>
+        <div class="relative group cursor-pointer py-6">
+          <a href="whatwedo.html" class="hover:text-orange-500 transition flex items-center">What we do
+            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </a>
+          <div class="absolute left-0 top-full mt-0 w-60 bg-white border border-gray-100 shadow-lg rounded-b-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <a href="oilfield.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Oilfield Services</a>
+            <a href="operations.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Operations Support Services</a>
+            <a href="engineering.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Engineering Services</a>
+            <a href="inspection.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500">Inspection Services</a>
+          </div>
+        </div>
+        <a href="joinus.html" class="text-orange-500 border-b-2 border-orange-500 pb-1 transition">Join us</a>
+        <a href="contactus.html" class="bg-orange-500 text-white px-6 py-2 rounded shadow hover:bg-orange-600 transition">Contact us</a>
+      </nav>
+      <div class="flex md:hidden items-center">
+        <button id="mobile-menu-btn" class="text-gray-600 hover:text-orange-500 focus:outline-none">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 pb-4 shadow-lg absolute w-full">
+    <a href="index.html" class="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent">Home</a>
+    <a href="whoweare.html" class="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent">Who we are</a>
+    <a href="whatwedo.html" class="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent">What we do</a>
+    <a href="joinus.html" class="block px-4 py-3 text-sm font-medium text-orange-500 bg-orange-50 border-l-4 border-orange-500">Join us</a>
+    <div class="px-4 mt-2">
+      <a href="contactus.html" class="block text-center bg-orange-500 text-white px-6 py-2 rounded shadow hover:bg-orange-600 transition">Contact us</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="py-10 md:py-16 px-4 min-h-[600px]">
+  <div class="max-w-3xl mx-auto">
+
+    <!-- Loading -->
+    <div id="loading-state" class="flex flex-col items-center justify-center py-24">
+      <svg class="spinner w-10 h-10 text-orange-500 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4"/>
+      </svg>
+      <p class="text-gray-500 text-sm">Loading job details...</p>
+    </div>
+
+    <!-- Error -->
+    <div id="error-state" class="hidden text-center py-24">
+      <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      <p class="text-gray-600 font-medium mb-1" id="error-title">Job not found</p>
+      <p class="text-gray-400 text-sm mb-6" id="error-msg">The job you're looking for may no longer be available.</p>
+      <a href="openings.html" class="inline-block bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-6 py-2.5 rounded-md transition">View All Openings</a>
+    </div>
+
+    <!-- Success state (after submission) -->
+    <div id="success-state" class="hidden text-center py-24">
+      <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">Application Submitted!</h2>
+      <p class="text-gray-500 text-sm mb-8 max-w-sm mx-auto">Thank you for applying to <span id="success-job-title" class="font-semibold text-gray-700"></span>. Our team will review your application and get back to you.</p>
+      <a href="openings.html" class="inline-block bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-8 py-3 rounded-md transition">View Other Openings</a>
+    </div>
+
+    <!-- Job content -->
+    <div id="job-content" class="hidden">
+      <!-- Job Header -->
+      <div class="mb-6">
+        <h1 id="job-title" class="text-2xl md:text-3xl font-bold text-gray-900 mb-1"></h1>
+        <p id="job-meta" class="text-sm text-gray-500"></p>
+      </div>
+
+      <!-- Application Dates -->
+      <div id="application-dates" class="hidden mb-6 bg-orange-50 border border-orange-100 rounded-lg px-4 py-3 flex flex-wrap gap-4 text-sm">
+        <span class="flex items-center gap-1.5 text-gray-600">
+          <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          Application Opens: <strong id="open-date" class="text-gray-800"></strong>
+        </span>
+        <span class="text-gray-300">|</span>
+        <span class="flex items-center gap-1.5 text-gray-600">
+          Closes: <strong id="close-date" class="text-gray-800"></strong>
+        </span>
+      </div>
+
+      <!-- Summary -->
+      <div id="summary-section" class="hidden mb-8">
+        <p id="job-summary" class="text-gray-700 text-sm leading-relaxed"></p>
+      </div>
+
+      <!-- Qualifications & Experience -->
+      <div id="qual-section" class="hidden mb-8">
+        <h3 class="text-base font-bold text-gray-900 mb-3">Qualifications &amp; Experience</h3>
+        <ul id="qual-list" class="space-y-2"></ul>
+      </div>
+
+      <!-- Skills & Competencies -->
+      <div id="skills-section" class="hidden mb-10">
+        <h3 class="text-base font-bold text-gray-900 mb-3">Skills &amp; Competencies</h3>
+        <ul id="skills-list" class="space-y-2"></ul>
+      </div>
+
+      <hr class="border-gray-200 mb-8">
+
+      <!-- Application Form -->
+      <div>
+        <h3 class="text-lg font-bold text-gray-900 mb-6">Your Details</h3>
+        <div class="space-y-5">
+          <div>
+            <label for="full-name" class="block text-sm font-bold text-gray-900 mb-2">Full Name <span class="text-red-500">*</span></label>
+            <input type="text" id="full-name" placeholder="Full Name" class="w-full px-4 py-3 border border-gray-300 rounded-md text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 transition-colors shadow-sm">
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-bold text-gray-900 mb-2">Email <span class="text-red-500">*</span></label>
+            <input type="email" id="email" placeholder="Email" class="w-full px-4 py-3 border border-gray-300 rounded-md text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 transition-colors shadow-sm">
+          </div>
+          <div>
+            <label for="phone" class="block text-sm font-bold text-gray-900 mb-2">Phone Number <span class="text-red-500">*</span></label>
+            <input type="tel" id="phone" placeholder="Phone Number" class="w-full px-4 py-3 border border-gray-300 rounded-md text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 transition-colors shadow-sm">
+          </div>
+        </div>
+
+        <!-- CV Upload -->
+        <div class="mt-8">
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Submit Your CV</h3>
+          <p class="text-gray-500 text-sm mb-4">Share your file to initiate the review process. This is the first step towards evaluation.</p>
+
+          <div id="drop-zone" class="drop-zone border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-orange-400">
+            <input type="file" id="cv-file" class="hidden" accept=".pdf,.doc,.docx,.xlsx,.jpg,.jpeg,.png">
+            <svg class="w-10 h-10 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            <p id="drop-text" class="text-gray-600 text-sm">
+              Drag and drop your file here or click to <span class="text-orange-500 font-semibold underline cursor-pointer" onclick="document.getElementById('cv-file').click()">select file</span>
+            </p>
+            <p class="text-gray-400 text-xs mt-2">Accepted file types: pdf, doc, docx, xlsx, jpg, png &bull; Maximum file size: 10MB</p>
+          </div>
+
+          <div id="file-selected" class="hidden mt-3 flex items-center gap-3 bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span id="file-name" class="text-sm text-gray-700 truncate flex-1"></span>
+            <button onclick="clearFile()" class="text-gray-400 hover:text-red-500 transition flex-shrink-0">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-4 mt-10">
+          <a href="openings.html" class="flex-1 md:flex-none inline-flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium px-8 py-3 rounded-md hover:bg-gray-50 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Back
+          </a>
+          <button id="send-btn" onclick="submitApplication()" class="flex-1 md:flex-none inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-10 py-3 rounded-md transition-colors duration-200 shadow-sm disabled:opacity-60 disabled:cursor-not-allowed">
+            Send
+          </button>
+        </div>
+
+        <div id="form-error" class="hidden mt-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3"></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="bg-white pt-16 pb-8 relative footer-vector overflow-hidden border-t border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      <div>
+        <img src="./logo_img.png" alt="Nondera Logo" class="h-10 w-auto mb-6" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'50\'%3E%3Crect width=\'150\' height=\'50\' fill=\'%23f3f4f6\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16\' font-weight=\'bold\' fill=\'%239ca3af\'%3ENONDERA%3C/text%3E%3C/svg%3E'">
+        <p class="text-gray-500 text-sm mb-6 leading-relaxed">Nondera Energy is your trusted partner for innovative, cost-effective oil, gas, and power services.</p>
+      </div>
+      <div>
+        <h4 class="font-bold text-gray-900 mb-6">Contact us</h4>
+        <ul class="space-y-3 text-sm text-gray-600">
+          <li>info@nondera.com</li>
+          <li>+234 81 5949 3333</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold text-gray-900 mb-6">Services</h4>
+        <ul class="space-y-3 text-sm text-gray-600">
+          <li><a href="oilfield.html" class="hover:text-orange-500 transition">Oilfield services</a></li>
+          <li><a href="operations.html" class="hover:text-orange-500 transition">Operations support services</a></li>
+          <li><a href="engineering.html" class="hover:text-orange-500 transition">Engineering services</a></li>
+          <li><a href="inspection.html" class="hover:text-orange-500 transition">Inspection services</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold text-gray-900 mb-6">Menu</h4>
+        <ul class="space-y-3 text-sm text-gray-600">
+          <li><a href="index.html" class="hover:text-orange-500 transition">Home</a></li>
+          <li><a href="joinus.html" class="hover:text-orange-500 transition">Join us</a></li>
+          <li><a href="contactus.html" class="hover:text-orange-500 transition">Contact us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 flex h-2 w-full">
+      <div class="w-1/2 bg-red-700"></div>
+      <div class="w-1/4 bg-orange-500"></div>
+      <div class="w-1/4 bg-yellow-400"></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ============================================================
+  // ⚠ CONFIGURATION: Replace with your deployed Apps Script URL
+  // ============================================================
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyg14iQvC4dnaTTSRlL8W_cXZdXNgppBYYFIpKLL158Roh-tGAFIGQB4nuhJb_isodTLA/exec';
+
+  let currentJob = null;
+  let selectedFile = null;
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+  async function loadJob() {
+    const params = new URLSearchParams(window.location.search);
+    const jobId = params.get('job_id');
+    if (!jobId) {
+      showError('No job specified', 'Please select a job from the openings page.');
+      return;
+    }
+
+    try {
+      const res = await fetch(`${SCRIPT_URL}?action=getJobDetails&job_id=${encodeURIComponent(jobId)}`);
+      const data = await res.json();
+
+      document.getElementById('loading-state').classList.add('hidden');
+
+      if (!data.success) {
+        showError('Job not found', data.error || 'This position may no longer be available.');
+        return;
+      }
+
+      currentJob = data.job;
+      renderJob(data.job);
+    } catch (err) {
+      document.getElementById('loading-state').classList.add('hidden');
+      showError('Connection error', 'Unable to load job details. Please try again.');
+    }
+  }
+
+  function showError(title, msg) {
+    document.getElementById('error-title').textContent = title;
+    document.getElementById('error-msg').textContent = msg;
+    document.getElementById('error-state').classList.remove('hidden');
+  }
+
+  function renderJob(job) {
+    document.title = `${job.designation} - Apply - Nondera Energy`;
+
+    // Title & meta
+    document.getElementById('job-title').textContent = job.designation;
+    const meta = [job.department, job.location, job.country, job.nature].filter(Boolean).join(' • ');
+    document.getElementById('job-meta').textContent = meta;
+
+    // Application dates
+    if (job.open_date || job.close_date) {
+      document.getElementById('open-date').textContent = job.open_date || '—';
+      document.getElementById('close-date').textContent = job.close_date || '—';
+      document.getElementById('application-dates').classList.remove('hidden');
+    }
+
+    // Summary
+    if (job.summary) {
+      document.getElementById('job-summary').textContent = job.summary;
+      document.getElementById('summary-section').classList.remove('hidden');
+    }
+
+    // Qualifications
+    if (job.qualification) {
+      const bullets = String(job.qualification).split(';').map(s => s.trim()).filter(Boolean);
+      const ul = document.getElementById('qual-list');
+      ul.innerHTML = bullets.map(b => `
+        <li class="flex items-start gap-2 text-sm text-gray-700">
+          <span class="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 flex-shrink-0"></span>
+          <span>${escHtml(b)}</span>
+        </li>
+      `).join('');
+      document.getElementById('qual-section').classList.remove('hidden');
+    }
+
+    // Skills
+    if (job.skill) {
+      const bullets = String(job.skill).split(';').map(s => s.trim()).filter(Boolean);
+      const ul = document.getElementById('skills-list');
+      ul.innerHTML = bullets.map(b => `
+        <li class="flex items-start gap-2 text-sm text-gray-700">
+          <span class="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 flex-shrink-0"></span>
+          <span>${escHtml(b)}</span>
+        </li>
+      `).join('');
+      document.getElementById('skills-section').classList.remove('hidden');
+    }
+
+    document.getElementById('job-content').classList.remove('hidden');
+  }
+
+  async function submitApplication() {
+    if (!currentJob) return;
+
+    const fullName = document.getElementById('full-name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+
+    const errEl = document.getElementById('form-error');
+    errEl.classList.add('hidden');
+
+    if (!fullName) { showFormError('Please enter your full name.'); return; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showFormError('Please enter a valid email address.'); return; }
+    if (!phone) { showFormError('Please enter your phone number.'); return; }
+    if (!selectedFile) { showFormError('Please attach your CV before submitting.'); return; }
+
+    const btn = document.getElementById('send-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<svg class="spinner w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4"/></svg> Submitting...';
+
+    try {
+      const base64 = await fileToBase64(selectedFile);
+      const payload = {
+        action: 'submitApplication',
+        job_id: currentJob.job_id,
+        full_name: fullName,
+        email: email,
+        phone: phone,
+        designation: currentJob.designation,
+        department: currentJob.department,
+        cv_filename: selectedFile.name,
+        cv_mime: selectedFile.type,
+        cv_data: base64
+      };
+
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('success-job-title').textContent = currentJob.designation;
+        document.getElementById('job-content').classList.add('hidden');
+        document.getElementById('success-state').classList.remove('hidden');
+      } else {
+        showFormError(data.error || 'Submission failed. Please try again.');
+        btn.disabled = false;
+        btn.innerHTML = 'Send';
+      }
+    } catch (err) {
+      showFormError('Network error. Please check your connection and try again.');
+      btn.disabled = false;
+      btn.innerHTML = 'Send';
+    }
+  }
+
+  function showFormError(msg) {
+    const el = document.getElementById('form-error');
+    el.textContent = msg;
+    el.classList.remove('hidden');
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function clearFile() {
+    selectedFile = null;
+    document.getElementById('cv-file').value = '';
+    document.getElementById('file-selected').classList.add('hidden');
+    document.getElementById('drop-zone').classList.remove('hidden');
+  }
+
+  function handleFileSelect(file) {
+    if (!file) return;
+    const allowed = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'image/jpeg', 'image/png'];
+    if (!allowed.includes(file.type) && !file.name.match(/\.(pdf|doc|docx|xlsx|jpg|jpeg|png)$/i)) {
+      showFormError('Invalid file type. Please upload a PDF, Word, Excel, or image file.');
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      showFormError('File is too large. Maximum size is 10MB.');
+      return;
+    }
+    selectedFile = file;
+    document.getElementById('file-name').textContent = file.name;
+    document.getElementById('file-selected').classList.remove('hidden');
+    document.getElementById('drop-zone').classList.add('hidden');
+    document.getElementById('form-error').classList.add('hidden');
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // File input change
+  document.getElementById('cv-file').addEventListener('change', e => handleFileSelect(e.target.files[0]));
+
+  // Drop zone
+  const dz = document.getElementById('drop-zone');
+  dz.addEventListener('click', () => document.getElementById('cv-file').click());
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault();
+    dz.classList.remove('drag-over');
+    handleFileSelect(e.dataTransfer.files[0]);
+  });
+
+  // Mobile menu
+  document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+
+  loadJob();
+</script>
+</body>
+</html>

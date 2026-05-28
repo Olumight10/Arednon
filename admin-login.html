@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login – Nondera Energy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.4s ease forwards; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.75s linear infinite; display: inline-block; }
+    input:focus { box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15); }
+    .eye-btn { transition: color 0.15s; }
+  </style>
+</head>
+<body class="bg-white text-gray-800 min-h-screen">
+
+<!-- ============================================================
+     ⚠️  SETUP: Replace SCRIPT_URL below with your deployed
+         Google Apps Script Web App URL.
+         See Code.gs for deployment instructions.
+     ============================================================ -->
+
+<div class="min-h-screen flex">
+
+  <!-- ===== LEFT PANEL: Image ===== -->
+  <div class="hidden lg:block lg:w-1/2 relative overflow-hidden">
+    <img
+      src="./joinus_hero.png"
+      alt="Nondera Energy workers"
+      class="w-full h-full object-cover object-center"
+      onerror="this.style.display='none'; this.parentElement.classList.add('bg-gradient-to-br','from-gray-900','to-gray-700')">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-transparent"></div>
+    <!-- Branding text on image -->
+    <div class="absolute bottom-12 left-10 right-10 text-white fade-in">
+      <img src="./logo_img.png" alt="Nondera Logo" class="h-10 w-auto mb-6 brightness-0 invert"
+        onerror="this.outerHTML='<div class=\'text-white text-xl font-extrabold tracking-wide mb-6\'>⬡ NONDERA <span class=\'font-light\'>ENERGY</span></div>'">
+      <h2 class="text-3xl font-bold leading-tight mb-3">Admin Portal</h2>
+      <p class="text-gray-300 text-sm leading-relaxed max-w-xs">
+        Manage job postings, review applications, and handle inbox messages — all in one place.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== RIGHT PANEL: Form ===== -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center px-6 py-12 bg-white">
+    <div class="w-full max-w-sm fade-in">
+
+      <!-- Logo (mobile only) -->
+      <div class="lg:hidden text-center mb-8">
+        <img src="./logo_img.png" alt="Nondera Logo" class="h-9 w-auto mx-auto"
+          onerror="this.outerHTML='<div class=\'text-gray-900 text-xl font-extrabold tracking-wide\'>⬡ NONDERA <span class=\'font-light\'>ENERGY</span></div>'">
+      </div>
+
+      <!-- Heading -->
+      <div class="mb-8">
+        <h1 class="text-2xl font-bold text-orange-500 mb-1">Login</h1>
+        <p class="text-gray-400 text-sm">Enter your credentials to access the admin dashboard.</p>
+      </div>
+
+      <!-- Form -->
+      <div class="space-y-4">
+
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="admin@nondera.com"
+            autocomplete="email"
+            class="w-full px-4 py-3 border border-gray-300 rounded-md text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-colors"
+            onkeydown="if(event.key==='Enter') document.getElementById('password').focus()">
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="password" class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
+          <div class="relative">
+            <input
+              type="password"
+              id="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              class="w-full px-4 py-3 pr-11 border border-gray-300 rounded-md text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-colors"
+              onkeydown="if(event.key==='Enter') handleLogin()">
+            <button
+              type="button"
+              id="toggle-pw"
+              onclick="togglePassword()"
+              class="eye-btn absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500">
+              <!-- Eye open -->
+              <svg id="eye-open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              <!-- Eye closed -->
+              <svg id="eye-closed" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Forgot password -->
+        <div class="text-right -mt-1">
+          <a href="#" class="text-xs text-orange-500 hover:text-orange-600 hover:underline transition">Forgot password?</a>
+        </div>
+
+        <!-- Error message -->
+        <div id="error-msg" class="hidden bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3 flex items-start gap-2">
+          <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span id="error-text"></span>
+        </div>
+
+        <!-- Login button -->
+        <button
+          id="login-btn"
+          onclick="handleLogin()"
+          class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-md text-sm transition-colors duration-200 shadow-sm flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed mt-2">
+          <span id="btn-text">Login</span>
+          <svg id="btn-spinner" class="spinner w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Footer note -->
+      <p class="text-center text-xs text-gray-400 mt-10">
+        Don't have an account? <a href="#" class="text-orange-500 hover:underline">Sign up</a>
+      </p>
+      <p class="text-center text-xs text-gray-300 mt-3">
+        Access this page directly via <code class="bg-gray-100 px-1 rounded">/admin-login.html</code>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // ⚠️  CONFIGURATION — paste your Apps Script URL here
+  // ============================================================
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyg14iQvC4dnaTTSRlL8W_cXZdXNgppBYYFIpKLL158Roh-tGAFIGQB4nuhJb_isodTLA/exec';
+
+  // Redirect if already logged in
+  if (sessionStorage.getItem('nondera_admin')) {
+    window.location.replace('admin.html');
+  }
+
+  function togglePassword() {
+    const pw = document.getElementById('password');
+    const open = document.getElementById('eye-open');
+    const closed = document.getElementById('eye-closed');
+    if (pw.type === 'password') {
+      pw.type = 'text';
+      open.classList.add('hidden');
+      closed.classList.remove('hidden');
+    } else {
+      pw.type = 'password';
+      open.classList.remove('hidden');
+      closed.classList.add('hidden');
+    }
+  }
+
+  function setLoading(on) {
+    const btn = document.getElementById('login-btn');
+    const text = document.getElementById('btn-text');
+    const spinner = document.getElementById('btn-spinner');
+    btn.disabled = on;
+    text.textContent = on ? 'Logging in...' : 'Login';
+    spinner.classList.toggle('hidden', !on);
+  }
+
+  function showError(msg) {
+    document.getElementById('error-text').textContent = msg;
+    document.getElementById('error-msg').classList.remove('hidden');
+  }
+
+  function hideError() {
+    document.getElementById('error-msg').classList.add('hidden');
+  }
+
+  async function handleLogin() {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    hideError();
+
+    if (!email) { showError('Please enter your email address.'); document.getElementById('email').focus(); return; }
+    if (!password) { showError('Please enter your password.'); document.getElementById('password').focus(); return; }
+
+    setLoading(true);
+
+    try {
+      const url = `${SCRIPT_URL}?action=adminLogin&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Network error');
+      const data = await res.json();
+
+      if (data.success) {
+        sessionStorage.setItem('nondera_admin', JSON.stringify(data.admin));
+        window.location.replace('admin.html');
+      } else {
+        showError(data.error || 'Invalid email or password. Please try again.');
+        setLoading(false);
+      }
+    } catch (err) {
+      showError('Unable to connect. Please check your internet connection and try again.');
+      setLoading(false);
+    }
+  }
+
+  // Demo mode — pre-fill for quick testing (remove in production)
+  // document.getElementById('email').value = 'olumight69@gmail.com';
+  // document.getElementById('password').value = 'Love@123';
+</script>
+
+</body>
+</html>

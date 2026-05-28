@@ -16,11 +16,160 @@
             background-position: bottom;
             background-repeat: no-repeat;
         }
+
+/* ── Service Cards ── */
+.service-card {
+    background: #E9E9E9;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.service-card-img-wrap {
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.service-card-img-wrap img {
+    width: 100%;
+    height: 336px; /* closer to Figma's 336px */
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.service-card:hover .service-card-img-wrap img {
+    transform: scale(1.05);
+}
+
+/* Bottom-third gradient overlay */
+.service-card-img-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 32%; /* tighter — bottom third only */
+    background: rgba(255, 255, 255, 0.82);
+    display: flex;
+    align-items: center;     /* vertical center */
+    justify-content: center; /* horizontal center */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.service-card-img-wrap:hover .service-card-img-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.service-card-img-overlay a {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #111111;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+}
+
+.service-card-img-overlay a:hover {
+    text-decoration: underline;
+}
+
+/* White content box */
+.service-card-body {
+    background: #ffffff;
+    padding: 14px 22px 16px;
+}
+
+.service-card-body h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #EB5101;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+
+.service-card-body p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #838383;
+    line-height: 1.65;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+/* Grey footer strip */
+.service-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+/* Read more button — asymmetric corners + bubble hover */
+.read-more-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    padding: 10px 22px;
+    height: 46px;
+
+    background: #FA6B02;
+    border-radius: 10px 0px 10px 10px;
+
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.read-more-btn .rm-bubble {
+    position: absolute;
+    width: 22px;
+    height: 24px;
+    background: #F9D30D;
+    border-radius: 50%;
+    left: 50%;
+    bottom: -30px;
+    transform: translateX(-50%) scale(1);
+    transition:
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        bottom    0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.read-more-btn:hover .rm-bubble {
+    transform: translateX(-50%) scale(14);
+    bottom: -6px;
+}
+
+.read-more-btn .rm-text {
+    position: relative;
+    z-index: 2;
+    transition: color 0.35s ease;
+}
+
+.read-more-btn:hover .rm-text {
+    color: #111111;
+}
     </style>
 </head>
 <body class="text-gray-800 antialiased bg-gray-50">
 
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm transition-all duration-300">
+    <header class="sticky top-0 z-50 transition-all duration-300" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(2px) saturate(180%) brightness(1.05); -webkit-backdrop-filter: blur(4px) saturate(180%) brightness(1.05); border-bottom: 1px solid rgba(255,255,255,0.25); box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);">                
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <div class="flex-shrink-0 flex items-center">
@@ -119,77 +268,81 @@
 
     <section class="pb-24 px-4">
         <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14">
-                
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
-                    <div class="relative overflow-hidden group">
-                        <img src="./oil_services_img.png" alt="Oilfield Services" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
-                        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/90 via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-6">
-                            <a href="oilfield.html" class="text-black font-semibold text-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 hover:underline cursor-pointer">Read more</a>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+
+                <div class="service-card">
+                    <div class="service-card-img-wrap">
+                        <img src="./oil_services_img.png" alt="Oilfield Services">
+                        <div class="service-card-img-overlay">
+                            <a href="oilfield.html">Read more</a>
                         </div>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-orange-500 text-xl font-bold mb-3">Oilfield Services</h3>
-                        <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">
-                            We offer specialized services spanning drilling support, well intervention, facility maintenance, and subsurface engineering.
-                        </p>
-                        <div class="mt-auto text-right">
-                            <a href="oilfield.html" class="inline-block bg-orange-500 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-300 shadow-sm hover:bg-[#facc15] hover:text-gray-900">Read more</a>
-                        </div>
+                    <div class="service-card-body">
+                        <h3>Oilfield Services</h3>
+                        <p>We offer specialized services spanning drilling support, well intervention, facility maintenance, and subsurface engineering.</p>
+                    </div>
+                    <div class="service-card-footer">
+                        <a href="oilfield.html" class="read-more-btn">
+                            <span class="rm-bubble"></span>
+                            <span class="rm-text">Read more</span>
+                        </a>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-md border border-gray-100 flex flex-col overflow-hidden">
-                    <div class="relative overflow-hidden group">
-                        <img src="./operation_support_img.png" alt="Operations Support Services" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
-                        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/90 via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-6">
-                            <a href="operations.html" class="text-black font-semibold text-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 hover:underline cursor-pointer">Read more</a>
+                <div class="service-card">
+                    <div class="service-card-img-wrap">
+                        <img src="./operation_support_img.png" alt="Operations Support Services">
+                        <div class="service-card-img-overlay">
+                            <a href="operations.html">Read more</a>
                         </div>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-orange-500 text-xl font-bold mb-3">Operations Support Services</h3>
-                        <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">
-                            Our comprehensive operations support spans manpower supply, logistics management, procurement, and facility optimization.
-                        </p>
-                        <div class="mt-auto text-right">
-                            <a href="operations.html" class="inline-block bg-orange-500 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-300 shadow-sm hover:bg-[#facc15] hover:text-gray-900">Read more</a>
-                        </div>
+                    <div class="service-card-body">
+                        <h3>Operations Support Services</h3>
+                        <p>Our comprehensive operations support spans manpower supply, logistics management, procurement, and facility optimization.</p>
                     </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-md border border-gray-100 flex flex-col overflow-hidden">
-                    <div class="relative overflow-hidden group">
-                        <img src="./eng_service_img.png" alt="Engineering Services" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-105">
-                        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/90 via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-6">
-                            <a href="engineering.html" class="text-black font-semibold text-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 hover:underline cursor-pointer">Read more</a>
-                        </div>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-orange-500 text-xl font-bold mb-3">Engineering Services</h3>
-                        <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">
-                            We deliver end-to-end engineering, fabrication, and maintenance solutions tailored to enhance operational efficiency.
-                        </p>
-                        <div class="mt-auto text-right">
-                            <a href="engineering.html" class="inline-block bg-orange-500 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-300 shadow-sm hover:bg-[#facc15] hover:text-gray-900">Read more</a>
-                        </div>
+                    <div class="service-card-footer">
+                        <a href="operations.html" class="read-more-btn">
+                            <span class="rm-bubble"></span>
+                            <span class="rm-text">Read more</span>
+                        </a>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-md border border-gray-100 flex flex-col overflow-hidden">
-                    <div class="relative overflow-hidden group">
-                        <img src="./inspection_service_img.png" alt="Inspection Services" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
-                        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/90 via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-6">
-                            <a href="inspection.html" class="text-black font-semibold text-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 hover:underline cursor-pointer">Read more</a>
+                <div class="service-card">
+                    <div class="service-card-img-wrap">
+                        <img src="./eng_service_img.png" alt="Engineering Services" style="object-position: center;">
+                        <div class="service-card-img-overlay">
+                            <a href="engineering.html">Read more</a>
                         </div>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="text-orange-500 text-xl font-bold mb-3">Inspection Services</h3>
-                        <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">
-                            We utilize advanced non-destructive testing (NDT), quality assurance, and compliance checks to maintain strict industry safety standards.
-                        </p>
-                        <div class="mt-auto text-right">
-                            <a href="inspection.html" class="inline-block bg-orange-500 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-300 shadow-sm hover:bg-[#facc15] hover:text-gray-900">Read more</a>
+                    <div class="service-card-body">
+                        <h3>Engineering Services</h3>
+                        <p>We deliver end-to-end engineering, fabrication, and maintenance solutions tailored to enhance operational efficiency.</p>
+                    </div>
+                    <div class="service-card-footer">
+                        <a href="engineering.html" class="read-more-btn">
+                            <span class="rm-bubble"></span>
+                            <span class="rm-text">Read more</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-card-img-wrap">
+                        <img src="./inspection_service_img.png" alt="Inspection Services">
+                        <div class="service-card-img-overlay">
+                            <a href="inspection.html">Read more</a>
                         </div>
+                    </div>
+                    <div class="service-card-body">
+                        <h3>Inspection Services</h3>
+                        <p>We utilize advanced non-destructive testing (NDT), quality assurance, and compliance checks to maintain strict industry safety standards.</p>
+                    </div>
+                    <div class="service-card-footer">
+                        <a href="inspection.html" class="read-more-btn">
+                            <span class="rm-bubble"></span>
+                            <span class="rm-text">Read more</span>
+                        </a>
                     </div>
                 </div>
 

@@ -16,11 +16,44 @@
             background-position: bottom;
             background-repeat: no-repeat;
         }
+
+        section {
+            margin: 0;
+            padding: 0;
+        }
+
+@media (max-width: 768px) {
+    .service-hero {
+        flex-direction: column !important;
+        height: auto !important;
+    }
+    .service-hero-img {
+        flex: none !important;
+        width: 100% !important;
+        height: 260px;
+    }
+    .service-hero-panel {
+        flex: none !important;
+        width: 100% !important;
+        padding: 28px 20px !important;
+    }
+    .service-tabs {
+        grid-template-columns: repeat(2, 1fr) !important;
+        height: auto !important;
+    }
+    .service-tabs > div {
+        min-height: 80px;
+        padding: 14px 20px !important;
+    }
+    .service-tabs > div:last-child {
+        grid-column: span 2;
+    }
+}
     </style>
 </head>
 <body class="text-gray-800 antialiased bg-white">
 
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm transition-all duration-300">
+    <header class="sticky top-0 z-50 transition-all duration-300" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(2px) saturate(180%) brightness(1.05); -webkit-backdrop-filter: blur(4px) saturate(180%) brightness(1.05); border-bottom: 1px solid rgba(255,255,255,0.25); box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);">                
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <div class="flex-shrink-0 flex items-center">
@@ -106,95 +139,119 @@
         </div>
     </header>
 
-    <section class="max-w-7xl mx-auto md:px-4 sm:px-6 lg:px-8 mt-0 md:mt-8">
-        <div class="flex flex-col md:flex-row shadow-sm overflow-hidden md:rounded-xl bg-white">
-            <div class="w-full md:w-3/5 h-64 md:h-[400px]">
-                <img src="./oil_service_hero.jpg" alt="Oilfield Services" class="w-full h-full object-cover">
+<section style="width: 100%; margin: 0; padding: 0;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="service-hero" style="display: flex; height: calc(100vh - 80px - 90px); min-height: 380px;">
+
+            <div class="service-hero-img" style="flex: 2; overflow: hidden; min-width: 0;">
+                <img src="./oil_service_hero.jpg" alt="Oilfield Services" style="width: 100%; height: 100%; object-fit: cover; display: block;">
             </div>
-            
-            <div class="w-full md:w-2/5 bg-orange-500 p-10 md:p-14 flex flex-col justify-center">
-                <h1 class="text-3xl md:text-4xl font-bold text-white mb-6">Oilfield Services</h1>
-                <p class="text-white/90 leading-relaxed text-sm md:text-base">
-                    We offer specialized services spanning drilling support, well intervention, facility maintenance, and subsurface engineering. We bring a diverse range of innovative and sustainable energy solutions tailored to enhance your operations and ensure optimal productivity.
+
+            <div class="service-hero-panel" style="flex: 1; background: #FA6B02; display: flex; flex-direction: column; justify-content: center; padding: 0 32px; min-width: 0;">
+                <h1 style="font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 700; line-height: 38px; letter-spacing: -0.04em; color: #FFFFFF; margin: 0 0 14px 0;">
+                    Oilfield Services
+                </h1>
+                <p style="font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; line-height: 24px; letter-spacing: -0.02em; color: #FFFFFF; margin: 0 0 14px 0;">
+                    With a team of experienced engineers and strategic technical partners, Nondera Energy ensures seamless project delivery and measurable value for our clients across Nigeria's oil and gas landscape.
+                </p>
+                <p style="font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; line-height: 24px; letter-spacing: -0.02em; color: #FFFFFF; margin: 0;">
+                    We provide a comprehensive range of services, including wellbore cleaning and pumping, liner hanger and accessories, cementing and casing operations, surface well testing, mud logging, and advanced drilling technologies.
                 </p>
             </div>
-        </div>
-    </section>
-
-    <section class="max-w-7xl mx-auto md:px-4 sm:px-6 lg:px-8 mt-1">
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-0.5 bg-white shadow-sm md:rounded-b-lg overflow-hidden">
-            
-            <div class="bg-[#ebebeb] hover:bg-[#9ca3af] text-[#6b7280] hover:text-white transition-all duration-300 flex items-center justify-center p-4 min-h-[90px] text-center cursor-pointer group">
-                <span class="text-xs md:text-sm font-medium leading-snug">Well testing/ wellhead<br>services</span>
-            </div>
-            
-            <div class="bg-[#ebebeb] hover:bg-[#9ca3af] text-[#6b7280] hover:text-white transition-all duration-300 flex items-center justify-center p-4 min-h-[90px] text-center cursor-pointer group">
-                <span class="text-xs md:text-sm font-medium leading-snug">Coiled Tubing and Pumping<br>Services</span>
-            </div>
-            
-            <div class="bg-[#ebebeb] hover:bg-[#9ca3af] text-[#6b7280] hover:text-white transition-all duration-300 flex items-center justify-center p-4 min-h-[90px] text-center cursor-pointer group">
-                <span class="text-xs md:text-sm font-medium leading-snug">Casing and Tubing Running<br>Service</span>
-            </div>
-            
-            <div class="bg-[#ebebeb] hover:bg-[#9ca3af] text-[#6b7280] hover:text-white transition-all duration-300 flex items-center justify-center p-4 min-h-[90px] text-center cursor-pointer group">
-                <span class="text-xs md:text-sm font-medium leading-snug">Slickline Services</span>
-            </div>
-            
-            <div class="col-span-2 md:col-span-1 bg-[#ebebeb] hover:bg-[#9ca3af] text-[#6b7280] hover:text-white transition-all duration-300 flex items-center justify-center p-4 min-h-[90px] text-center cursor-pointer group">
-                <span class="text-xs md:text-sm font-medium leading-snug">Well completion services</span>
-            </div>
 
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="py-20 px-4">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <div class="bg-gray-50 flex flex-col overflow-hidden group border border-gray-100 rounded-t-sm shadow-sm pb-8 transition-shadow hover:shadow-md">
-                    <div class="relative w-full h-56 md:h-64 overflow-hidden bg-black">
-                        <img src="./geophysical_active.jpg" alt="Geophysical Services" class="absolute inset-0 w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700 ease-out">
-                        
-                        <img src="./geophysical_blur.jpg" alt="Geophysical Services Blurred" class="absolute inset-0 w-full h-full object-cover transform scale-105 group-hover:scale-100 opacity-100 group-hover:opacity-0 transition-all duration-700 ease-in-out z-10">
-                    </div>
-                    <div class="p-6 md:p-8 flex-grow bg-gray-50 relative z-20">
-                        <h3 class="text-orange-500 text-xl font-bold mb-4">Geophysical Services</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed">
-                            Our geophysical services provide critical subsurface data and insights. We utilize advanced surveying, imaging technologies, and data analysis to mitigate operational risks and optimize your resource exploration safely.
-                        </p>
-                    </div>
-                </div>
+<section style="width: 100%; margin: 0; padding: 0;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="service-tabs" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; height: 90px; background: white;">
 
-                <div class="bg-gray-50 flex flex-col overflow-hidden group border border-gray-100 rounded-t-sm shadow-sm pb-8 transition-shadow hover:shadow-md">
-                    <div class="relative w-full h-56 md:h-64 overflow-hidden bg-black">
-                        <img src="./drilling_active.png" alt="Drilling Services" class="absolute inset-0 w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700 ease-out">
-                        <img src="./drilling_blur.jpg" alt="Drilling Services Blurred" class="absolute inset-0 w-full h-full object-cover transform scale-105 group-hover:scale-100 opacity-100 group-hover:opacity-0 transition-all duration-700 ease-in-out z-10">
-                    </div>
-                    <div class="p-6 md:p-8 flex-grow bg-gray-50 relative z-20">
-                        <h3 class="text-orange-500 text-xl font-bold mb-4">Drilling Services</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed">
-                            We provide comprehensive drilling solutions including well planning, execution, and management. Our team ensures the highest safety standards while optimizing efficiency and minimizing environmental impact.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="bg-gray-50 flex flex-col overflow-hidden group border border-gray-100 rounded-t-sm shadow-sm pb-8 transition-shadow hover:shadow-md">
-                    <div class="relative w-full h-56 md:h-64 overflow-hidden bg-black">
-                        <img src="./well_service_active.jpg" alt="Well Services" class="absolute inset-0 w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700 ease-out">
-                        <img src="./well_service_blur.jpg" alt="Well Services Blurred" class="absolute inset-0 w-full h-full object-cover transform scale-105 group-hover:scale-100 opacity-100 group-hover:opacity-0 transition-all duration-700 ease-in-out z-10">
-                    </div>
-                    <div class="p-6 md:p-8 flex-grow bg-gray-50 relative z-20">
-                        <h3 class="text-orange-500 text-xl font-bold mb-4">Well Services</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed">
-                            Our well services encompass a wide range of activities designed to maintain, optimize, and extend the life of your wells. From intervention to completion, we deliver technical excellence and reliability.
-                        </p>
-                    </div>
-                </div>
-
+            <div style="background: #ebebeb; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px 16px; cursor: pointer; transition: background 0.3s, color 0.3s; color: #6b7280; font-size: 13px; font-weight: 500; line-height: 1.4; font-family: 'Inter', sans-serif;"
+                 onmouseover="this.style.background='#9ca3af'; this.style.color='white';"
+                 onmouseout="this.style.background='#ebebeb'; this.style.color='#6b7280';">
+                Well testing / wellhead services
             </div>
-        </div>
-    </section>
+            <div style="background: #ebebeb; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px 16px; cursor: pointer; transition: background 0.3s, color 0.3s; color: #6b7280; font-size: 13px; font-weight: 500; line-height: 1.4; font-family: 'Inter', sans-serif;"
+                 onmouseover="this.style.background='#9ca3af'; this.style.color='white';"
+                 onmouseout="this.style.background='#ebebeb'; this.style.color='#6b7280';">
+                Coiled Tubing and Pumping Services
+            </div>
+            <div style="background: #ebebeb; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px 16px; cursor: pointer; transition: background 0.3s, color 0.3s; color: #6b7280; font-size: 13px; font-weight: 500; line-height: 1.4; font-family: 'Inter', sans-serif;"
+                 onmouseover="this.style.background='#9ca3af'; this.style.color='white';"
+                 onmouseout="this.style.background='#ebebeb'; this.style.color='#6b7280';">
+                Casing and Tubing Running Service
+            </div>
+            <div style="background: #ebebeb; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px 16px; cursor: pointer; transition: background 0.3s, color 0.3s; color: #6b7280; font-size: 13px; font-weight: 500; line-height: 1.4; font-family: 'Inter', sans-serif;"
+                 onmouseover="this.style.background='#9ca3af'; this.style.color='white';"
+                 onmouseout="this.style.background='#ebebeb'; this.style.color='#6b7280';">
+                Slickline Services
+            </div>
+            <div style="background: #ebebeb; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px 16px; cursor: pointer; transition: background 0.3s, color 0.3s; color: #6b7280; font-size: 13px; font-weight: 500; line-height: 1.4; font-family: 'Inter', sans-serif;"
+                 onmouseover="this.style.background='#9ca3af'; this.style.color='white';"
+                 onmouseout="this.style.background='#ebebeb'; this.style.color='#6b7280';">
+                Well completion services
+            </div>
 
+        </div>
+    </div>
+</section>
+
+<section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <div class="bg-gray-50 flex flex-col overflow-hidden group border border-gray-100 rounded-t-sm shadow-sm pb-8 transition-shadow hover:shadow-md">
+                <div class="relative w-full h-56 md:h-64 overflow-hidden bg-black">
+                    <img src="./geophysical_active.jpg" alt="Geophysical Services" class="absolute inset-0 w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700 ease-out">
+                    <img src="./geophysical_blur.jpg" alt="Geophysical Services Blurred" class="absolute inset-0 w-full h-full object-cover transform scale-105 group-hover:scale-100 opacity-100 group-hover:opacity-0 transition-all duration-700 ease-in-out z-10">
+                </div>
+                <div class="p-6 md:p-8 flex-grow bg-gray-50 relative z-20">
+                    <h3 class="text-orange-500 text-xl font-bold mb-4">Geophysical Services</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        Our Geophysical Services provide the critical subsurface insight needed for confident exploration and efficient field development.
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Our capabilities cover seismic data acquisition, processing, and interpretation, as well as magnetic, gravity, electrical, and electromagnetic surveys tailored to specific project objectives. These solutions support exploration, reservoir characterization, well planning, and risk reduction.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 flex flex-col overflow-hidden group border border-gray-100 rounded-t-sm shadow-sm pb-8 transition-shadow hover:shadow-md">
+                <div class="relative w-full h-56 md:h-64 overflow-hidden bg-black">
+                    <img src="./drilling_active.png" alt="Drilling Services" class="absolute inset-0 w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700 ease-out">
+                    <img src="./drilling_blur.jpg" alt="Drilling Services Blurred" class="absolute inset-0 w-full h-full object-cover transform scale-105 group-hover:scale-100 opacity-100 group-hover:opacity-0 transition-all duration-700 ease-in-out z-10">
+                </div>
+                <div class="p-6 md:p-8 flex-grow bg-gray-50 relative z-20">
+                    <h3 class="text-orange-500 text-xl font-bold mb-4">Drilling Services</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        Our Drilling Services are designed to deliver safe, efficient, and cost effective well construction solutions that meet the highest industry standards.
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Our expertise spans directional and horizontal drilling, mud engineering, cementing, casing and tubular running, wellbore cleanout, and completion support.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 flex flex-col overflow-hidden group border border-gray-100 rounded-t-sm shadow-sm pb-8 transition-shadow hover:shadow-md">
+                <div class="relative w-full h-56 md:h-64 overflow-hidden bg-black">
+                    <img src="./well_service_active.jpg" alt="Well Services" class="absolute inset-0 w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700 ease-out">
+                    <img src="./well_service_blur.jpg" alt="Well Services Blurred" class="absolute inset-0 w-full h-full object-cover transform scale-105 group-hover:scale-100 opacity-100 group-hover:opacity-0 transition-all duration-700 ease-in-out z-10">
+                </div>
+                <div class="p-6 md:p-8 flex-grow bg-gray-50 relative z-20">
+                    <h3 class="text-orange-500 text-xl font-bold mb-4">Well Services</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        Our team delivers precise well testing operations to measure flow rates, reservoir pressure, and fluid properties, enabling accurate reservoir assessment and production planning.
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        We provide integrated solutions that cover surface well testing, wellhead maintenance, and completion services, supporting clients through the critical stages of well evaluation, control, and performance optimization.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
     <footer class="bg-white pt-16 pb-8 relative footer-vector overflow-hidden border-t border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">

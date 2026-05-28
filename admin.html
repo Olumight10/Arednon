@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – Nondera Energy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; }
+    html, body { height: 100%; overflow: hidden; }
+    .sidebar { width: 260px; min-width: 260px; transition: transform 0.3s; }
+    .nav-item { transition: background 0.15s, color 0.15s; }
+    .nav-item.active { background: #fff7ed; color: #f97316; border-left: 3px solid #f97316; }
+    .nav-item:not(.active) { border-left: 3px solid transparent; }
+    .section { display: none; }
+    .section.active { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.75s linear infinite; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.25s ease; }
+    .kpi-card { transition: box-shadow 0.2s, transform 0.2s; cursor: pointer; }
+    .kpi-card:hover { box-shadow: 0 4px 20px rgba(249,115,22,0.12); transform: translateY(-1px); }
+    .modal-overlay { background: rgba(0,0,0,0.4); }
+    .job-card { transition: box-shadow 0.15s; }
+    .job-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    .inbox-card { transition: background 0.12s; }
+    .inbox-card:hover { background: #fafafa; }
+    .tree-item { transition: background 0.1s, color 0.1s; }
+    .tree-item:hover { background: #fff7ed; color: #f97316; }
+    .tree-item.selected { background: #fff7ed; color: #f97316; font-weight: 600; }
+    .status-badge { font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 9999px; text-transform: capitalize; }
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-interviewing { background: #dbeafe; color: #1e40af; }
+    .status-accepted { background: #dcfce7; color: #166534; }
+    .status-rejected { background: #fee2e2; color: #991b1b; }
+    .status-new { background: #ffedd5; color: #c2410c; }
+    .status-read { background: #dcfce7; color: #166534; }
+    .status-unread { background: #f1f5f9; color: #475569; }
+    .status-open { background: #dcfce7; color: #166534; }
+    .status-closed { background: #f1f5f9; color: #6b7280; }
+    .main-scroll { height: calc(100vh - 72px); overflow-y: auto; }
+    th { font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.04em; }
+    tr.app-row { cursor: pointer; transition: background 0.1s; }
+    tr.app-row:hover { background: #fff7ed; }
+    tr.app-row-expanded { background: #fff7ed; }
+    .bullet-input-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .bullet-input-row input { flex: 1; }
+    .main-scroll::-webkit-scrollbar { width: 5px; }
+    .main-scroll::-webkit-scrollbar-track { background: transparent; }
+    .main-scroll::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+    /* Search dropdown */
+    #search-dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: white; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); z-index: 100; max-height: 340px; overflow-y: auto; }
+    .search-result-item { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center; gap-10px; }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-item:hover { background: #fff7ed; }
+    /* Dual input combobox */
+    .combo-wrap { position: relative; }
+    .combo-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #d1d5db; border-top: none; border-radius: 0 0 8px 8px; max-height: 180px; overflow-y: auto; z-index: 50; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .combo-option { padding: 8px 12px; font-size: 0.8rem; cursor: pointer; }
+    .combo-option:hover { background: #fff7ed; color: #f97316; }
+    @media (max-width: 768px) {
+      .sidebar { position: fixed; top: 0; bottom: 0; left: 0; z-index: 40; transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<div class="flex h-screen overflow-hidden" id="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar bg-white border-r border-gray-100 flex flex-col z-40 shadow-sm" id="sidebar">
+    <div class="px-6 py-5 border-b border-gray-100">
+      <img src="./logo_img.png" alt="Nondera" class="h-9 w-auto"
+        onerror="this.outerHTML='<div class=\'text-gray-900 font-extrabold text-base tracking-wide\'>⬡ NONDERA <span class=\'font-light\'>ENERGY</span></div>'">
+    </div>
+    <nav class="flex-1 py-4 overflow-y-auto">
+      <button onclick="navigate('dashboard')" id="nav-dashboard"
+        class="nav-item active w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-orange-500">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke-width="2"/></svg>
+        Dashboard
+      </button>
+      <button onclick="navigate('inbox')" id="nav-inbox"
+        class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Inbox
+      </button>
+      <button onclick="navigate('jobs')" id="nav-jobs"
+        class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Jobs
+      </button>
+      <div>
+        <button onclick="navigate('applications')" id="nav-applications"
+          class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Applications
+        </button>
+        <div id="app-tree" class="hidden pl-4 pb-2"></div>
+      </div>
+      <div class="mt-4 border-t border-gray-100"></div>
+      <button onclick="handleLogout()"
+        class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 mt-2">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Log out
+      </button>
+    </nav>
+  </aside>
+
+  <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/40 z-30 md:hidden" onclick="closeSidebar()"></div>
+
+  <!-- MAIN AREA -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <!-- TOP BAR -->
+    <header class="bg-white border-b border-gray-100 h-[72px] flex items-center px-5 gap-4 flex-shrink-0 shadow-sm">
+      <button onclick="openSidebar()" class="md:hidden text-gray-500 hover:text-gray-900">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <!-- Global search with dropdown -->
+      <div class="flex-1 max-w-md relative" id="search-wrap">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="global-search" placeholder="Search jobs, applicants, messages..."
+          oninput="handleGlobalSearch(this.value)" onkeydown="searchKeyNav(event)"
+          onfocus="if(this.value.trim().length>1) showSearchDropdown()"
+          class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400 bg-gray-50">
+        <div id="search-dropdown" class="hidden"></div>
+      </div>
+      <!-- Admin info -->
+      <div class="flex items-center gap-3 ml-auto">
+        <div id="admin-avatar" class="w-9 h-9 rounded-full bg-orange-100 border-2 border-orange-200 overflow-hidden flex items-center justify-center flex-shrink-0">
+          <span id="admin-initials" class="text-orange-600 font-bold text-sm"></span>
+        </div>
+        <div class="hidden sm:block leading-tight">
+          <p id="admin-name-display" class="text-sm font-semibold text-gray-900"></p>
+          <p id="admin-email-display" class="text-xs text-gray-400 truncate max-w-[160px]"></p>
+        </div>
+      </div>
+    </header>
+
+    <!-- SCROLLABLE CONTENT -->
+    <div class="main-scroll" id="main-scroll">
+      <div class="p-6">
+
+        <!-- DASHBOARD -->
+        <div id="section-dashboard" class="section active fade-in">
+          <div class="mb-5 flex items-start justify-between flex-wrap gap-3">
+            <div>
+              <p class="text-orange-500 font-medium text-sm">Hello there,</p>
+              <h2 id="dash-hello-name" class="text-2xl font-bold text-gray-900"></h2>
+            </div>
+            <!-- Timeframe picker -->
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-500 font-medium">Period:</span>
+              <select id="kpi-timeframe" onchange="onTimeframeChange()"
+                class="border border-gray-200 rounded-lg text-xs px-3 py-1.5 text-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-200 bg-white font-medium">
+                <option value="1day">Today</option>
+                <option value="1week" selected>Last 7 days</option>
+                <option value="2weeks">Last 14 days</option>
+                <option value="1month">Last 30 days</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- KPI Cards -->
+          <div id="kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 animate-pulse"><div class="h-3 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-7 bg-gray-200 rounded w-1/3"></div></div>
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 animate-pulse"><div class="h-3 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-7 bg-gray-200 rounded w-1/3"></div></div>
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 animate-pulse"><div class="h-3 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-7 bg-gray-200 rounded w-1/3"></div></div>
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 animate-pulse"><div class="h-3 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-7 bg-gray-200 rounded w-1/3"></div></div>
+          </div>
+
+          <!-- Widgets row -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Active Jobs widget -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="font-semibold text-gray-900">Active Jobs</h3>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span id="widget-jobs-count" class="text-2xl font-bold text-gray-900">–</span>
+                    <span class="text-xs text-gray-400">Jobs</span>
+                  </div>
+                </div>
+                <div class="flex gap-1">
+                  <button onclick="widgetPrev('jobs')" class="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                  </button>
+                  <button onclick="widgetNext('jobs')" class="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div id="widget-jobs-list" class="space-y-2 min-h-[80px]">
+                <div class="text-sm text-gray-400 py-4 text-center">Loading...</div>
+              </div>
+            </div>
+            <!-- Upcoming Interviews widget -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="font-semibold text-gray-900">Upcoming Interviews</h3>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span id="widget-interviews-count" class="text-2xl font-bold text-gray-900">–</span>
+                    <span class="text-xs text-gray-400">Interviews</span>
+                  </div>
+                </div>
+                <div class="flex gap-1">
+                  <button onclick="widgetPrev('interviews')" class="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                  </button>
+                  <button onclick="widgetNext('interviews')" class="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div id="widget-interviews-list" class="space-y-2 min-h-[80px]">
+                <div class="text-sm text-gray-400 py-4 text-center">Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INBOX -->
+        <div id="section-inbox" class="section fade-in">
+          <h2 class="text-xl font-bold text-gray-900 mb-5">Inbox</h2>
+          <div class="flex flex-wrap gap-3 mb-5">
+            <div class="relative flex-1 min-w-[180px] max-w-sm">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="inbox-search" placeholder="Search messages..." oninput="renderInboxList()"
+                class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400 bg-white">
+            </div>
+            <select id="inbox-status-filter" onchange="renderInboxList()"
+              class="border border-gray-200 rounded-lg text-sm px-3 py-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-200 bg-white min-w-[140px]">
+              <option value="">All Status</option>
+              <option value="new">New</option>
+              <option value="unread">Unread</option>
+              <option value="read">Read</option>
+            </select>
+          </div>
+          <div id="inbox-batch-bar" class="hidden mb-4 bg-orange-50 border border-orange-200 rounded-lg px-4 py-2.5 flex items-center gap-3 sticky top-2 z-20 shadow-md">
+            <span id="batch-count" class="text-sm font-semibold text-orange-700"></span>
+            <div class="ml-auto flex gap-2">
+              <button onclick="batchMarkRead()" class="text-xs font-medium px-3 py-1.5 rounded bg-green-100 text-green-700 hover:bg-green-200 transition">Mark as Read</button>
+              <button onclick="batchDelete()" class="text-xs font-medium px-3 py-1.5 rounded bg-red-100 text-red-700 hover:bg-red-200 transition">Delete Selected</button>
+              <button onclick="clearInboxSelection()" class="text-xs font-medium px-3 py-1.5 rounded bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition">Deselect All</button>
+            </div>
+          </div>
+          <div id="inbox-loading" class="text-center py-12">
+            <svg class="spinner w-8 h-8 text-orange-400 mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4"/></svg>
+            <p class="text-gray-400 text-sm">Loading inbox...</p>
+          </div>
+          <div id="inbox-list" class="space-y-2 px-1"></div>
+          <div id="inbox-empty" class="hidden text-center py-16 text-gray-400 text-sm">No messages found.</div>
+        </div>
+
+        <!-- JOBS -->
+        <div id="section-jobs" class="section fade-in">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-xl font-bold text-gray-900">Job Posting</h2>
+            <button onclick="toggleCreateJobForm()" id="create-job-btn"
+              class="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm transition-colors flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+              Create new job
+            </button>
+          </div>
+          <!-- Create/Edit Job Form -->
+          <div id="create-job-form-wrap" class="hidden mb-5">
+            <div class="bg-white rounded-xl border border-orange-200 shadow-sm p-5">
+              <div class="flex items-center justify-between mb-4">
+                <h3 id="job-form-title" class="font-semibold text-gray-900">Create New Job</h3>
+                <button onclick="toggleCreateJobForm()" class="text-gray-400 hover:text-gray-600">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+              <input type="hidden" id="edit-job-id">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                <!-- Job Title - dual input combobox -->
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Job Title (Designation) *</label>
+                  <div class="combo-wrap">
+                    <input type="text" id="jf-designation" placeholder="Type or select title..."
+                      oninput="filterCombo('jf-designation','combo-designation')"
+                      onfocus="openCombo('combo-designation')" autocomplete="off"
+                      class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                    <div id="combo-designation" class="combo-dropdown hidden"></div>
+                  </div>
+                </div>
+                <!-- Location -->
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Location *</label>
+                  <input type="text" id="jf-location" placeholder="e.g. Lagos"
+                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                </div>
+                <!-- Experience -->
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Years of Experience *</label>
+                  <input type="text" id="jf-experience" placeholder="e.g. 3 to 5 Years"
+                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                </div>
+                <!-- Department - dual input combobox -->
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Department *</label>
+                  <div class="combo-wrap">
+                    <input type="text" id="jf-department" placeholder="Type or select department..."
+                      oninput="filterCombo('jf-department','combo-department')"
+                      onfocus="openCombo('combo-department')" autocomplete="off"
+                      class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                    <div id="combo-department" class="combo-dropdown hidden"></div>
+                  </div>
+                </div>
+                <!-- Country -->
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Country *</label>
+                  <input type="text" id="jf-country" placeholder="e.g. Nigeria"
+                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                </div>
+                <!-- Nature -->
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Nature *</label>
+                  <select id="jf-nature" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400 bg-white">
+                    <option value="">Select type</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Internship">Internship</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Application Open Date</label>
+                  <input type="date" id="jf-open-date"
+                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Application Close Date</label>
+                  <input type="date" id="jf-close-date"
+                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Summary / Advertisement</label>
+                <textarea id="jf-summary" rows="3" placeholder="A brief overview of the role..."
+                  class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400 resize-none"></textarea>
+              </div>
+              <div class="mb-4">
+                <div class="flex items-center justify-between mb-2">
+                  <label class="text-xs font-semibold text-gray-600">Qualifications &amp; Experience</label>
+                  <button onclick="addBullet('jf-qual-list')" class="text-xs text-orange-500 hover:text-orange-600 flex items-center gap-1 font-medium">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>Add
+                  </button>
+                </div>
+                <div id="jf-qual-list" class="space-y-2"></div>
+              </div>
+              <div class="mb-5">
+                <div class="flex items-center justify-between mb-2">
+                  <label class="text-xs font-semibold text-gray-600">Skills &amp; Competencies</label>
+                  <button onclick="addBullet('jf-skills-list')" class="text-xs text-orange-500 hover:text-orange-600 flex items-center gap-1 font-medium">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>Add
+                  </button>
+                </div>
+                <div id="jf-skills-list" class="space-y-2"></div>
+              </div>
+              <div id="job-form-error" class="hidden mb-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2"></div>
+              <div class="flex gap-3">
+                <button onclick="submitJobForm()" id="job-form-submit-btn"
+                  class="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-sm">Post Job</button>
+                <button onclick="toggleCreateJobForm()" class="text-sm font-medium px-5 py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div id="jobs-loading" class="text-center py-12">
+            <svg class="spinner w-8 h-8 text-orange-400 mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4"/></svg>
+            <p class="text-gray-400 text-sm">Loading jobs...</p>
+          </div>
+          <div id="jobs-list" class="space-y-3 hidden px-1"></div>
+          <div id="jobs-empty" class="hidden text-center py-16 text-gray-400 text-sm">No job postings yet. Create your first job above.</div>
+        </div>
+
+        <!-- APPLICATIONS -->
+        <div id="section-applications" class="section fade-in">
+          <h2 class="text-xl font-bold text-gray-900 mb-5">Job Applications</h2>
+          <div class="flex flex-wrap gap-3 mb-5">
+            <div class="relative flex-1 min-w-[180px] max-w-sm">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="app-search" placeholder="Search by name, job, or email..." oninput="renderAppTable()"
+                class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400 bg-white">
+            </div>
+            <select id="app-status-filter" onchange="renderAppTable()"
+              class="border border-gray-200 rounded-lg text-sm px-3 py-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-200 bg-white min-w-[140px]">
+              <option value="">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="interviewing">Interviewing</option>
+              <option value="accepted">Accepted</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <select id="app-category-filter" onchange="renderAppTable()"
+              class="border border-gray-200 rounded-lg text-sm px-3 py-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-200 bg-white min-w-[160px]">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+          <div id="apps-loading" class="text-center py-12">
+            <svg class="spinner w-8 h-8 text-orange-400 mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4"/></svg>
+            <p class="text-gray-400 text-sm">Loading applications...</p>
+          </div>
+          <div id="apps-table-wrap" class="hidden bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th class="text-left px-5 py-3">Applicant</th>
+                    <th class="text-left px-4 py-3">Job Title</th>
+                    <th class="text-left px-4 py-3">CV</th>
+                    <th class="text-left px-4 py-3">Applied Date</th>
+                    <th class="text-left px-4 py-3">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="apps-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="apps-empty" class="hidden text-center py-16 text-gray-400 text-sm">No applications found.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="modal-backdrop" class="hidden fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4" onclick="closeAllModals(event)">
+
+  <!-- Job View Modal -->
+  <div id="modal-job-view" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white z-10">
+      <h3 id="job-view-modal-title" class="font-bold text-gray-900 text-lg"></h3>
+      <button onclick="closeModal('modal-job-view')" class="text-gray-400 hover:text-gray-600 p-1 rounded">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="px-6 py-5 space-y-4" id="job-view-content"></div>
+  </div>
+
+  <!-- Delete Job Modal -->
+  <div id="modal-delete-job" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-md" onclick="event.stopPropagation()">
+    <div class="p-6">
+      <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <h3 class="text-center font-bold text-gray-900 text-lg mb-2">Delete Job Posting?</h3>
+      <p class="text-center text-gray-500 text-sm mb-1">You are about to delete <strong id="delete-job-name" class="text-gray-800"></strong>.</p>
+      <p class="text-center text-red-500 text-xs mb-6">⚠ This will permanently delete the job and ALL associated applications.</p>
+      <div class="flex gap-3">
+        <button onclick="closeModal('modal-delete-job')" class="flex-1 border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+        <button id="confirm-delete-job-btn" onclick="confirmDeleteJob()" class="flex-1 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-2.5 rounded-lg transition">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mark Inbox Read Modal -->
+  <div id="modal-inbox-read" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-md" onclick="event.stopPropagation()">
+    <div class="p-6">
+      <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      </div>
+      <h3 class="text-center font-bold text-gray-900 text-lg mb-2">Mark as Read?</h3>
+      <p class="text-center text-gray-500 text-sm mb-6">Have you read this message? Confirm to mark it as <strong>read</strong>.</p>
+      <div class="flex gap-3">
+        <button onclick="closeModal('modal-inbox-read')" class="flex-1 border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+        <button id="confirm-inbox-read-btn" class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-2.5 rounded-lg transition">Yes, Mark as Read</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Inbox Modal -->
+  <div id="modal-delete-inbox" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-md" onclick="event.stopPropagation()">
+    <div class="p-6">
+      <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      </div>
+      <h3 class="text-center font-bold text-gray-900 text-lg mb-2">Delete Message(s)?</h3>
+      <p id="delete-inbox-msg" class="text-center text-gray-500 text-sm mb-6">This action cannot be undone.</p>
+      <div class="flex gap-3">
+        <button onclick="closeModal('modal-delete-inbox')" class="flex-1 border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+        <button id="confirm-delete-inbox-btn" class="flex-1 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-2.5 rounded-lg transition">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Status Modal -->
+  <div id="modal-app-status" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-md" onclick="event.stopPropagation()">
+    <div class="px-6 py-4 border-b border-gray-100">
+      <h3 class="font-bold text-gray-900">Change Applicant Status</h3>
+    </div>
+    <div class="p-6">
+      <p class="text-sm text-gray-600 mb-4">Applicant: <strong id="modal-app-name" class="text-gray-900"></strong></p>
+      <div class="mb-4">
+        <label class="block text-xs font-semibold text-gray-600 mb-1.5">New Status</label>
+        <select id="modal-app-status-select" onchange="handleStatusSelectChange()"
+          class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 bg-white">
+          <option value="pending">Pending</option>
+          <option value="interviewing">Interviewing</option>
+          <option value="accepted">Accepted</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+      <div id="interview-date-group" class="hidden mb-4">
+        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Interview Date &amp; Time <span class="text-red-500">*</span></label>
+        <input type="datetime-local" id="modal-interview-dt"
+          class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200">
+      </div>
+      <p class="text-xs text-orange-600 bg-orange-50 border border-orange-100 rounded-lg px-3 py-2 mb-5">Are you sure you want to change this applicant's status?</p>
+      <div class="flex gap-3">
+        <button onclick="closeModal('modal-app-status')" class="flex-1 border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+        <button onclick="confirmStatusChange()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2.5 rounded-lg transition">Confirm Change</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+'use strict';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyg14iQvC4dnaTTSRlL8W_cXZdXNgppBYYFIpKLL158Roh-tGAFIGQB4nuhJb_isodTLA/exec';
+
+// ============================================================
+// STATE
+// ============================================================
+const S = {
+  admin: null,
+  currentSection: 'dashboard',
+  previousSection: null,
+  dashboard: null,
+  dashTimeframe: '1week',
+  inboxData: [],        // current session display data (includes 'new' display_status for migrated)
+  inboxSelected: new Set(),
+  jobsData: [],
+  jobsLoaded: false,
+  appsData: [],
+  appsLoaded: false,
+  newAppIds: [],
+  widgetJobsPage: 0,
+  widgetInterviewsPage: 0,
+  widgetPageSize: 4,
+  pendingDeleteJobId: null,
+  pendingDeleteJobName: '',
+  pendingInboxIds: [],
+  pendingAppId: null,
+  expandedAppIds: new Set(),
+  expandedInboxIds: new Set(),
+  // section loaded flags
+  inboxLoaded: false,
+  dashLoaded: false,
+  // job meta for combos
+  jobMeta: { designations: [], departments: [] },
+  // search
+  searchResults: [],
+  searchHighlightIdx: -1,
+  // inline refresh tracking
+  sectionNeedsRefresh: { dashboard: false, inbox: false, jobs: false, applications: false }
+};
+
+// ============================================================
+// AUTH
+// ============================================================
+(function checkAuth() {
+  const raw = sessionStorage.getItem('nondera_admin');
+  if (!raw) { window.location.replace('admin-login.html'); return; }
+  try {
+    S.admin = JSON.parse(raw);
+    initAdminUI();
+  } catch { window.location.replace('admin-login.html'); }
+})();
+
+function initAdminUI() {
+  const a = S.admin;
+  document.getElementById('admin-name-display').textContent = a.full_name || 'Admin';
+  document.getElementById('admin-email-display').textContent = a.email || '';
+  document.getElementById('dash-hello-name').textContent = a.full_name || 'Admin';
+  const initials = (a.full_name || 'A').split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
+  document.getElementById('admin-initials').textContent = initials;
+  // Profile pic
+  if (a.profile_pic) {
+    const av = document.getElementById('admin-avatar');
+    av.innerHTML = `<img src="./profile/${esc(a.profile_pic)}" class="w-full h-full object-cover" onerror="this.style.display='none'">`;
+  }
+  // Load all sections in background on startup — staggered so they don't all fire at once.
+  // Dashboard loads immediately (it's the landing page).
+  // Others load silently behind the scenes so they're ready when you click.
+  loadDashboard();
+  loadJobMeta();
+  setTimeout(() => loadInbox(),        800);
+  setTimeout(() => loadJobs(),         1600);
+  setTimeout(() => loadApplications(), 2400);
+}
+
+function handleLogout() {
+  sessionStorage.removeItem('nondera_admin');
+  window.location.replace('admin-login.html');
+}
+
+// ============================================================
+// NAVIGATION + INLINE REFRESH
+// ============================================================
+function navigate(section) {
+  // Trigger inbox migration when navigating to inbox or jobs
+  if (section === 'inbox' || section === 'jobs') {
+    migrateInboxSilently();
+  }
+
+  // Always silently refresh the section we're leaving so it's fresh on return
+  if (S.currentSection && S.currentSection !== section) {
+    silentRefreshSection(S.currentSection);
+    S.sectionNeedsRefresh[S.currentSection] = false;
+  }
+
+  S.previousSection = S.currentSection;
+  S.currentSection = section;
+
+  ['dashboard','inbox','jobs','applications'].forEach(s => {
+    const el = document.getElementById(`nav-${s}`);
+    if (!el) return;
+    el.classList.remove('active','text-orange-500');
+    el.classList.add('text-gray-600');
+    if (s === section) {
+      el.classList.add('active','text-orange-500');
+      el.classList.remove('text-gray-600');
+    }
+  });
+
+  document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+  const secEl = document.getElementById(`section-${section}`);
+  if (secEl) {
+    secEl.classList.add('active');
+    secEl.classList.remove('fade-in');
+    void secEl.offsetWidth;
+    secEl.classList.add('fade-in');
+  }
+  document.getElementById('main-scroll').scrollTop = 0;
+
+  const tree = document.getElementById('app-tree');
+  if (section === 'applications') tree.classList.remove('hidden');
+  else tree.classList.add('hidden');
+
+  if (section === 'dashboard') {
+    if (!S.dashLoaded) {
+      loadDashboard();
+    } else {
+      // Show cached data instantly, then silently refresh in background
+      renderKPIs(S.dashboard.kpis);
+      renderWidgetJobs(S.dashboard.active_jobs || []);
+      renderWidgetInterviews(S.dashboard.upcoming_interviews || []);
+      silentRefreshDashboard();
+    }
+  }
+  if (section === 'inbox') {
+    if (!S.inboxLoaded) {
+      loadInbox();
+    } else {
+      renderInboxList();
+      loadInbox(); // silent — shows cached, fetches fresh behind it
+    }
+  }
+  if (section === 'jobs') {
+    if (!S.jobsLoaded) {
+      loadJobs();
+    } else {
+      renderJobsList();
+      loadJobs();
+    }
+  }
+  if (section === 'applications') {
+    if (!S.appsLoaded) {
+      loadApplications();
+    } else {
+      buildAppTree();
+      renderAppTable();
+      loadApplications();
+    }
+  }
+
+  closeSearchDropdown();
+  closeSidebar();
+}
+
+// Silently trigger migration without full reload
+async function migrateInboxSilently() {
+  try {
+    const data = await api({ action: 'getInboxes', trigger: 'nav' });
+    if (data.success && data.newly_migrated_ids && data.newly_migrated_ids.length > 0) {
+      // Merge newly migrated as 'new' display_status into existing data
+      if (S.inboxLoaded) {
+        data.newly_migrated_ids.forEach(id => {
+          const existing = S.inboxData.find(m => String(m.box_id) === String(id));
+          if (!existing) {
+            const newItem = data.inboxes.find(m => String(m.box_id) === String(id));
+            if (newItem) S.inboxData.unshift({ ...newItem, display_status: 'new', status: 'new' });
+          }
+        });
+      }
+    }
+  } catch(e) {}
+}
+
+// After an action in one section, silently refresh related sections in the background.
+// Sections currently visible get refreshed immediately; others are flagged and refreshed now too.
+function markSectionsStale(...sections) {
+  sections.forEach(s => {
+    S.sectionNeedsRefresh[s] = true;
+    // Kick off a background refresh right away (unless it's the current section —
+    // the caller handles that separately to avoid double-fetching)
+    if (s !== S.currentSection) {
+      silentRefreshSection(s);
+    }
+  });
+}
+
+// ============================================================
+// SIDEBAR (mobile)
+// ============================================================
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.remove('hidden');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.add('hidden');
+}
+
+// ============================================================
+// GLOBAL SEARCH
+// ============================================================
+let _searchTimer = null;
+function handleGlobalSearch(val) {
+  clearTimeout(_searchTimer);
+  if (!val || val.trim().length < 2) { closeSearchDropdown(); return; }
+  _searchTimer = setTimeout(() => doGlobalSearch(val.trim()), 280);
+}
+
+async function doGlobalSearch(q) {
+  try {
+    const data = await api({ action: 'globalSearch', q });
+    if (!data.success) return;
+    S.searchResults = data.results || [];
+    S.searchHighlightIdx = -1;
+    renderSearchDropdown(q);
+  } catch(e) {}
+}
+
+function renderSearchDropdown(q) {
+  const dd = document.getElementById('search-dropdown');
+  if (!S.searchResults.length) { closeSearchDropdown(); return; }
+  const icons = { job: '💼', application: '📋', message: '✉️' };
+  dd.innerHTML = S.searchResults.map((r, i) => `
+    <div class="search-result-item" data-idx="${i}" onclick="selectSearchResult(${i})">
+      <span class="text-base mr-2">${icons[r.type] || '🔍'}</span>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-semibold text-gray-900 truncate">${esc(r.label)}</p>
+        <p class="text-xs text-gray-400 truncate">${esc(r.sub)}</p>
+      </div>
+      <span class="text-xs text-orange-400 font-medium ml-2 capitalize">${r.type}</span>
+    </div>
+  `).join('');
+  dd.classList.remove('hidden');
+}
+
+function showSearchDropdown() {
+  if (S.searchResults.length) document.getElementById('search-dropdown').classList.remove('hidden');
+}
+
+function closeSearchDropdown() {
+  document.getElementById('search-dropdown').classList.add('hidden');
+  S.searchResults = [];
+  S.searchHighlightIdx = -1;
+}
+
+function searchKeyNav(e) {
+  const dd = document.getElementById('search-dropdown');
+  if (dd.classList.contains('hidden')) return;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    S.searchHighlightIdx = Math.min(S.searchHighlightIdx + 1, S.searchResults.length - 1);
+    highlightSearchResult();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    S.searchHighlightIdx = Math.max(S.searchHighlightIdx - 1, -1);
+    highlightSearchResult();
+  } else if (e.key === 'Enter') {
+    if (S.searchHighlightIdx >= 0) selectSearchResult(S.searchHighlightIdx);
+    else if (S.searchResults.length > 0) selectSearchResult(0);
+  } else if (e.key === 'Escape') {
+    closeSearchDropdown();
+  }
+}
+
+function highlightSearchResult() {
+  document.querySelectorAll('.search-result-item').forEach((el, i) => {
+    el.style.background = i === S.searchHighlightIdx ? '#fff7ed' : '';
+  });
+}
+
+function selectSearchResult(idx) {
+  const r = S.searchResults[idx];
+  if (!r) return;
+  document.getElementById('global-search').value = '';
+  closeSearchDropdown();
+  // Navigate to section and pre-fill search
+  navigate(r.section);
+  setTimeout(() => {
+    if (r.section === 'inbox') {
+      const el = document.getElementById('inbox-search');
+      if (el) { el.value = r.label; renderInboxList(); }
+      // Expand the matching card
+      S.expandedInboxIds.add(String(r.id));
+      renderInboxList();
+    } else if (r.section === 'applications') {
+      const el = document.getElementById('app-search');
+      if (el) { el.value = r.label; renderAppTable(); }
+      S.expandedAppIds.add(r.id);
+      renderAppTable();
+    } else if (r.section === 'jobs') {
+      // scroll to job card
+      setTimeout(() => {
+        const card = document.getElementById(`job-card-${r.id}`);
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 400);
+    }
+  }, 300);
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  if (!document.getElementById('search-wrap').contains(e.target)) closeSearchDropdown();
+});
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id) {
+  document.getElementById('modal-backdrop').classList.remove('hidden');
+  document.getElementById(id).classList.remove('hidden');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.add('hidden');
+  const anyOpen = ['modal-job-view','modal-delete-job','modal-inbox-read','modal-delete-inbox','modal-app-status']
+    .some(m => !document.getElementById(m).classList.contains('hidden'));
+  if (!anyOpen) document.getElementById('modal-backdrop').classList.add('hidden');
+}
+function closeAllModals(e) {
+  if (e && e.target !== document.getElementById('modal-backdrop')) return;
+  ['modal-job-view','modal-delete-job','modal-inbox-read','modal-delete-inbox','modal-app-status']
+    .forEach(m => document.getElementById(m).classList.add('hidden'));
+  document.getElementById('modal-backdrop').classList.add('hidden');
+}
+
+// ============================================================
+// UTIL
+// ============================================================
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function statusBadge(s) {
+  return `<span class="status-badge status-${String(s||'').toLowerCase()}">${esc(s)}</span>`;
+}
+async function api(params) {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${SCRIPT_URL}?${qs}`);
+  return res.json();
+}
+async function post(body) {
+  const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(body) });
+  return res.json();
+}
+function dateInputToDisplay(val) {
+  if (!val) return '';
+  const d = new Date(val + 'T00:00:00');
+  return isNaN(d) ? val : `${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`;
+}
+function displayToDateInput(val) {
+  if (!val) return '';
+  const d = new Date(val);
+  if (isNaN(d)) return '';
+  return d.toISOString().split('T')[0];
+}
+
+// ============================================================
+// JOB META (for comboboxes)
+// ============================================================
+async function loadJobMeta() {
+  try {
+    const data = await api({ action: 'getJobMeta' });
+    if (data.success) S.jobMeta = data;
+  } catch(e) {}
+}
+
+function openCombo(comboId) {
+  const combo = document.getElementById(comboId);
+  const inputId = comboId === 'combo-designation' ? 'jf-designation' : 'jf-department';
+  const list = comboId === 'combo-designation' ? S.jobMeta.designations : S.jobMeta.departments;
+  renderComboOptions(combo, list, inputId, '');
+  combo.classList.remove('hidden');
+  // Close other combos
+  document.querySelectorAll('.combo-dropdown').forEach(c => { if (c.id !== comboId) c.classList.add('hidden'); });
+}
+
+function filterCombo(inputId, comboId) {
+  const val = document.getElementById(inputId).value.toLowerCase();
+  const combo = document.getElementById(comboId);
+  const list = comboId === 'combo-designation' ? S.jobMeta.designations : S.jobMeta.departments;
+  renderComboOptions(combo, list, inputId, val);
+  combo.classList.remove('hidden');
+}
+
+function renderComboOptions(combo, list, inputId, filter) {
+  const filtered = list.filter(x => x.toLowerCase().includes(filter));
+  if (!filtered.length) { combo.classList.add('hidden'); return; }
+  combo.innerHTML = filtered.map(x =>
+    `<div class="combo-option" onclick="selectComboOption('${inputId}','${esc(x)}')">${esc(x)}</div>`
+  ).join('');
+}
+
+function selectComboOption(inputId, val) {
+  document.getElementById(inputId).value = val;
+  const comboId = inputId === 'jf-designation' ? 'combo-designation' : 'combo-department';
+  document.getElementById(comboId).classList.add('hidden');
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.combo-wrap')) {
+    document.querySelectorAll('.combo-dropdown').forEach(c => c.classList.add('hidden'));
+  }
+});
+
+// ============================================================
+// TIMEFRAME PICKER
+// ============================================================
+function onTimeframeChange() {
+  S.dashTimeframe = document.getElementById('kpi-timeframe').value;
+  loadDashboard();
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+async function loadDashboard() {
+  S.dashLoaded = true;
+  try {
+    const data = await api({ action: 'getDashboardData', timeframe: S.dashTimeframe });
+    if (!data.success) return;
+    S.dashboard = data;
+    renderKPIs(data.kpis);
+    renderWidgetJobs(data.active_jobs || []);
+    renderWidgetInterviews(data.upcoming_interviews || []);
+  } catch(e) { console.error('Dashboard load failed', e); }
+}
+
+function renderKPIs(kpis) {
+  const defs = [
+    { key: 'total_applications', newKey: 'new_applications', pctKey: 'app_pct', label: 'Total Applications', icon: '📋', section: 'applications' },
+    { key: 'new_applications',   newKey: 'new_applications', pctKey: 'app_pct', label: 'New Applications',   icon: '📥', section: 'applications' },
+    { key: 'total_messages',     newKey: 'new_messages',     pctKey: 'msg_pct', label: 'Total Messages',     icon: '💬', section: 'inbox' },
+    { key: 'new_messages',       newKey: 'new_messages',     pctKey: 'msg_pct', label: 'New Messages',       icon: '📩', section: 'inbox' },
+  ];
+  const tfLabel = { '1day':'today', '1week':'7d', '2weeks':'14d', '1month':'30d' }[S.dashTimeframe] || '7d';
+  document.getElementById('kpi-grid').innerHTML = defs.map(d => {
+    const pct = kpis[d.pctKey] || 0;
+    const pctColor = pct > 0 ? 'text-green-600 bg-green-50' : pct < 0 ? 'text-red-600 bg-red-50' : 'text-gray-500 bg-gray-100';
+    const pctSign = pct > 0 ? '+' : '';
+    return `
+      <div class="kpi-card bg-white rounded-xl p-5 shadow-sm border border-gray-100" onclick="navigate('${d.section}')">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-xl">${d.icon}</div>
+          <span class="text-xs font-bold ${pctColor} px-2 py-0.5 rounded-full">${pctSign}${pct}%</span>
+        </div>
+        <div class="text-2xl font-bold text-gray-900 mb-0.5">${(kpis[d.key] || 0).toLocaleString()}</div>
+        <div class="text-xs text-gray-400 font-medium">${d.label}</div>
+        <div class="text-xs text-gray-300 mt-0.5">${pctSign}${kpis[d.newKey]||0} in last ${tfLabel}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderWidgetJobs(jobs) {
+  document.getElementById('widget-jobs-count').textContent = jobs.length;
+  S._widgetJobs = jobs; // already sorted open-first from backend
+  S.widgetJobsPage = 0;
+  renderWidgetJobsPage();
+}
+function renderWidgetJobsPage() {
+  const jobs = S._widgetJobs || [];
+  const slice = jobs.slice(S.widgetJobsPage * S.widgetPageSize, (S.widgetJobsPage + 1) * S.widgetPageSize);
+  const el = document.getElementById('widget-jobs-list');
+  if (!slice.length) { el.innerHTML = '<p class="text-sm text-gray-400 text-center py-4">No jobs.</p>'; return; }
+  el.innerHTML = slice.map(j => {
+    const isOpen = j.is_open;
+    return `<div class="flex items-center justify-between py-1.5">
+      <div class="flex items-center gap-2.5">
+        <div class="w-2 h-2 rounded-full flex-shrink-0 ${isOpen ? 'bg-green-500' : 'bg-gray-300'}"></div>
+        <span class="text-sm text-gray-800 font-medium">${esc(j.designation)}</span>
+      </div>
+      <span class="status-badge ${isOpen ? 'status-open' : 'status-closed'}">${isOpen ? 'Open' : 'Closed'}</span>
+    </div>`;
+  }).join('');
+}
+function renderWidgetInterviews(ints) {
+  document.getElementById('widget-interviews-count').textContent = ints.length;
+  S._widgetInterviews = ints;
+  S.widgetInterviewsPage = 0;
+  renderWidgetInterviewsPage();
+}
+function renderWidgetInterviewsPage() {
+  const ints = S._widgetInterviews || [];
+  const slice = ints.slice(S.widgetInterviewsPage * S.widgetPageSize, (S.widgetInterviewsPage + 1) * S.widgetPageSize);
+  const el = document.getElementById('widget-interviews-list');
+  if (!slice.length) { el.innerHTML = '<p class="text-sm text-gray-400 text-center py-4">No upcoming interviews.</p>'; return; }
+  el.innerHTML = slice.map(iv => `
+    <div class="flex items-center justify-between py-1.5">
+      <div>
+        <p class="text-sm font-semibold text-gray-900">${esc(iv.full_name)}</p>
+        <p class="text-xs text-gray-400">${esc(iv.designation || iv.department)}</p>
+      </div>
+      <span class="text-xs font-semibold bg-orange-500 text-white px-3 py-1.5 rounded-lg whitespace-nowrap ml-2">${esc(iv.interview_date)}</span>
+    </div>`).join('');
+}
+function widgetPrev(w) {
+  if (w === 'jobs') { if (S.widgetJobsPage > 0) { S.widgetJobsPage--; renderWidgetJobsPage(); } }
+  else { if (S.widgetInterviewsPage > 0) { S.widgetInterviewsPage--; renderWidgetInterviewsPage(); } }
+}
+function widgetNext(w) {
+  if (w === 'jobs') { if ((S.widgetJobsPage + 1) * S.widgetPageSize < (S._widgetJobs||[]).length) { S.widgetJobsPage++; renderWidgetJobsPage(); } }
+  else { if ((S.widgetInterviewsPage + 1) * S.widgetPageSize < (S._widgetInterviews||[]).length) { S.widgetInterviewsPage++; renderWidgetInterviewsPage(); } }
+}
+
+// ============================================================
+// INBOX
+// ============================================================
+async function loadInbox() {
+  S.inboxLoaded = true;
+  // Only show spinner if admin is looking at inbox right now with no data yet
+  const showSpinner = S.currentSection === 'inbox' && S.inboxData.length === 0;
+  if (showSpinner) {
+    document.getElementById('inbox-loading').classList.remove('hidden');
+    document.getElementById('inbox-list').innerHTML = '';
+    document.getElementById('inbox-empty').classList.add('hidden');
+  }
+  try {
+    const data = await api({ action: 'getInboxes', trigger: 'inbox_nav' });
+    // Always hide spinner — whether we showed it or it was leftover from HTML default
+    document.getElementById('inbox-loading').classList.add('hidden');
+    if (!data.success) return;
+    S.inboxData = (data.inboxes || []).map(i => ({
+      ...i,
+      status: i.display_status || i.status
+    }));
+    S.inboxSelected.clear();
+    // Render if admin is currently on inbox (covers: they arrived while fetch was running)
+    if (S.currentSection === 'inbox') renderInboxList();
+  } catch(e) {
+    document.getElementById('inbox-loading').classList.add('hidden');
+  }
+}
+
+function renderInboxList() {
+  const search = (document.getElementById('inbox-search')?.value || '').toLowerCase();
+  const statusFilter = document.getElementById('inbox-status-filter')?.value || '';
+  let items = S.inboxData;
+  if (search) items = items.filter(m =>
+    (m.name||'').toLowerCase().includes(search) ||
+    (m.email||'').toLowerCase().includes(search) ||
+    (m.subject||'').toLowerCase().includes(search) ||
+    (m.message||'').toLowerCase().includes(search)
+  );
+  if (statusFilter) items = items.filter(m => m.status === statusFilter);
+  const list = document.getElementById('inbox-list');
+  const empty = document.getElementById('inbox-empty');
+  if (!items.length) { list.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  list.innerHTML = items.map(m => {
+    const isExpanded = S.expandedInboxIds.has(String(m.box_id));
+    const isSelected = S.inboxSelected.has(String(m.box_id));
+    const initials = (m.name || '?').split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
+    const isActionable = m.status === 'new' || m.status === 'unread';
+    const borderCls = m.status === 'new' ? 'border-orange-200' : 'border-gray-200';
+    return `
+      <div id="inbox-card-${m.box_id}" class="inbox-card bg-white rounded-xl border ${borderCls} shadow-sm transition-all">
+        <div class="flex items-start gap-3 p-4 cursor-pointer" onclick="toggleInboxExpand('${m.box_id}')">
+          <input type="checkbox" class="mt-1 flex-shrink-0 accent-orange-500 w-4 h-4 cursor-pointer" ${isSelected ? 'checked' : ''}
+            onclick="event.stopPropagation(); toggleInboxSelect('${m.box_id}', this.checked)">
+          <div class="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0 text-orange-600 font-bold text-sm border border-orange-200">${esc(initials)}</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-bold text-gray-900 text-sm">${esc(m.name)}</span>
+                ${statusBadge(m.status)}
+              </div>
+              <span class="text-xs text-gray-400 flex-shrink-0">${esc(m.submit_date)}</span>
+            </div>
+            <p class="text-xs text-gray-500 mt-0.5">${esc(m.email)}</p>
+            <p class="font-semibold text-gray-800 text-sm mt-1">${esc(m.subject)}</p>
+            <p class="text-sm text-gray-500 mt-0.5 ${isExpanded ? '' : 'line-clamp-2'}">${esc(m.message)}</p>
+          </div>
+          <button onclick="event.stopPropagation(); openDeleteInbox(['${m.box_id}'])"
+            class="flex-shrink-0 text-gray-400 hover:text-red-500 transition p-1 rounded">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </button>
+        </div>
+        ${isExpanded && isActionable ? `
+          <div class="border-t border-gray-100 px-4 py-2.5 flex justify-end">
+            <button onclick="event.stopPropagation(); openMarkReadModal('${m.box_id}')"
+              class="text-xs font-semibold text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 px-3 py-1.5 rounded-lg transition">
+              ✓ Mark as Read
+            </button>
+          </div>` : ''}
+      </div>`;
+  }).join('');
+  updateBatchBar();
+}
+
+function toggleInboxExpand(id) {
+  const sid = String(id);
+  if (S.expandedInboxIds.has(sid)) S.expandedInboxIds.delete(sid);
+  else S.expandedInboxIds.add(sid);
+  renderInboxList();
+}
+function toggleInboxSelect(id, checked) {
+  const sid = String(id);
+  if (checked) S.inboxSelected.add(sid);
+  else S.inboxSelected.delete(sid);
+  updateBatchBar();
+}
+function clearInboxSelection() {
+  S.inboxSelected.clear();
+  renderInboxList();
+}
+function updateBatchBar() {
+  const bar = document.getElementById('inbox-batch-bar');
+  const cnt = document.getElementById('batch-count');
+  const n = S.inboxSelected.size;
+  if (n > 0) { bar.classList.remove('hidden'); cnt.textContent = `${n} message${n > 1 ? 's' : ''} selected`; }
+  else bar.classList.add('hidden');
+}
+function openMarkReadModal(boxId) {
+  S.pendingInboxIds = [String(boxId)];
+  document.getElementById('confirm-inbox-read-btn').onclick = () => confirmMarkRead(false);
+  openModal('modal-inbox-read');
+}
+function confirmMarkRead(isBatch) {
+  closeModal('modal-inbox-read');
+  const ids = isBatch ? [...S.inboxSelected] : S.pendingInboxIds;
+  ids.forEach(id => {
+    const idx = S.inboxData.findIndex(m => String(m.box_id) === id);
+    if (idx >= 0) S.inboxData[idx].status = 'read';
+  });
+  ids.forEach(id => { post({ action: 'updateInboxStatus', box_id: id, status: 'read', all_new_ids: [] }).catch(() => {}); });
+  if (isBatch) S.inboxSelected.clear();
+  else S.pendingInboxIds = [];
+  renderInboxList();
+  // Inline refresh dashboard + applications (message counts changed)
+  markSectionsStale('dashboard', 'applications');
+  if (S.dashLoaded) silentRefreshDashboard();
+}
+function batchMarkRead() {
+  if (!S.inboxSelected.size) return;
+  document.getElementById('confirm-inbox-read-btn').onclick = () => confirmMarkRead(true);
+  openModal('modal-inbox-read');
+}
+function openDeleteInbox(ids) {
+  S.pendingInboxIds = ids.map(String);
+  const n = ids.length;
+  document.getElementById('delete-inbox-msg').textContent =
+    n === 1 ? 'Delete this message? This action cannot be undone.' : `Delete ${n} messages? This action cannot be undone.`;
+  document.getElementById('confirm-delete-inbox-btn').onclick = confirmDeleteInbox;
+  openModal('modal-delete-inbox');
+}
+function batchDelete() {
+  if (!S.inboxSelected.size) return;
+  openDeleteInbox([...S.inboxSelected]);
+}
+async function confirmDeleteInbox() {
+  closeModal('modal-delete-inbox');
+  const ids = S.pendingInboxIds;
+  S.inboxData = S.inboxData.filter(m => !ids.includes(String(m.box_id)));
+  ids.forEach(id => S.inboxSelected.delete(id));
+  renderInboxList();
+  try { await post({ action: 'deleteInboxes', box_ids: ids }); } catch {}
+  markSectionsStale('dashboard', 'applications');
+  if (S.dashLoaded) silentRefreshDashboard();
+}
+
+// ============================================================
+// JOBS
+// ============================================================
+async function loadJobs() {
+  S.jobsLoaded = true;
+  const showSpinner = S.currentSection === 'jobs' && S.jobsData.length === 0;
+  if (showSpinner) {
+    document.getElementById('jobs-loading').classList.remove('hidden');
+    document.getElementById('jobs-list').classList.add('hidden');
+    document.getElementById('jobs-empty').classList.add('hidden');
+  }
+  try {
+    const data = await api({ action: 'getJobs' });
+    document.getElementById('jobs-loading').classList.add('hidden');
+    if (!data.success) return;
+    S.jobsData = data.jobs || [];
+    if (S.currentSection === 'jobs') renderJobsList();
+  } catch {
+    document.getElementById('jobs-loading').classList.add('hidden');
+  }
+}
+
+function renderJobsList() {
+  const list = document.getElementById('jobs-list');
+  const empty = document.getElementById('jobs-empty');
+  if (!S.jobsData.length) { list.classList.add('hidden'); empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  list.classList.remove('hidden');
+  list.innerHTML = S.jobsData.map(j => {
+    const isLive = String(j.live).toLowerCase() === 'yes';
+    return `
+      <div id="job-card-${j.job_id}" class="job-card bg-white rounded-xl border border-gray-200 shadow-sm p-4 mx-0.5">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-0.5">
+              <div class="w-2.5 h-2.5 rounded-full flex-shrink-0 ${isLive ? 'bg-green-500' : 'bg-gray-300'}"></div>
+              <h4 class="font-bold text-gray-900">${esc(j.designation)}</h4>
+            </div>
+            <p class="text-xs text-gray-400 mb-2">${[j.department, j.location, j.country, j.nature].filter(Boolean).map(esc).join(' • ')}</p>
+            ${j.summary ? `<p class="text-sm text-gray-700 mb-2">${esc(j.summary.slice(0,120))}${j.summary.length>120?'…':''}</p>` : ''}
+            <div class="flex flex-wrap gap-3 items-center text-xs text-gray-400">
+              <span>Posted: <strong class="text-gray-600">${esc(j.time_posted)}</strong></span>
+              ${j.open_date ? `<span>Open: <strong class="text-gray-600">${esc(j.open_date)}</strong></span>` : ''}
+              ${j.close_date ? `<span>Close: <strong class="text-gray-600">${esc(j.close_date)}</strong></span>` : ''}
+              <span class="ml-auto font-semibold text-gray-600">${j.applicant_count || 0} Application${j.applicant_count !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 flex-shrink-0">
+            <!-- View -->
+            <button onclick="openJobViewModal('${j.job_id}', false)" title="View"
+              class="w-8 h-8 rounded-lg bg-gray-50 text-gray-500 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </button>
+            <!-- Edit -->
+            <button onclick="openJobViewModal('${j.job_id}', true)" title="Edit"
+              class="w-8 h-8 rounded-lg bg-gray-50 text-gray-500 hover:bg-orange-50 hover:text-orange-600 flex items-center justify-center transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            </button>
+            <!-- Delete -->
+            <button onclick="openDeleteJobModal('${j.job_id}','${esc(j.designation)}')" title="Delete"
+              class="w-8 h-8 rounded-lg bg-gray-50 text-gray-500 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openJobViewModal(jobId, editable) {
+  const j = S.jobsData.find(x => x.job_id === jobId);
+  if (!j) return;
+  if (!editable) {
+    document.getElementById('job-view-modal-title').textContent = j.designation;
+    const quals = j.qualification ? String(j.qualification).split(';').map(s=>s.trim()).filter(Boolean) : [];
+    const skills = j.skill ? String(j.skill).split(';').map(s=>s.trim()).filter(Boolean) : [];
+    document.getElementById('job-view-content').innerHTML = `
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        ${[['Designation',j.designation],['Department',j.department],['Location',j.location],['Country',j.country],['Nature',j.nature],['Experience',j.years_of_experience],['Open Date',j.open_date],['Close Date',j.close_date],['Posted',j.time_posted],['Status',j.live==='yes'?'Live':'Not Live']].map(([k,v])=>v?`<div><p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">${esc(k)}</p><p class="font-medium text-gray-800 mt-0.5">${esc(v)}</p></div>`:'').join('')}
+      </div>
+      ${j.summary?`<div><p class="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-1">Summary</p><p class="text-sm text-gray-700">${esc(j.summary)}</p></div>`:''}
+      ${quals.length?`<div><p class="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-2">Qualifications</p><ul class="space-y-1">${quals.map(q=>`<li class="flex gap-2 text-sm text-gray-700"><span class="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 flex-shrink-0"></span>${esc(q)}</li>`).join('')}</ul></div>`:''}
+      ${skills.length?`<div><p class="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-2">Skills</p><ul class="space-y-1">${skills.map(s=>`<li class="flex gap-2 text-sm text-gray-700"><span class="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 flex-shrink-0"></span>${esc(s)}</li>`).join('')}</ul></div>`:''}`;
+    openModal('modal-job-view');
+  } else {
+    closeModal('modal-job-view');
+    document.getElementById('job-form-title').textContent = 'Edit Job';
+    document.getElementById('job-form-submit-btn').textContent = 'Update Job';
+    document.getElementById('edit-job-id').value = j.job_id;
+    document.getElementById('jf-designation').value = j.designation || '';
+    document.getElementById('jf-location').value = j.location || '';
+    document.getElementById('jf-experience').value = j.years_of_experience || '';
+    document.getElementById('jf-department').value = j.department || '';
+    document.getElementById('jf-country').value = j.country || '';
+    document.getElementById('jf-nature').value = j.nature || '';
+    document.getElementById('jf-open-date').value = displayToDateInput(j.open_date);
+    document.getElementById('jf-close-date').value = displayToDateInput(j.close_date);
+    document.getElementById('jf-summary').value = j.summary || '';
+    const quals = j.qualification ? String(j.qualification).split(';').map(s=>s.trim()).filter(Boolean) : [];
+    const skills = j.skill ? String(j.skill).split(';').map(s=>s.trim()).filter(Boolean) : [];
+    document.getElementById('jf-qual-list').innerHTML = '';
+    document.getElementById('jf-skills-list').innerHTML = '';
+    quals.forEach(q => addBullet('jf-qual-list', q));
+    skills.forEach(s => addBullet('jf-skills-list', s));
+    if (!quals.length) addBullet('jf-qual-list');
+    if (!skills.length) addBullet('jf-skills-list');
+    document.getElementById('create-job-form-wrap').classList.remove('hidden');
+    document.getElementById('create-job-form-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function toggleCreateJobForm() {
+  const wrap = document.getElementById('create-job-form-wrap');
+  if (wrap.classList.contains('hidden')) {
+    document.getElementById('job-form-title').textContent = 'Create New Job';
+    document.getElementById('job-form-submit-btn').textContent = 'Post Job';
+    document.getElementById('edit-job-id').value = '';
+    ['jf-designation','jf-location','jf-experience','jf-department','jf-country','jf-open-date','jf-close-date','jf-summary'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('jf-nature').value = '';
+    document.getElementById('jf-qual-list').innerHTML = '';
+    document.getElementById('jf-skills-list').innerHTML = '';
+    addBullet('jf-qual-list');
+    addBullet('jf-skills-list');
+    document.getElementById('job-form-error').classList.add('hidden');
+    wrap.classList.remove('hidden');
+    wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    wrap.classList.add('hidden');
+  }
+}
+
+function addBullet(listId, value = '') {
+  const list = document.getElementById(listId);
+  const row = document.createElement('div');
+  row.className = 'bullet-input-row flex items-center gap-2';
+  row.innerHTML = `
+    <span class="w-1.5 h-1.5 rounded-full bg-orange-400 flex-shrink-0 mt-0.5"></span>
+    <input type="text" value="${esc(value)}" placeholder="Enter requirement..."
+      class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+    <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-red-500 transition p-1">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>`;
+  list.appendChild(row);
+}
+function getBullets(listId) {
+  return [...document.querySelectorAll(`#${listId} input`)].map(inp => inp.value.trim()).filter(Boolean).join(';');
+}
+
+async function submitJobForm() {
+  const editId = document.getElementById('edit-job-id').value;
+  const designation = document.getElementById('jf-designation').value.trim();
+  const location = document.getElementById('jf-location').value.trim();
+  const experience = document.getElementById('jf-experience').value.trim();
+  const department = document.getElementById('jf-department').value.trim();
+  const country = document.getElementById('jf-country').value.trim();
+  const nature = document.getElementById('jf-nature').value;
+  const summary = document.getElementById('jf-summary').value.trim();
+  const openDate = dateInputToDisplay(document.getElementById('jf-open-date').value);
+  const closeDate = dateInputToDisplay(document.getElementById('jf-close-date').value);
+  const qualification = getBullets('jf-qual-list');
+  const skill = getBullets('jf-skills-list');
+  const errEl = document.getElementById('job-form-error');
+  errEl.classList.add('hidden');
+  if (!designation) { errEl.textContent = 'Job title is required.'; errEl.classList.remove('hidden'); return; }
+  if (!location) { errEl.textContent = 'Location is required.'; errEl.classList.remove('hidden'); return; }
+  if (!department) { errEl.textContent = 'Department is required.'; errEl.classList.remove('hidden'); return; }
+  const btn = document.getElementById('job-form-submit-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    const data = await post({ action: editId ? 'updateJob' : 'createJob', job_id: editId||undefined, designation, location, years_of_experience: experience, department, country, nature, qualification, skill, summary, open_date: openDate, close_date: closeDate });
+    if (data.success) {
+      // Update job meta combos with any new title/dept
+      if (!S.jobMeta.designations.includes(designation)) S.jobMeta.designations.push(designation);
+      if (!S.jobMeta.departments.includes(department)) S.jobMeta.departments.push(department);
+      toggleCreateJobForm();
+      S.jobsLoaded = false;
+      loadJobs();
+      markSectionsStale('dashboard', 'inbox', 'applications');
+      if (S.dashLoaded) silentRefreshDashboard();
+    } else {
+      errEl.textContent = data.error || 'Failed to save job.'; errEl.classList.remove('hidden');
+    }
+  } catch {
+    errEl.textContent = 'Network error. Please try again.'; errEl.classList.remove('hidden');
+  }
+  btn.disabled = false; btn.textContent = editId ? 'Update Job' : 'Post Job';
+}
+
+function openDeleteJobModal(jobId, jobName) {
+  S.pendingDeleteJobId = jobId;
+  document.getElementById('delete-job-name').textContent = `"${jobName}"`;
+  openModal('modal-delete-job');
+}
+async function confirmDeleteJob() {
+  closeModal('modal-delete-job');
+  const id = S.pendingDeleteJobId;
+  S.jobsData = S.jobsData.filter(j => j.job_id !== id);
+  renderJobsList();
+  try {
+    await post({ action: 'deleteJob', job_id: id });
+    markSectionsStale('dashboard', 'inbox', 'applications');
+    if (S.dashLoaded) silentRefreshDashboard();
+  } catch { S.jobsLoaded = false; loadJobs(); }
+}
+
+// ============================================================
+// APPLICATIONS
+// ============================================================
+async function loadApplications() {
+  S.appsLoaded = true;
+  const showSpinner = S.currentSection === 'applications' && S.appsData.length === 0;
+  if (showSpinner) {
+    document.getElementById('apps-loading').classList.remove('hidden');
+    document.getElementById('apps-table-wrap').classList.add('hidden');
+    document.getElementById('apps-empty').classList.add('hidden');
+  }
+  try {
+    const data = await api({ action: 'getApplications' });
+    document.getElementById('apps-loading').classList.add('hidden');
+    if (!data.success) return;
+    S.appsData = data.applications || [];
+    S.newAppIds = data.new_ids || [];
+    buildAppTree();
+    if (S.currentSection === 'applications') renderAppTable();
+  } catch {
+    document.getElementById('apps-loading').classList.add('hidden');
+  }
+}
+
+function buildAppTree() {
+  const departments = {};
+  S.appsData.forEach(a => {
+    const dept = a.department || 'Other';
+    const desig = a.designation || 'Unknown';
+    if (!departments[dept]) departments[dept] = new Set();
+    departments[dept].add(desig);
+  });
+  const tree = document.getElementById('app-tree');
+  const catSelect = document.getElementById('app-category-filter');
+  let treeHTML = '';
+  let catOptions = '<option value="">All Categories</option>';
+  Object.entries(departments).forEach(([dept, designSet]) => {
+    treeHTML += `
+      <div class="mt-1">
+        <button onclick="filterAppByCategory('${esc(dept)}','')"
+          class="tree-item w-full text-left px-3 py-1.5 text-xs font-bold text-gray-600 uppercase tracking-wide hover:bg-orange-50 rounded-lg transition">${esc(dept)}</button>
+        <div class="pl-3">
+          ${[...designSet].map(d=>`
+            <button onclick="filterAppByCategory('${esc(dept)}','${esc(d)}')"
+              class="tree-item w-full text-left px-3 py-1.5 text-xs text-gray-600 rounded-lg transition">${esc(d)}</button>`).join('')}
+        </div>
+      </div>`;
+    catOptions += `<optgroup label="${esc(dept)}">${[...designSet].map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('')}</optgroup>`;
+  });
+  tree.innerHTML = treeHTML;
+  catSelect.innerHTML = catOptions;
+}
+
+function filterAppByCategory(dept, desig) {
+  document.querySelectorAll('.tree-item').forEach(el => el.classList.remove('selected'));
+  document.getElementById('app-category-filter').value = desig || dept;
+  renderAppTable();
+}
+
+function renderAppTable() {
+  const search = (document.getElementById('app-search')?.value || '').toLowerCase();
+  const statusF = document.getElementById('app-status-filter')?.value || '';
+  const catF = document.getElementById('app-category-filter')?.value || '';
+  let items = S.appsData;
+  if (search) items = items.filter(a =>
+    (a.full_name||'').toLowerCase().includes(search) ||
+    (a.email||'').toLowerCase().includes(search) ||
+    (a.designation||'').toLowerCase().includes(search)
+  );
+  if (statusF) items = items.filter(a => (a.status||'').toLowerCase() === statusF);
+  if (catF) items = items.filter(a =>
+    (a.designation||'').toLowerCase() === catF.toLowerCase() ||
+    (a.department||'').toLowerCase() === catF.toLowerCase()
+  );
+  const wrap = document.getElementById('apps-table-wrap');
+  const empty = document.getElementById('apps-empty');
+  const tbody = document.getElementById('apps-tbody');
+  if (!items.length) { wrap.classList.add('hidden'); empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  wrap.classList.remove('hidden');
+  tbody.innerHTML = items.map(a => {
+    const isExpanded = S.expandedAppIds.has(a.app_id);
+    const isNew = S.newAppIds.includes(a.app_id);
+    const isInterviewing = (a.status||'').toLowerCase() === 'interviewing';
+    // CV: use filename as pointer - display as {app_id}_{full_name}.pdf
+    const cvDisplay = a.cv || '';
+    const cvCell = cvDisplay
+      ? `<a href="./cvs/${esc(cvDisplay)}" target="_blank" onclick="event.stopPropagation()"
+           class="flex items-center gap-1.5 text-xs text-orange-500 hover:text-orange-600 font-medium">
+           <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg>
+           <span class="truncate max-w-[120px]">${esc(cvDisplay)}</span>
+         </a>`
+      : '<span class="text-xs text-gray-300">—</span>';
+    return `
+      <tr class="app-row border-b border-gray-100 ${isExpanded?'app-row-expanded':''}" onclick="toggleAppExpand('${a.app_id}')">
+        <td class="px-5 py-3">
+          <div class="flex items-start gap-1.5">
+            ${isNew ? '<span class="status-badge status-new mt-0.5">new</span>' : ''}
+            <div>
+              <p class="font-semibold text-gray-900 text-sm">${esc(a.full_name)}</p>
+              <p class="text-xs text-gray-400">${esc(a.email)}</p>
+              ${isExpanded ? `<p class="text-xs text-gray-500 mt-1">📞 ${esc(a.phone||'—')}</p>
+                ${isInterviewing
+                  ? `<p class="text-xs text-blue-600 mt-0.5">📅 Interview: <strong>${esc(a.interview_date||'—')}</strong></p>`
+                  : `<p class="text-xs text-gray-400 mt-0.5">Interview: —</p>`}` : ''}
+            </div>
+          </div>
+        </td>
+        <td class="px-4 py-3 text-sm text-gray-700">${esc(a.designation)}</td>
+        <td class="px-4 py-3">${cvCell}</td>
+        <td class="px-4 py-3 text-sm text-gray-600">${esc(a.applied_date)}</td>
+        <td class="px-4 py-3" onclick="event.stopPropagation()">
+          <div class="flex items-center gap-2">
+            ${statusBadge(a.status)}
+            <button onclick="openStatusModal('${a.app_id}','${esc(a.full_name)}','${a.status}')"
+              class="text-gray-400 hover:text-orange-500 transition p-0.5 rounded">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+function toggleAppExpand(appId) {
+  if (S.expandedAppIds.has(appId)) S.expandedAppIds.delete(appId);
+  else S.expandedAppIds.add(appId);
+  renderAppTable();
+}
+
+function openStatusModal(appId, name, currentStatus) {
+  S.pendingAppId = appId;
+  document.getElementById('modal-app-name').textContent = name;
+  document.getElementById('modal-app-status-select').value = currentStatus;
+  document.getElementById('modal-interview-dt').value = '';
+  handleStatusSelectChange();
+  openModal('modal-app-status');
+}
+function handleStatusSelectChange() {
+  const val = document.getElementById('modal-app-status-select').value;
+  const grp = document.getElementById('interview-date-group');
+  if (val === 'interviewing') grp.classList.remove('hidden');
+  else grp.classList.add('hidden');
+}
+async function confirmStatusChange() {
+  const newStatus = document.getElementById('modal-app-status-select').value;
+  const interviewDt = document.getElementById('modal-interview-dt').value;
+  if (newStatus === 'interviewing' && !interviewDt) {
+    document.getElementById('modal-interview-dt').focus(); return;
+  }
+  const id = S.pendingAppId;
+  closeModal('modal-app-status');
+  const idx = S.appsData.findIndex(a => a.app_id === id);
+  if (idx >= 0) {
+    S.appsData[idx].status = newStatus;
+    if (interviewDt) {
+      // Format interview date for display: "Mon, 25 May 2026 - 3:00PM"
+      const d = new Date(interviewDt);
+      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      let h = d.getHours(), m = d.getMinutes();
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12; if (h===0) h=12;
+      const ms = m < 10 ? '0'+m : String(m);
+      S.appsData[idx].interview_date = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} - ${h}:${ms}${ampm}`;
+    }
+  }
+  renderAppTable();
+  try {
+    await post({ action: 'updateApplicationStatus', app_id: id, status: newStatus, interview_date: interviewDt ? new Date(interviewDt).toLocaleString() : '' });
+    markSectionsStale('dashboard', 'inbox', 'jobs');
+    if (S.dashLoaded) silentRefreshDashboard();
+  } catch {}
+}
+
+// ============================================================
+// SILENT BACKGROUND LOADERS (no spinners, update state in place)
+// ============================================================
+
+// Generic dispatcher — all sections use their main load function.
+// The load functions themselves decide whether to show a spinner (first load only).
+function silentRefreshSection(section) {
+  if (section === 'dashboard')    silentRefreshDashboard();
+  if (section === 'inbox')        loadInbox();
+  if (section === 'jobs')         loadJobs();
+  if (section === 'applications') loadApplications();
+}
+
+// SILENT DASHBOARD REFRESH (background, no flicker)
+// ============================================================
+async function silentRefreshDashboard() {
+  try {
+    const data = await api({ action: 'getDashboardData', timeframe: S.dashTimeframe });
+    if (!data.success) return;
+    S.dashboard = data;
+    if (S.currentSection === 'dashboard') {
+      renderKPIs(data.kpis);
+      renderWidgetJobs(data.active_jobs || []);
+      renderWidgetInterviews(data.upcoming_interviews || []);
+    }
+    S.sectionNeedsRefresh.dashboard = false;
+  } catch(e) {}
+}
+
+</script>
+</body>
+</html>
