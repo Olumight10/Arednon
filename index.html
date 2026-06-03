@@ -94,7 +94,8 @@
 
         .tagline-inner {
             display: inline-flex;
-            align-items: center;
+            align-items: baseline;           /* Better vertical alignment */
+            gap: 4px;                        /* Fine-tune spacing between static text and slot */
             flex-wrap: nowrap;
             white-space: nowrap;
             font-size: clamp(14.5px, 3.5vw, 26px);
@@ -107,8 +108,9 @@
             display: inline-block;
             height: 1.25em;
             overflow: hidden;
-            vertical-align: middle;
+            vertical-align: baseline;        /* Better alignment with text */
             flex-shrink: 0;
+            margin-left: 2px;                /* Small adjustment if needed */
         }
 
         .slot-track {
@@ -116,7 +118,7 @@
             flex-direction: column;
             align-items: flex-start;
         }
-
+        
         .slot-word {
             font-family: 'Poppins', 'Inter', sans-serif;
             font-weight: 700;
@@ -125,6 +127,7 @@
             letter-spacing: -0.04em;
             display: block;
             white-space: nowrap;
+            text-align: left;                /* Ensure left alignment */
         }
 
         .w-partnership   { background: linear-gradient(180deg, #D60000 0%, #FC0202 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
@@ -294,7 +297,6 @@
             width: 52%;
             max-width: 880px;
             height: auto;
-
             mix-blend-mode: multiply;
             object-fit: contain;
             object-position: left bottom;
@@ -333,148 +335,261 @@
             100% { filter: drop-shadow(0 0 20px #FFE310) brightness(0.8);  transform: scale(1.0)  rotate(-1deg); }
         }
 
+        /* ── Nav "Contact us" button ── */
+        .contact-nav-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 8px 24px;
+            height: 38px;
+            background: #FA6B02;
+            border-radius: 6px;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.18);
+        }
 
-/* ── Nav "Contact us" button ── */
-.contact-nav-btn {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    padding: 8px 24px;
-    height: 38px;
-    background: #FA6B02;
-    border-radius: 6px;
-    text-decoration: none;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: #ffffff;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.18);
-}
-
-.contact-nav-btn .cnb-bubble {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: #F9D30D;
-    border-radius: 50%;
-    left: 50%;
-    bottom: -28px;
-    transform: translateX(-50%) scale(1);
-    transition:
-        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-        bottom    0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.contact-nav-btn:hover .cnb-bubble {
-    transform: translateX(-50%) scale(12);
-    bottom: -4px;
-}
-
-.contact-nav-btn .cnb-text {
-    position: relative;
-    z-index: 2;
-    transition: color 0.35s ease;
-}
-
-.contact-nav-btn:hover .cnb-text {
-    color: #111111;
-}
-/* ── Footer layout ── */
-.col_12_34 {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
-}
-
-.col_12 {
-    display: flex;
-    flex-direction: row;
-    gap: 300px;
-    flex-shrink: 0;
-}
-
-.col_34 {
-    display: flex;
-    flex-direction: row;
-    gap: 60px;
-    flex-shrink: 0;
-    margin-right: 60px;
-}
-
-/* ── Mobile ── */
-@media (max-width: 767px) {
-
-    .col_12_34 {
-        flex-direction: row;   
-        gap: 0px;
-    }
-
-    .col_12 {
-        flex-direction: column;   /* logo above contact */
-        gap: 28px;
-        width: 40%;
-    }
-
-    .col_34 {
-        flex-direction: row;      /* services + menu stay side by side */
-        gap: 32px;                /* tighter gap on small screen */
-        margin-right: 0;          /* no right margin on mobile */
-    }
-
-    /* Shrink heading size on mobile */
-    .col_34 h4,
-    .col_12 h4 {
-        font-size: 13px;
-    }
-
-    /* Shrink link text on mobile */
-    .col_34 ul li a,
-    .col_12 ul li a,
-    .col_12 ul li {
-        font-size: 12px;
-    }
-
-    /* Tighten list spacing on mobile */
-    .col_34 ul {
-        gap: 10px;
-    }
-
-    /* Logo smaller on mobile */
-    .col_12 img {
-        height: 28px;
-        margin-bottom: 10px;
-    }
-
-    /* About text smaller on mobile */
-    .col_12 p {
-        font-size: 11px;
-        line-height: 1.55;
-        margin-bottom: 10px;
-    }
-
-    .footer-rig {
+        .contact-nav-btn .cnb-bubble {
             position: absolute;
-            left: -15%;
-            bottom: 12%;
-            width: 130%;
-            max-width: 1000px;
-            height: auto;
-            mix-blend-mode: multiply;
-            object-fit: contain;
-            object-position: left bottom;
-    }
+            width: 20px;
+            height: 20px;
+            background: #F9D30D;
+            border-radius: 50%;
+            left: 50%;
+            bottom: -28px;
+            transform: translateX(-50%) scale(1);
+            transition:
+                transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                bottom    0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        }
 
-    .footer-flame {
-        left: 42%;        /* ← tweak mobile: flame horizontal position */
-        top: 155px;        /* ← tweak mobile: flame vertical position */
-        width: 80px;      /* ← tweak mobile: flame size */
-        height: 80px;     /* ← tweak mobile: flame size (keep same as width) */
-    }
-}
+        .contact-nav-btn:hover .cnb-bubble {
+            transform: translateX(-50%) scale(12);
+            bottom: -4px;
+        }
+
+        .contact-nav-btn .cnb-text {
+            position: relative;
+            z-index: 2;
+            transition: color 0.35s ease;
+        }
+
+        .contact-nav-btn:hover .cnb-text {
+            color: #111111;
+        }
+
+        /* ── Footer layout ── */
+        .col_12_34 {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .col_12 {
+            display: flex;
+            flex-direction: row;
+            gap: 300px;
+            flex-shrink: 0;
+        }
+
+        .col_34 {
+            display: flex;
+            flex-direction: row;
+            gap: 60px;
+            flex-shrink: 0;
+            margin-right: 60px;
+        }
+
+        /* ── Mobile ── */
+        @media (max-width: 767px) {
+
+            .col_12_34 {
+                flex-direction: row;
+                gap: 0px;
+            }
+
+            .col_12 {
+                flex-direction: column;
+                gap: 28px;
+                width: 40%;
+            }
+
+            .col_34 {
+                flex-direction: row;
+                gap: 32px;
+                margin-right: 0;
+            }
+
+            .col_34 h4,
+            .col_12 h4 {
+                font-size: 13px;
+            }
+
+            .col_34 ul li a,
+            .col_12 ul li a,
+            .col_12 ul li {
+                font-size: 12px;
+            }
+
+            .col_34 ul {
+                gap: 10px;
+            }
+
+            .col_12 img {
+                height: 28px;
+                margin-bottom: 10px;
+            }
+
+            .col_12 p {
+                font-size: 11px;
+                line-height: 1.55;
+                margin-bottom: 10px;
+            }
+
+            .footer-rig {
+                position: absolute;
+                left: -15%;
+                bottom: 12%;
+                width: 130%;
+                max-width: 1000px;
+                height: auto;
+                mix-blend-mode: multiply;
+                object-fit: contain;
+                object-position: left bottom;
+            }
+
+            .footer-flame {
+                left: 42%;
+                top: 155px;
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        /* ════════════════════════════════════════
+           MOBILE DROPDOWN MENU
+        ════════════════════════════════════════ */
+
+        /* The dropdown panel — matches the width of the Contact us + hamburger wrapper */
+        #mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 100%;          /* same width as its relative-positioned parent */
+            min-width: 160px;     /* safety floor */
+            background: #ffffff;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+            border-radius: 0 0 10px 10px;
+            z-index: 100;
+            overflow: visible;
+        }
+        #mobile-menu.open {
+            display: block;
+        }
+
+        /* Each top-level row */
+        .mob-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 11px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            text-decoration: none;
+            border-bottom: 1px solid #f3f3f3;
+            cursor: pointer;
+            transition: color 0.18s, background 0.18s;
+            user-select: none;
+        }
+        .mob-row:hover { color: #FA6B02; background: #fff8f4; }
+        .mob-row.active { color: #FA6B02; }
+
+        /* Chevron inside row */
+        .mob-chevron {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            transition: transform 0.22s ease;
+            stroke: #9ca3af;
+        }
+        .mob-row.expanded .mob-chevron {
+            transform: rotate(90deg);
+            stroke: #FA6B02;
+        }
+
+        /* Text part of a split row — navigates to page */
+        .mob-row-link {
+            flex: 1;
+            padding: 11px 0 11px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            text-decoration: none;
+            transition: color 0.18s;
+        }
+        .mob-row-link:hover { color: #FA6B02; }
+
+        /* Arrow button — only toggles the submenu */
+        .mob-arrow-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            flex-shrink: 0;
+        }
+        .mob-arrow-btn:hover .mob-chevron { stroke: #FA6B02; }
+        .mob-arrow-btn.expanded .mob-chevron {
+            transform: rotate(90deg);
+            stroke: #FA6B02;
+        }
+
+        /* Sub-menu panel — flies out to the LEFT of the main panel */
+        .mob-sub {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 100%;
+            width: 210px;
+            background: #ffffff;
+            box-shadow: -4px 8px 24px rgba(0,0,0,0.13);
+            border-radius: 10px 0 0 10px;
+            z-index: 101;
+            overflow: hidden;
+        }
+        .mob-sub.open { display: block; }
+
+        /* Each row that has a submenu needs relative positioning to anchor it */
+        .mob-row-wrap {
+            position: relative;
+            border-bottom: 1px solid #f3f3f3;
+        }
+
+        .mob-sub a {
+            display: block;
+            padding: 11px 14px;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: #4b5563;
+            text-decoration: none;
+            border-bottom: 1px solid #f0f0f0;
+            transition: color 0.18s, background 0.18s;
+        }
+        .mob-sub a:last-child { border-bottom: none; }
+        .mob-sub a:hover { color: #FA6B02; background: #fff3ec; }
     </style>
 </head>
 <body class="text-gray-800 antialiased bg-white">
@@ -483,7 +598,7 @@
          HEADER
     ══════════════════════════════════════════ -->
     <header class="sticky top-0 z-50 transition-all duration-300"
-            style="background: rgba(255,255,255,0.08);
+            style="position:relative; background: rgba(255,255,255,0.08);
                    backdrop-filter: blur(2px) saturate(180%) brightness(1.05);
                    -webkit-backdrop-filter: blur(4px) saturate(180%) brightness(1.05);
                    border-bottom: 1px solid rgba(255,255,255,0.25);
@@ -540,53 +655,75 @@
                     </a>
                 </nav>
 
-                <!-- Mobile menu button -->
-                <div class="flex md:hidden items-center">
-                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-orange-500 focus:outline-none">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                <!-- Mobile: Contact us btn + hamburger + dropdown -->
+                <div class="flex md:hidden items-center gap-2 relative">
+
+                    <!-- Contact us — always visible beside hamburger -->
+                    <a href="contactus.html" class="contact-nav-btn" style="height:34px; padding:0 14px; font-size:13px; border-radius:6px;">
+                        <span class="cnb-bubble"></span>
+                        <span class="cnb-text">Contact us</span>
+                    </a>
+
+                    <!-- Hamburger -->
+                    <button id="mob-menu-btn" aria-label="Open menu" aria-expanded="false"
+                            style="background:none;border:none;cursor:pointer;padding:6px;">
+                        <svg id="mob-icon-bars" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="#374151" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                        <svg id="mob-icon-x" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="#374151" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
-                </div>
-            </div>
-        </div>
 
-        <!-- Mobile menu drawer -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 pb-4 shadow-lg absolute w-full">
-            <a href="index.html" class="block px-4 py-3 text-sm font-medium text-orange-500 bg-orange-50 border-l-4 border-orange-500">Home</a>
+                    <!-- Dropdown panel -->
+                    <div id="mobile-menu">
 
-            <div>
-                <div class="mobile-dropdown-toggle flex justify-between items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent cursor-pointer" data-target="who-we-are-menu">
-                    <span class="flex-grow">Who we are</span>
-                    <svg class="dropdown-icon w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </div>
-                <div id="who-we-are-menu" class="hidden bg-gray-50 border-l-4 border-transparent pl-4 py-2 space-y-2">
-                    <a href="whoweare.html#vision"      class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Vision</a>
-                    <a href="whoweare.html#mission"     class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Mission</a>
-                    <a href="whoweare.html#core-values" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Core Values</a>
-                </div>
-            </div>
+                        <!-- Home -->
+                        <a href="index.html" class="mob-row active">Home</a>
 
-            <div>
-                <div class="mobile-dropdown-toggle flex justify-between items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent cursor-pointer" data-target="what-we-do-menu">
-                    <span class="flex-grow">What we do</span>
-                    <svg class="dropdown-icon w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </div>
-                <div id="what-we-do-menu" class="hidden bg-gray-50 border-l-4 border-transparent pl-4 py-2 space-y-2">
-                    <a href="oilfield.html"    class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Oilfield Services</a>
-                    <a href="operations.html"  class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Operations Support Services</a>
-                    <a href="engineering.html" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Engineering Services</a>
-                    <a href="inspection.html"  class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Inspection Services</a>
-                </div>
-            </div>
+                        <!-- Who we are: text navigates, arrow toggles sub -->
+                        <div class="mob-row-wrap">
+                            <div class="mob-row" style="padding:0;">
+                                <a href="whoweare.html" class="mob-row-link">Who we are</a>
+                                <button class="mob-arrow-btn" data-target="sub-who" aria-label="Expand Who we are">
+                                    <svg class="mob-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 18l6-6-6-6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="mob-sub" id="sub-who">
+                                <a href="whoweare.html#vision">Vision</a>
+                                <a href="whoweare.html#mission">Mission</a>
+                                <a href="whoweare.html#core-values">Core Values</a>
+                            </div>
+                        </div>
 
-            <a href="joinus.html" class="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent">Join us</a>
-            <div class="px-4 mt-2">
-                <a href="contactus.html" class="block text-center bg-orange-500 text-white px-6 py-2 rounded shadow hover:bg-orange-600 transition">Contact us</a>
+                        <!-- What we do: text navigates, arrow toggles sub -->
+                        <div class="mob-row-wrap">
+                            <div class="mob-row" style="padding:0;">
+                                <a href="whatwedo.html" class="mob-row-link">What we do</a>
+                                <button class="mob-arrow-btn" data-target="sub-what" aria-label="Expand What we do">
+                                    <svg class="mob-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 18l6-6-6-6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="mob-sub" id="sub-what">
+                                <a href="oilfield.html">Oilfield services</a>
+                                <a href="operations.html">Operations support services</a>
+                                <a href="engineering.html">Engineering services</a>
+                                <a href="inspection.html">Inspection services</a>
+                            </div>
+                        </div>
+
+                        <!-- Join us -->
+                        <a href="joinus.html" class="mob-row" style="border-bottom:none;">Join us</a>
+
+                    </div>
+                    <!-- end #mobile-menu -->
+
+                </div>
+
             </div>
         </div>
     </header>
@@ -634,7 +771,8 @@
             </p>
             <div class="tagline-outer">
                 <p class="tagline-inner">
-                    BEYOND SERVICES, WE BUILD&nbsp;<span class="slot-wrapper" id="slotWrapper">
+                    BEYOND SERVICES, WE BUILD
+                    <span class="slot-wrapper" id="slotWrapper">
                         <span class="slot-track" id="slotTrack">
                             <span class="slot-word w-partnership">PARTNERSHIP</span>
                             <span class="slot-word w-relationships">RELATIONSHIPS</span>
@@ -730,33 +868,78 @@
     <section class="py-16 bg-white px-4">
         <div class="max-w-7xl mx-auto text-center">
             <h2 class="text-2xl font-bold text-gray-900 mb-10">Our Partners</h2>
-            <div class="flex flex-wrap justify-center items-center gap-4 md:gap-8 max-w-5xl mx-auto">
 
-                <div class="w-24 h-24 md:w-36 md:h-36 bg-white rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
+            <!--
+                DESKTOP: single row, all 5 centered with generous gap
+                MOBILE:  3 on top row + 2 centred below (grid trick)
+            -->
+
+            <!-- Desktop layout (md and up) -->
+            <div class="hidden md:flex justify-center items-center gap-16 lg:gap-20 max-w-6xl mx-auto flex-wrap">
+
+                <div class="w-36 h-36 bg-white rounded-md shadow-[0_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
                     <img src="petroIt_img.jpeg" alt="Petro IT"
                          onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'40\'%3E%3Crect width=\'120\' height=\'40\' fill=\'%2310b981\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'14\' font-weight=\'bold\' fill=\'%23ffffff\'%3EPetro IT%3C/text%3E%3C/svg%3E'"
                          class="max-w-full max-h-full object-contain">
                 </div>
 
-                <div class="w-24 h-24 md:w-36 md:h-36 bg-white rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
+                <div class="w-36 h-36 bg-white rounded-md shadow-[0_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
                     <img src="joy_pipe_img.jpg" alt="Joy Pipe USA"
                          onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'40\'%3E%3Crect width=\'120\' height=\'40\' fill=\'%23ef4444\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'12\' font-weight=\'bold\' fill=\'%23ffffff\'%3EJOY PIPE%3C/text%3E%3C/svg%3E'"
                          class="max-w-full max-h-full object-contain">
                 </div>
 
-                <div class="w-24 h-24 md:w-36 md:h-36 bg-white rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
+                <div class="w-36 h-36 bg-white rounded-md shadow-[0_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
                     <img src="cisco_img.png" alt="Cisco" class="max-w-full max-h-full object-contain">
                 </div>
 
-                <div class="w-24 h-24 md:w-36 md:h-36 bg-white rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
-                    <img src="samson_img.png" alt="Samson" class="max-w-full max-h-full object-contain">
+                <div class="w-36 h-36 bg-white rounded-md shadow-[0_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
+                    <img src="samson.png" alt="Samson" class="max-w-full max-h-full object-contain">
                 </div>
 
-                <div class="w-24 h-24 md:w-36 md:h-36 bg-white rounded-md shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
+                <div class="w-36 h-36 bg-white rounded-md shadow-[0_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
                     <img src="motorola_img.png" alt="Motorola" class="max-w-full max-h-full object-contain">
                 </div>
 
             </div>
+
+            <!-- Mobile layout: 3 + 2 centred rows -->
+            <div class="md:hidden max-w-sm mx-auto">
+                <!-- Row 1: 3 partners -->
+                <div class="flex justify-center items-center gap-5 mb-4">
+
+                    <div class="w-32 h-32 bg-white rounded-md shadow-[0_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
+                        <img src="petroIt_img.jpeg" alt="Petro IT"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'30\'%3E%3Crect width=\'80\' height=\'30\' fill=\'%2310b981\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'10\' font-weight=\'bold\' fill=\'%23ffffff\'%3EPetro IT%3C/text%3E%3C/svg%3E'"
+                             class="max-w-full max-h-full object-contain">
+                    </div>
+
+                    <div class="w-32 h-32 bg-white rounded-md shadow-[0_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
+                        <img src="joy_pipe_img.jpg" alt="Joy Pipe USA"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'30\'%3E%3Crect width=\'80\' height=\'30\' fill=\'%23ef4444\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'9\' font-weight=\'bold\' fill=\'%23ffffff\'%3EJOY PIPE%3C/text%3E%3C/svg%3E'"
+                             class="max-w-full max-h-full object-contain">
+                    </div>
+
+                    <div class="w-32 h-32 bg-white rounded-md shadow-[0_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
+                        <img src="cisco_img.png" alt="Cisco" class="max-w-full max-h-full object-contain">
+                    </div>
+
+                </div>
+
+                <!-- Row 2: 2 partners centred -->
+                <div class="flex justify-center items-center gap-5">
+
+                    <div class="w-32 h-32 bg-white rounded-md shadow-[0_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
+                        <img src="samson.png" alt="Samson" class="max-w-full max-h-full object-contain">
+                    </div>
+
+                    <div class="w-32 h-32 bg-white rounded-md shadow-[0_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center p-4 hover:shadow-lg transition duration-300">
+                        <img src="motorola_img.png" alt="Motorola" class="max-w-full max-h-full object-contain">
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -778,12 +961,6 @@
         <!-- Footer content -->
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
 
-            <!--
-                col_12_34
-                ├── col_12  (Logo+Socials  |  Contact)   ← left side
-                └── col_34  (Services  |  Menu)           ← right side
-                justify-content: space-between pushes them to opposite ends
-            -->
             <div class="col_12_34">
 
                 <!-- ── col_12: Logo block + Contact block ── -->
@@ -806,7 +983,7 @@
                             <!-- LinkedIn -->
                             <a href="#" class="text-orange-500 hover:text-orange-600 transition">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667h-3.554v-11.492h3.414v1.571h.048c.475-.9 1.636-1.85 3.367-1.85 3.605 0 4.27 2.372 4.27 5.455v6.316h.001zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019h-3.555v-11.492h3.555v11.492zm15.556-20.452h-21.35c-.732 0-1.325.593-1.325 1.324v21.351c0 .731.593 1.325 1.325 1.325h21.35c.731 0 1.325-.594 1.325-1.325v-21.351c0-.731-.594-1.324-1.325-1.324z"/>
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667h-3.554v-11.492h3.414v1.571h.048c.475-.9 1.636-1.85 3.367-1.85 3.605 0 4.27 2.372 4.27 5.455v6.316h.001zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019h-3.555v-11.492h3.555v11.492zm15.556-20.452h-21.35c-.732 0-1.325.593-1.324v21.351c0 .731.593 1.325 1.325 1.325h21.35c.731 0 1.325-.594 1.325-1.325v-21.351c0-.731-.594-1.324-1.325-1.324z"/>
                                 </svg>
                             </a>
                         </div>
@@ -866,9 +1043,10 @@
 
             </div>
             <!-- ── end col_12_34 ── -->
-
-            <!-- Bottom colour bar -->
-            <div class="mt-16 w-full" style="height: 20px; background: linear-gradient(105deg, #7B0000 74%, #F9D30D 74%);"></div>
+            <div
+                class="mt-16 relative left-1/2 -translate-x-1/2 w-screen h-5"
+                style="background:linear-gradient(105deg,#7B0000 74%,#F9D30D 74%);">
+            </div>
 
         </div>
     </footer>
@@ -878,40 +1056,80 @@
          SCRIPTS
     ══════════════════════════════════════════ -->
     <script>
-        // Mobile menu toggle
-        document.addEventListener('DOMContentLoaded', () => {
-            const btn  = document.getElementById('mobile-menu-btn');
-            const menu = document.getElementById('mobile-menu');
+        // ── Mobile dropdown menu ───────────────────────
+        const mobBtn    = document.getElementById('mob-menu-btn');
+        const mobMenu   = document.getElementById('mobile-menu');
+        const iconBars  = document.getElementById('mob-icon-bars');
+        const iconX     = document.getElementById('mob-icon-x');
 
-            btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+        function openMobMenu() {
+            mobMenu.classList.add('open');
+            iconBars.classList.add('hidden');
+            iconX.classList.remove('hidden');
+            mobBtn.setAttribute('aria-expanded', 'true');
+        }
+        function closeMobMenu() {
+            mobMenu.classList.remove('open');
+            iconBars.classList.remove('hidden');
+            iconX.classList.add('hidden');
+            mobBtn.setAttribute('aria-expanded', 'false');
+        }
 
-            document.querySelectorAll('.mobile-dropdown-toggle').forEach(toggle => {
-                toggle.addEventListener('click', e => {
-                    e.preventDefault();
-                    const target = document.getElementById(toggle.getAttribute('data-target'));
-                    const icon   = toggle.querySelector('.dropdown-icon');
-                    target.classList.toggle('hidden');
-                    icon.classList.toggle('rotate-180');
-                });
-            });
+        mobBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobMenu.classList.contains('open') ? closeMobMenu() : openMobMenu();
+        });
 
-            document.querySelectorAll('.mobile-submenu-link').forEach(link => {
-                link.addEventListener('click', () => menu.classList.add('hidden'));
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobMenu.contains(e.target) && e.target !== mobBtn) {
+                closeMobMenu();
+            }
+        });
+
+        // Close when a leaf link is tapped
+        mobMenu.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', closeMobMenu);
+        });
+
+        // Sub-menu arrow toggles (arrow only — text links navigate normally)
+        document.querySelectorAll('.mob-arrow-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const targetId = btn.getAttribute('data-target');
+                const sub      = document.getElementById(targetId);
+                const isOpen   = sub.classList.contains('open');
+
+                // Close all subs first
+                document.querySelectorAll('.mob-sub').forEach(s => s.classList.remove('open'));
+                document.querySelectorAll('.mob-arrow-btn').forEach(b => b.classList.remove('expanded'));
+
+                if (!isOpen) {
+                    sub.classList.add('open');
+                    btn.classList.add('expanded');
+                }
             });
         });
 
-        // Tagline slot animation
+        // ── Tagline slot animation ─────────────────────
         (function () {
             const track   = document.getElementById('slotTrack');
             const wrapper = document.getElementById('slotWrapper');
-            const WORDS = 4, PAUSE = 2400, FORWARD_DUR = 700, REWIND_DUR = 900;
+            const WORDS = 4;
+            const PAUSE = 800;           // ← Reduced from 2400
+            const FORWARD_DUR = 350;      // ← Faster slide up
+            const REWIND_DUR = 450;       // ← Faster reset
+
             let current = 0;
 
             function setWidth() {
                 let max = 0;
-                track.querySelectorAll('.slot-word').forEach(s => { if (s.offsetWidth > max) max = s.offsetWidth; });
+                track.querySelectorAll('.slot-word').forEach(s => {
+                    if (s.offsetWidth > max) max = s.offsetWidth;
+                });
                 wrapper.style.width = max + 'px';
             }
+
             setWidth();
             window.addEventListener('resize', setWidth);
 
@@ -921,7 +1139,7 @@
             function tick() {
                 if (current < WORDS - 1) {
                     current++;
-                    track.style.transition = `transform ${FORWARD_DUR}ms cubic-bezier(0.22, 1, 0.36, 1)`;
+                    track.style.transition = `transform ${FORWARD_DUR}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
                     track.style.transform  = `translateY(-${current * wrapper.offsetHeight}px)`;
                     setTimeout(tick, PAUSE);
                 } else {
@@ -933,6 +1151,7 @@
                     }, PAUSE);
                 }
             }
+
             setTimeout(tick, PAUSE);
         })();
     </script>

@@ -218,109 +218,272 @@
     }
 }
 
+        /* ════════════════════════════════════════
+           MOBILE DROPDOWN MENU
+        ════════════════════════════════════════ */
+
+        /* The dropdown panel — matches the width of the Contact us + hamburger wrapper */
+        #mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 100%;          /* same width as its relative-positioned parent */
+            min-width: 160px;     /* safety floor */
+            background: #ffffff;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+            border-radius: 0 0 10px 10px;
+            z-index: 100;
+            overflow: visible;
+        }
+        #mobile-menu.open {
+            display: block;
+        }
+
+        /* Each top-level row */
+        .mob-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 11px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            text-decoration: none;
+            border-bottom: 1px solid #f3f3f3;
+            cursor: pointer;
+            transition: color 0.18s, background 0.18s;
+            user-select: none;
+        }
+        .mob-row:hover { color: #FA6B02; background: #fff8f4; }
+        .mob-row.active { color: #FA6B02; }
+
+        /* Chevron inside row */
+        .mob-chevron {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            transition: transform 0.22s ease;
+            stroke: #9ca3af;
+        }
+        .mob-row.expanded .mob-chevron {
+            transform: rotate(90deg);
+            stroke: #FA6B02;
+        }
+
+        /* Text part of a split row — navigates to page */
+        .mob-row-link {
+            flex: 1;
+            padding: 11px 0 11px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            text-decoration: none;
+            transition: color 0.18s;
+        }
+        .mob-row-link:hover { color: #FA6B02; }
+
+        /* Arrow button — only toggles the submenu */
+        .mob-arrow-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            flex-shrink: 0;
+        }
+        .mob-arrow-btn:hover .mob-chevron { stroke: #FA6B02; }
+        .mob-arrow-btn.expanded .mob-chevron {
+            transform: rotate(90deg);
+            stroke: #FA6B02;
+        }
+
+        /* Sub-menu panel — flies out to the LEFT of the main panel */
+        .mob-sub {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 100%;
+            width: 210px;
+            background: #ffffff;
+            box-shadow: -4px 8px 24px rgba(0,0,0,0.13);
+            border-radius: 10px 0 0 10px;
+            z-index: 101;
+            overflow: hidden;
+        }
+        .mob-sub.open { display: block; }
+
+        /* Each row that has a submenu needs relative positioning to anchor it */
+        .mob-row-wrap {
+            position: relative;
+            border-bottom: 1px solid #f3f3f3;
+        }
+
+        .mob-sub a {
+            display: block;
+            padding: 11px 14px;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: #4b5563;
+            text-decoration: none;
+            border-bottom: 1px solid #f0f0f0;
+            transition: color 0.18s, background 0.18s;
+        }
+        .mob-sub a:last-child { border-bottom: none; }
+        .mob-sub a:hover { color: #FA6B02; background: #fff3ec; }
+
     </style>
 </head>
 <body class="text-gray-800 antialiased bg-white">
 
-    <header class="sticky top-0 z-50 transition-all duration-300" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(2px) saturate(180%) brightness(1.05); -webkit-backdrop-filter: blur(4px) saturate(180%) brightness(1.05); border-bottom: 1px solid rgba(255,255,255,0.25); box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);">                
+    <header class="sticky top-0 z-50 transition-all duration-300"
+            style="position:relative; background: rgba(255,255,255,0.08);
+                   backdrop-filter: blur(2px) saturate(180%) brightness(1.05);
+                   -webkit-backdrop-filter: blur(4px) saturate(180%) brightness(1.05);
+                   border-bottom: 1px solid rgba(255,255,255,0.25);
+                   box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);">
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
+
+                <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="index.html">
-                        <img class="h-10 w-auto" src="./logo_img.png" alt="Nondera Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'50\'%3E%3Crect width=\'150\' height=\'50\' fill=\'%23f3f4f6\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16\' font-weight=\'bold\' fill=\'%239ca3af\'%3ENONDERA%3C/text%3E%3C/svg%3E'">
+                        <img class="h-10 w-auto" src="./logo_img.png" alt="Nondera Logo"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'50\'%3E%3Crect width=\'150\' height=\'50\' fill=\'%23f3f4f6\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16\' font-weight=\'bold\' fill=\'%239ca3af\'%3ENONDERA%3C/text%3E%3C/svg%3E'">
                     </a>
                 </div>
 
+                <!-- Desktop nav -->
                 <nav class="hidden md:flex space-x-8 items-center text-sm font-semibold text-gray-700">
                     <a href="index.html" class="hover:text-orange-500 transition">Home</a>
-                    
+
                     <div class="relative group cursor-pointer py-6">
                         <a href="whoweare.html" class="hover:text-orange-500 transition flex items-center">
-                            Who we are 
-                            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            Who we are
+                            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
                         </a>
                         <div class="absolute left-0 top-full mt-0 w-48 bg-white border border-gray-100 shadow-lg rounded-b-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                            <a href="whoweare.html#vision" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Vision</a>
-                            <a href="whoweare.html#mission" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Mission</a>
+                            <a href="whoweare.html#vision"      class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Vision</a>
+                            <a href="whoweare.html#mission"     class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Mission</a>
                             <a href="whoweare.html#core-values" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500">Core Values</a>
                         </div>
                     </div>
 
                     <div class="relative group cursor-pointer py-6">
                         <a href="whatwedo.html" class="text-orange-500 border-b-2 border-orange-500 pb-1 transition flex items-center">
-                            What we do 
-                            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            What we do
+                            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
                         </a>
                         <div class="absolute left-0 top-full mt-0 w-60 bg-white border border-gray-100 shadow-lg rounded-b-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                            <a href="oilfield.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Oilfield Services</a>
-                            <a href="operations.html" class="block px-4 py-3 text-sm text-orange-500 bg-orange-50 font-semibold border-b border-gray-50">Operations Support Services</a>
+                            <a href="oilfield.html"    class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Oilfield Services</a>
+                            <a href="operations.html"  class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Operations Support Services</a>
                             <a href="engineering.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-b border-gray-50">Engineering Services</a>
-                            <a href="inspection.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500">Inspection Services</a>
+                            <a href="inspection.html"  class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500">Inspection Services</a>
                         </div>
                     </div>
 
-                    <a href="joinus.html" class="hover:text-orange-500 transition">Join us</a>
+                    <a href="joinus.html"   class="hover:text-orange-500 transition">Join us</a>
                     <a href="contactus.html" class="contact-nav-btn">
                         <span class="cnb-bubble"></span>
                         <span class="cnb-text">Contact us</span>
                     </a>
                 </nav>
 
-                <div class="flex md:hidden items-center">
-                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-orange-500 focus:outline-none">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                <!-- Mobile: Contact us btn + hamburger + dropdown -->
+                <div class="flex md:hidden items-center gap-2 relative">
+
+                    <!-- Contact us — always visible beside hamburger -->
+                    <a href="contactus.html" class="contact-nav-btn" style="height:34px; padding:0 14px; font-size:13px; border-radius:6px;">
+                        <span class="cnb-bubble"></span>
+                        <span class="cnb-text">Contact us</span>
+                    </a>
+
+                    <!-- Hamburger -->
+                    <button id="mob-menu-btn" aria-label="Open menu" aria-expanded="false"
+                            style="background:none;border:none;cursor:pointer;padding:6px;">
+                        <svg id="mob-icon-bars" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="#374151" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                        <svg id="mob-icon-x" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="#374151" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
-                </div>
-            </div>
-        </div>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 pb-4 shadow-lg absolute w-full">
-            <a href="index.html" class="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent">Home</a>
-            
-            <div>
-                <div class="mobile-dropdown-toggle flex justify-between items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent cursor-pointer" data-target="who-we-are-menu">
-                    <span class="flex-grow">Who we are</span>
-                    <svg class="dropdown-icon w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div id="who-we-are-menu" class="hidden bg-gray-50 border-l-4 border-transparent pl-4 py-2 space-y-2">
-                    <a href="whoweare.html#vision" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Vision</a>
-                    <a href="whoweare.html#mission" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Mission</a>
-                    <a href="whoweare.html#core-values" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Core Values</a>
-                </div>
-            </div>
+                    <!-- Dropdown panel -->
+                    <div id="mobile-menu">
 
-            <div>
-                <div class="mobile-dropdown-toggle flex justify-between items-center px-4 py-3 text-sm font-medium text-orange-500 bg-orange-50 border-l-4 border-orange-500 cursor-pointer" data-target="what-we-do-menu">
-                    <span class="flex-grow">What we do</span>
-                    <svg class="dropdown-icon w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div id="what-we-do-menu" class="hidden bg-gray-50 border-l-4 border-orange-500 pl-4 py-2 space-y-2">
-                    <a href="oilfield.html" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Oilfield Services</a>
-                    <a href="operations.html" class="block px-4 py-2 text-sm text-orange-500 font-semibold mobile-submenu-link">Operations Support Services</a>
-                    <a href="engineering.html" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Engineering Services</a>
-                    <a href="inspection.html" class="block px-4 py-2 text-sm text-gray-600 hover:text-orange-500 mobile-submenu-link">Inspection Services</a>
-                </div>
-            </div>
+                        <!-- Home -->
+                        <a href="index.html" class="mob-row">Home</a>
 
-            <a href="joinus.html" class="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500 border-l-4 border-transparent">Join us</a>
-            <div class="px-4 mt-2">
-                <a href="contactus.html" class="block text-center bg-orange-500 text-white px-6 py-2 rounded shadow hover:bg-orange-600 transition">Contact us</a>
+                        <!-- Who we are: text navigates, arrow toggles sub -->
+                        <div class="mob-row-wrap">
+                            <div class="mob-row" style="padding:0;">
+                                <a href="whoweare.html" class="mob-row-link">Who we are</a>
+                                <button class="mob-arrow-btn" data-target="sub-who" aria-label="Expand Who we are">
+                                    <svg class="mob-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 18l6-6-6-6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="mob-sub" id="sub-who">
+                                <a href="whoweare.html#vision">Vision</a>
+                                <a href="whoweare.html#mission">Mission</a>
+                                <a href="whoweare.html#core-values">Core Values</a>
+                            </div>
+                        </div>
+
+                        <!-- What we do: text navigates, arrow toggles sub -->
+                        <div class="mob-row-wrap">
+                            <div class="mob-row" style="padding:0;">
+                            <a href="whatwedo.html"
+                            class="mob-row-link"
+                            style="color:#FA6B02;font-weight:600;">
+                            What we do
+                            </a>
+                                <button class="mob-arrow-btn" data-target="sub-what" aria-label="Expand What we do">
+                                    <svg class="mob-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 18l6-6-6-6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="mob-sub" id="sub-what">
+                                <a href="oilfield.html">Oilfield services</a>
+                                <a href="operations.html">Operations support services</a>
+                                <a href="engineering.html">Engineering services</a>
+                                <a href="inspection.html">Inspection services</a>
+                            </div>
+                        </div>
+
+                        <!-- Join us -->
+                        <a href="joinus.html" class="mob-row" style="border-bottom:none;">Join us</a>
+
+                    </div>
+                    <!-- end #mobile-menu -->
+
+                </div>
+
             </div>
         </div>
     </header>
 
-    <section class="w-full bg-gradient-to-r from-orange-600 via-orange-500 to-yellow-400 py-16 md:py-20">
+    <section class="w-full bg-gradient-to-r from-orange-600 via-orange-500 to-yellow-400 py-8 md:py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-wide">Operations Support Services</h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-white tracking-wide">Operations Support Services</h1>
         </div>
     </section>
 
 
-    <section class="py-16 md:py-24 px-4 bg-white">
-        <div class="max-w-7xl mx-auto space-y-20 md:space-y-32">
-            
+    <section class="py-16 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20 md:space-y-32">
             <div>
                 <div class="flex flex-col md:flex-row-reverse gap-8 md:gap-12 lg:gap-16 items-stretch">
                     
@@ -382,13 +545,13 @@
                     </div>
                 </div>
 
-                <div class="mt-12 md:mt-16 grid grid-cols-3 md:grid-cols-6 gap-6 md:gap-10 items-center justify-items-center w-full">
-                    <img src="./img1.png" alt="Equipment 1" class="h-16 md:h-24 object-contain hover:scale-110 transition-transform duration-300">
-                    <img src="./img2.png" alt="Equipment 2" class="h-16 md:h-24 object-contain hover:scale-110 transition-transform duration-300">
-                    <img src="./img3.png" alt="Equipment 3" class="h-16 md:h-32 object-contain hover:scale-110 transition-transform duration-300">
-                    <img src="./img4.png" alt="Equipment 4" class="h-16 md:h-24 object-contain hover:scale-110 transition-transform duration-300">
-                    <img src="./img5.png" alt="Equipment 5" class="h-16 md:h-24 object-contain hover:scale-110 transition-transform duration-300">
-                    <img src="./img6.png" alt="Equipment 6" class="h-16 md:h-24 object-contain hover:scale-110 transition-transform duration-300">
+                <div class="mt-12 md:mt-16 grid grid-cols-3 md:grid-cols-6 gap-8 md:gap-10 items-center justify-items-center w-full">
+                    <img src="./img1.png" alt="Equipment 1" class="h-28 md:h-40 w-full object-contain hover:scale-110 transition-transform duration-300">
+                    <img src="./img2.png" alt="Equipment 2" class="h-28 md:h-40 w-full object-contain hover:scale-110 transition-transform duration-300">
+                    <img src="./img3.png" alt="Equipment 3" class="h-28 md:h-44 w-full object-contain hover:scale-110 transition-transform duration-300">
+                    <img src="./img4.png" alt="Equipment 4" class="h-28 md:h-40 w-full object-contain hover:scale-110 transition-transform duration-300">
+                    <img src="./img5.png" alt="Equipment 5" class="h-28 md:h-40 w-full object-contain hover:scale-110 transition-transform duration-300">
+                    <img src="./img6.png" alt="Equipment 6" class="h-28 md:h-40 w-full object-contain hover:scale-110 transition-transform duration-300">
                 </div>
             </div>
 
@@ -520,41 +683,66 @@
 
             </div>
             <!-- ── end col_12_34 ── -->
-
-            <!-- Bottom colour bar -->
-            <div class="mt-16 w-full" style="height: 20px; background: linear-gradient(105deg, #7B0000 74%, #F9D30D 74%);"></div>
-
+            <div
+                class="mt-16 relative left-1/2 -translate-x-1/2 w-screen h-5"
+                style="background:linear-gradient(105deg,#7B0000 74%,#F9D30D 74%);">
+            </div>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const btn = document.getElementById('mobile-menu-btn');
-            const menu = document.getElementById('mobile-menu');
+        // ── Mobile dropdown menu ───────────────────────
+        const mobBtn    = document.getElementById('mob-menu-btn');
+        const mobMenu   = document.getElementById('mobile-menu');
+        const iconBars  = document.getElementById('mob-icon-bars');
+        const iconX     = document.getElementById('mob-icon-x');
 
-            btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
-            });
+        function openMobMenu() {
+            mobMenu.classList.add('open');
+            iconBars.classList.add('hidden');
+            iconX.classList.remove('hidden');
+            mobBtn.setAttribute('aria-expanded', 'true');
+        }
+        function closeMobMenu() {
+            mobMenu.classList.remove('open');
+            iconBars.classList.remove('hidden');
+            iconX.classList.add('hidden');
+            mobBtn.setAttribute('aria-expanded', 'false');
+        }
 
-            const dropdownToggles = document.querySelectorAll('.mobile-dropdown-toggle');
-            
-            dropdownToggles.forEach(toggle => {
-                toggle.addEventListener('click', (e) => {
-                    e.preventDefault(); 
-                    const targetMenuId = toggle.getAttribute('data-target');
-                    const targetMenu = document.getElementById(targetMenuId);
-                    const icon = toggle.querySelector('.dropdown-icon');
-                    
-                    targetMenu.classList.toggle('hidden');
-                    icon.classList.toggle('rotate-180');
-                });
-            });
+        mobBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobMenu.classList.contains('open') ? closeMobMenu() : openMobMenu();
+        });
 
-            const submenuLinks = document.querySelectorAll('.mobile-submenu-link');
-            submenuLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    menu.classList.add('hidden');
-                });
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobMenu.contains(e.target) && e.target !== mobBtn) {
+                closeMobMenu();
+            }
+        });
+
+        // Close when a leaf link is tapped
+        mobMenu.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', closeMobMenu);
+        });
+
+        // Sub-menu arrow toggles (arrow only — text links navigate normally)
+        document.querySelectorAll('.mob-arrow-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const targetId = btn.getAttribute('data-target');
+                const sub      = document.getElementById(targetId);
+                const isOpen   = sub.classList.contains('open');
+
+                // Close all subs first
+                document.querySelectorAll('.mob-sub').forEach(s => s.classList.remove('open'));
+                document.querySelectorAll('.mob-arrow-btn').forEach(b => b.classList.remove('expanded'));
+
+                if (!isOpen) {
+                    sub.classList.add('open');
+                    btn.classList.add('expanded');
+                }
             });
         });
     </script>
