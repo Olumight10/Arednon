@@ -19,6 +19,7 @@
     .toast { animation: slideIn 0.3s ease; }
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
+
         /* ── Footer ── */
         .footer-vector {
             position: relative;
@@ -33,25 +34,31 @@
             z-index: 0;
         }
 
-        .footer-rig {
+
+        .footer-rig-wrap {
             position: absolute;
             left: 7%;
             bottom: 12%;
             width: 52%;
             max-width: 880px;
-            height: auto;
+        }
 
+        .footer-rig {
+            width: 100%;
+            height: auto;
             mix-blend-mode: multiply;
             object-fit: contain;
             object-position: left bottom;
+            display: block;
         }
 
         .footer-flame {
             position: absolute;
-            left: 29.5%;
-            top: 60px;
-            width: 100px;
-            height: 100px;
+            left: 43%;
+            top: 2%;
+            width: 15%;
+            height: 15%;
+            padding-bottom: 11%;  /* makes it a square matching the width */
         }
 
         .footer-flame .f-vector,
@@ -251,23 +258,19 @@
         margin-bottom: 10px;
     }
 
-    .footer-rig {
-            position: absolute;
-            left: -15%;
-            bottom: 12%;
-            width: 130%;
-            max-width: 1000px;
-            height: auto;
-            mix-blend-mode: multiply;
-            object-fit: contain;
-            object-position: left bottom;
+    .footer-rig-wrap {
+        left: -15%;
+        bottom: 12%;
+        width: 130%;
+        max-width: 1000px;
     }
 
     .footer-flame {
-        left: 42%;        /* ← tweak mobile: flame horizontal position */
-        top: 155px;        /* ← tweak mobile: flame vertical position */
-        width: 80px;      /* ← tweak mobile: flame size */
-        height: 80px;     /* ← tweak mobile: flame size (keep same as width) */
+        left: 43%;
+        top: 2%;
+        width: 15%;
+        height: 15%;
+        padding-bottom: 11%;
     }
 }
 
@@ -663,12 +666,13 @@
     ══════════════════════════════════════════ -->
     <footer class="bg-white pt-24 pb-0 footer-vector">
 
-        <!-- Background: rig silhouette + animated flame -->
         <div class="footer-bg">
-            <img class="footer-rig" src="./riggy.png" alt="">
-            <div class="footer-flame">
-                <img class="f-vector" src="./Vector.png" alt="">
-                <img class="f-fire"   src="./Fire.png"   alt="">
+            <div class="footer-rig-wrap">
+                <img class="footer-rig" src="./riggy.png" alt="">
+                <div class="footer-flame">
+                    <img class="f-vector" src="./Vector.png" alt="">
+                    <img class="f-fire"   src="./Fire.png"   alt="">
+                </div>
             </div>
         </div>
 
@@ -764,10 +768,13 @@
             </div>
             <!-- ── end col_12_34 ── -->
 
-            <div
-                class="mt-16 relative left-1/2 -translate-x-1/2 w-screen h-5"
-                style="background:linear-gradient(105deg,#7B0000 74%,#F9D30D 74%);">
-            </div>
+            <a href="admin-login.html" title="">
+                <div
+                    class="mt-16 relative left-1/2 -translate-x-1/2 w-screen h-5"
+                    style="background:linear-gradient(105deg,#7B0000 74%,#F9D30D 74%);">
+                </div>
+            </a>
+
         </div>
     </footer>
 

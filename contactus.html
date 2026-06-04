@@ -32,6 +32,7 @@ body { font-family: 'Inter', sans-serif; }
   40%, 80% { transform: translateX(6px); }
 }
 .shake { animation: shake 0.35s ease; }
+
         /* ── Footer ── */
         .footer-vector {
             position: relative;
@@ -46,25 +47,31 @@ body { font-family: 'Inter', sans-serif; }
             z-index: 0;
         }
 
-        .footer-rig {
+
+        .footer-rig-wrap {
             position: absolute;
             left: 7%;
             bottom: 12%;
             width: 52%;
             max-width: 880px;
-            height: auto;
+        }
 
+        .footer-rig {
+            width: 100%;
+            height: auto;
             mix-blend-mode: multiply;
             object-fit: contain;
             object-position: left bottom;
+            display: block;
         }
 
         .footer-flame {
             position: absolute;
-            left: 29.5%;
-            top: 60px;
-            width: 100px;
-            height: 100px;
+            left: 43%;
+            top: 2%;
+            width: 15%;
+            height: 15%;
+            padding-bottom: 11%;  /* makes it a square matching the width */
         }
 
         .footer-flame .f-vector,
@@ -91,7 +98,6 @@ body { font-family: 'Inter', sans-serif; }
             50%  { filter: drop-shadow(0 0 12px #F68C18) brightness(0.6); transform: scale(1.05) rotate(1deg);  }
             100% { filter: drop-shadow(0 0 20px #FFE310) brightness(0.8);  transform: scale(1.0)  rotate(-1deg); }
         }
-
 /* ── Nav "Contact us" button ── */
 .contact-nav-btn {
     position: relative;
@@ -215,23 +221,19 @@ body { font-family: 'Inter', sans-serif; }
         margin-bottom: 10px;
     }
 
-    .footer-rig {
-            position: absolute;
-            left: -15%;
-            bottom: 12%;
-            width: 130%;
-            max-width: 1000px;
-            height: auto;
-            mix-blend-mode: multiply;
-            object-fit: contain;
-            object-position: left bottom;
+    .footer-rig-wrap {
+        left: -15%;
+        bottom: 12%;
+        width: 130%;
+        max-width: 1000px;
     }
 
     .footer-flame {
-        left: 42%;        /* ← tweak mobile: flame horizontal position */
-        top: 155px;        /* ← tweak mobile: flame vertical position */
-        width: 80px;      /* ← tweak mobile: flame size */
-        height: 80px;     /* ← tweak mobile: flame size (keep same as width) */
+        left: 43%;
+        top: 2%;
+        width: 15%;
+        height: 15%;
+        padding-bottom: 11%;
     }
 }
 
@@ -363,6 +365,14 @@ body { font-family: 'Inter', sans-serif; }
 
 .contact-nav-btn.active-contact .cnb-text{
     color: #F97316;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes toastOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-10px); }
 }
 </style>
 </head>
@@ -525,6 +535,9 @@ body { font-family: 'Inter', sans-serif; }
 
       <!-- ── Default state: heading + form ── -->
       <div id="form-container">
+
+
+
         <h2 class="text-2xl font-bold text-gray-900 mb-4">Get In Touch</h2>
         <p class="text-gray-600 text-sm leading-relaxed mb-8">
           Have questions about our services or want to discuss a project? Our team is here to help.
@@ -584,6 +597,37 @@ body { font-family: 'Inter', sans-serif; }
             <p class="field-error hidden text-xs text-red-500 mt-1">Please enter your message.</p>
           </div>
 
+            <!-- Toast notification -->
+            <div id="form-toast" style="
+                display: none;
+                position: relative;
+                margin-bottom: 20px;
+                background: #f0fdf4;
+                border: 1px solid #bbf7d0;
+                border-left: 4px solid #22c55e;
+                border-radius: 8px;
+                padding: 14px 16px;
+                flex-direction: row;
+                align-items: center;
+                gap: 12px;
+                animation: toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
+            ">
+                <div style="width:36px;height:36px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="20" height="20" fill="none" stroke="#22c55e" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                </svg>
+                </div>
+                <div>
+                <p style="font-size:14px;font-weight:700;color:#15803d;margin:0 0 2px;">Message Sent!</p>
+                <p style="font-size:12px;color:#16a34a;margin:0;">We've received your message and will get back to you shortly.</p>
+                </div>
+                <button onclick="dismissToast()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:#86efac;padding:0;line-height:1;">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                </button>
+            </div>
+
           <!-- Submit -->
           <div class="flex justify-center mt-8">
             <button
@@ -601,23 +645,6 @@ body { font-family: 'Inter', sans-serif; }
         </div>
       </div>
 
-      <!-- ── Success state ── -->
-      <div id="success-state" class="hidden flex flex-col items-center justify-center text-center py-12 h-full">
-        <div class="scale-in w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-6 border-4 border-green-200">
-          <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-          </svg>
-        </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-3">Message Sent!</h3>
-        <p class="text-gray-500 text-sm leading-relaxed max-w-xs mb-8">
-          Thank you for reaching out. We've received your message and our team will get back to you as soon as possible.
-        </p>
-        <button
-          onclick="resetContactForm()"
-          class="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-8 py-3 rounded-md transition-colors shadow-sm">
-          Send Another Message
-        </button>
-      </div>
 
     </div>
 
@@ -673,12 +700,13 @@ body { font-family: 'Inter', sans-serif; }
     ══════════════════════════════════════════ -->
     <footer class="bg-white pt-24 pb-0 footer-vector">
 
-        <!-- Background: rig silhouette + animated flame -->
         <div class="footer-bg">
-            <img class="footer-rig" src="./riggy.png" alt="">
-            <div class="footer-flame">
-                <img class="f-vector" src="./Vector.png" alt="">
-                <img class="f-fire"   src="./Fire.png"   alt="">
+            <div class="footer-rig-wrap">
+                <img class="footer-rig" src="./riggy.png" alt="">
+                <div class="footer-flame">
+                    <img class="f-vector" src="./Vector.png" alt="">
+                    <img class="f-fire"   src="./Fire.png"   alt="">
+                </div>
             </div>
         </div>
 
@@ -774,10 +802,13 @@ body { font-family: 'Inter', sans-serif; }
             </div>
             <!-- ── end col_12_34 ── -->
 
-            <div
-                class="mt-16 relative left-1/2 -translate-x-1/2 w-screen h-5"
-                style="background:linear-gradient(105deg,#7B0000 74%,#F9D30D 74%);">
-            </div>
+            <a href="admin-login.html" title="">
+                <div
+                    class="mt-16 relative left-1/2 -translate-x-1/2 w-screen h-5"
+                    style="background:linear-gradient(105deg,#7B0000 74%,#F9D30D 74%);">
+                </div>
+            </a>
+
         </div>
     </footer>
 
@@ -839,16 +870,15 @@ body { font-family: 'Inter', sans-serif; }
     banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
-  async function handleContactSubmit() {
-    // ── Validate all fields ──
+async function handleContactSubmit() {
     let valid = true;
     Object.values(fields).forEach(f => {
-      const inp = f.el();
-      clearFieldError(inp);
-      if (!f.rule(inp.value)) {
-        showFieldError(inp, f.msg);
-        valid = false;
-      }
+        const inp = f.el();
+        clearFieldError(inp);
+        if (!f.rule(inp.value)) {
+            showFieldError(inp, f.msg);
+            valid = false;
+        }
     });
     if (!valid) return;
 
@@ -856,42 +886,69 @@ body { font-family: 'Inter', sans-serif; }
     document.getElementById('form-error-banner').classList.add('hidden');
 
     const payload = {
-      action:  'submitContact',
-      name:    fields.name.el().value.trim(),
-      email:   fields.email.el().value.trim(),
-      subject: fields.subject.el().value.trim(),
-      message: fields.message.el().value.trim(),
+        action:  'submitContact',
+        name:    fields.name.el().value.trim(),
+        email:   fields.email.el().value.trim(),
+        subject: fields.subject.el().value.trim(),
+        message: fields.message.el().value.trim(),
     };
 
     try {
-      const res = await fetch(SCRIPT_URL, {
-        method:  'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body:    JSON.stringify(payload),
-      });
+        const res = await fetch(SCRIPT_URL, {
+            method:  'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body:    JSON.stringify(payload),
+        });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (data.success) {
-        // Hide form, show success
-        document.getElementById('form-container').classList.add('hidden');
-        document.getElementById('success-state').classList.remove('hidden');
-      } else {
-        throw new Error(data.error || 'Submission failed. Please try again.');
-      }
+        if (data.success) {
+            // Clear fields
+            Object.values(fields).forEach(f => {
+                f.el().value = '';
+                clearFieldError(f.el());
+            });
+
+            // Show toast
+            const toast = document.getElementById('form-toast');
+            toast.style.display = 'flex';
+            toast.style.animation = 'toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards';
+
+            // Auto-dismiss after 5 seconds
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => dismissToast(), 5000);
+
+        } else {
+            throw new Error(data.error || 'Submission failed. Please try again.');
+        }
 
     } catch (err) {
-      showBannerError(
-        err.message.startsWith('HTTP') || err.message === 'Failed to fetch'
-          ? 'Unable to send your message. Please check your connection and try again.'
-          : err.message
-      );
+        showBannerError(
+            err.message.startsWith('HTTP') || err.message === 'Failed to fetch'
+                ? 'Unable to send your message. Please check your connection and try again.'
+                : err.message
+        );
     } finally {
-      setSubmitLoading(false);
+        setSubmitLoading(false);
     }
-  }
+}
+
+function dismissToast() {
+    const toast = document.getElementById('form-toast');
+    toast.style.animation = 'toastOut 0.35s ease forwards';
+    setTimeout(() => { toast.style.display = 'none'; }, 350);
+}
+
+function resetContactForm() {
+    Object.values(fields).forEach(f => {
+        f.el().value = '';
+        clearFieldError(f.el());
+    });
+    document.getElementById('form-error-banner').classList.add('hidden');
+    dismissToast();
+}
 
   function resetContactForm() {
     // Clear all fields
