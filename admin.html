@@ -31,15 +31,15 @@
     .tree-item:hover { background: #fff7ed; color: #f97316; }
     .tree-item.selected { background: #fff7ed; color: #f97316; font-weight: 600; }
     .status-badge { font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 9999px; text-transform: capitalize; }
-    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-pending    { background: #fef3c7; color: #92400e; }
     .status-interviewing { background: #dbeafe; color: #1e40af; }
-    .status-accepted { background: #dcfce7; color: #166534; }
-    .status-rejected { background: #fee2e2; color: #991b1b; }
-    .status-new { background: #ffedd5; color: #c2410c; }
-    .status-read { background: #dcfce7; color: #166534; }
-    .status-unread { background: #f1f5f9; color: #475569; }
-    .status-open { background: #dcfce7; color: #166534; }
-    .status-closed { background: #f1f5f9; color: #6b7280; }
+    .status-accepted   { background: #dcfce7; color: #166534; }
+    .status-rejected   { background: #fee2e2; color: #991b1b; }
+    .status-new        { background: #ffedd5; color: #c2410c; }
+    .status-read       { background: #dcfce7; color: #166534; }
+    .status-unread     { background: #f1f5f9; color: #475569; }
+    .status-open       { background: #dcfce7; color: #166534; }
+    .status-closed     { background: #f1f5f9; color: #6b7280; }
     .main-scroll { height: calc(100vh - 72px); overflow-y: auto; }
     th { font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.04em; }
     tr.app-row { cursor: pointer; transition: background 0.1s; }
@@ -52,7 +52,7 @@
     .main-scroll::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
     /* Search dropdown */
     #search-dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: white; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); z-index: 100; max-height: 340px; overflow-y: auto; }
-    .search-result-item { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center; gap-10px; }
+    .search-result-item { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center; gap: 10px; }
     .search-result-item:last-child { border-bottom: none; }
     .search-result-item:hover { background: #fff7ed; }
     /* Dual input combobox */
@@ -60,6 +60,11 @@
     .combo-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #d1d5db; border-top: none; border-radius: 0 0 8px 8px; max-height: 180px; overflow-y: auto; z-index: 50; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
     .combo-option { padding: 8px 12px; font-size: 0.8rem; cursor: pointer; }
     .combo-option:hover { background: #fff7ed; color: #f97316; }
+    /* Sidebar app sub-menu — always visible, never toggles */
+    #app-tree { display: block !important; }
+    /* Sidebar scrollbar */
+    nav::-webkit-scrollbar { width: 3px; }
+    nav::-webkit-scrollbar-thumb { background: #f3f4f6; border-radius: 10px; }
     @media (max-width: 768px) {
       .sidebar { position: fixed; top: 0; bottom: 0; left: 0; z-index: 40; transform: translateX(-100%); }
       .sidebar.open { transform: translateX(0); }
@@ -71,42 +76,53 @@
 <div class="flex h-screen overflow-hidden" id="app">
   <!-- SIDEBAR -->
   <aside class="sidebar bg-white border-r border-gray-100 flex flex-col z-40 shadow-sm" id="sidebar">
-  <div class="px-6 py-5 border-b border-gray-100">
-    <a href="index.html">
-      <img src="./logo_img.png" alt="Nondera" class="h-9 w-auto"
-        onerror="this.outerHTML='<div class=\'text-gray-900 font-extrabold text-base tracking-wide\'>⬡ NONDERA <span class=\'font-light\'>ENERGY</span></div>'">
-    </a>
-  </div>
-    <nav class="flex-1 py-4 overflow-y-auto">
-      <button onclick="navigate('dashboard')" id="nav-dashboard"
-        class="nav-item active w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-orange-500">
-        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke-width="2"/></svg>
-        Dashboard
-      </button>
-      <button onclick="navigate('inbox')" id="nav-inbox"
-        class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
-        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-        Inbox
-      </button>
-      <button onclick="navigate('jobs')" id="nav-jobs"
-        class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
-        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-        Jobs
-      </button>
-      <div>
-        <button onclick="navigate('applications')" id="nav-applications"
-          class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
-          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          Applications
+    <div class="px-6 py-5 border-b border-gray-100 flex-shrink-0">
+      <a href="index.html">
+        <img src="./logo_img.png" alt="Nondera" class="h-9 w-auto"
+          onerror="this.outerHTML='<div class=\'text-gray-900 font-extrabold text-base tracking-wide\'>⬡ NONDERA <span class=\'font-light\'>ENERGY</span></div>'">
+      </a>
+    </div>
+
+    <nav class="flex-1 py-4 flex flex-col min-h-0">
+      <div class="flex-1 flex flex-col min-h-0">
+        <button onclick="navigate('dashboard')" id="nav-dashboard"
+          class="nav-item active w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-orange-500">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke-width="2"/></svg>
+          Dashboard
         </button>
-        <div id="app-tree" class="hidden pl-4 pb-2"></div>
+
+        <button onclick="navigate('inbox')" id="nav-inbox"
+          class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Inbox
+        </button>
+
+        <button onclick="navigate('jobs')" id="nav-jobs"
+          class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Jobs
+        </button>
+
+        <!-- Applications — sub-menu ALWAYS visible, never toggles -->
+        <div>
+          <button onclick="S._appDeptFilter=''; S._appDesigFilter=''; document.querySelectorAll('.tree-item').forEach(el=>el.classList.remove('selected')); navigate('applications')" id="nav-applications"
+            class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Applications
+          </button>
+          <!-- Permanent tree — built from ALL jobs in openings sheet, grouped by dept -->
+          <div id="app-tree" class="pl-3 pb-1 text-xs text-gray-400 px-5 py-1 overflow-y-auto min-h-0 flex-1 max-h-[40vh]">Loading…</div>
+        </div>
       </div>
-      <div class="mt-4 border-t border-gray-100"></div>
-      <button onclick="handleLogout()"
-        class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 mt-2">
-        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-        Log out
-      </button>
+
+      <!-- Logout pinned at bottom -->
+      <div class="border-t border-gray-100 mt-2 pt-2 flex-shrink-0">
+        <button onclick="handleLogout()"
+          class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          Log out
+        </button>
+      </div>
     </nav>
   </aside>
 
@@ -119,7 +135,6 @@
       <button onclick="openSidebar()" class="md:hidden text-gray-500 hover:text-gray-900">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
-      <!-- Global search with dropdown -->
       <div class="flex-1 max-w-md relative" id="search-wrap">
         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         <input type="text" id="global-search" placeholder="Search jobs, applicants, messages..."
@@ -128,7 +143,6 @@
           class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400 bg-gray-50">
         <div id="search-dropdown" class="hidden"></div>
       </div>
-      <!-- Admin info -->
       <div class="flex items-center gap-3 ml-auto">
         <div id="admin-avatar" class="w-9 h-9 rounded-full bg-orange-100 border-2 border-orange-200 overflow-hidden flex items-center justify-center flex-shrink-0">
           <span id="admin-initials" class="text-orange-600 font-bold text-sm"></span>
@@ -139,7 +153,7 @@
         </div>
       </div>
     </header>
-
+  
     <!-- SCROLLABLE CONTENT -->
     <div class="main-scroll" id="main-scroll">
       <div class="p-6">
@@ -151,13 +165,12 @@
               <p class="text-orange-500 font-medium text-sm">Hello there,</p>
               <h2 id="dash-hello-name" class="text-2xl font-bold text-gray-900"></h2>
             </div>
-            <!-- Timeframe picker -->
             <div class="flex items-center gap-2">
               <span class="text-xs text-gray-500 font-medium">Period:</span>
               <select id="kpi-timeframe" onchange="onTimeframeChange()"
                 class="border border-gray-200 rounded-lg text-xs px-3 py-1.5 text-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-200 bg-white font-medium">
-                <option value="1day">Today</option>
-                <option value="1week" selected>Last 7 days</option>
+                <option value="1day" selected>Today</option>
+                <option value="1week">Last 7 days</option>
                 <option value="2weeks">Last 14 days</option>
                 <option value="1month">Last 30 days</option>
               </select>
@@ -174,7 +187,6 @@
 
           <!-- Widgets row -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <!-- Active Jobs widget -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
               <div class="flex items-center justify-between mb-4">
                 <div>
@@ -197,7 +209,6 @@
                 <div class="text-sm text-gray-400 py-4 text-center">Loading...</div>
               </div>
             </div>
-            <!-- Upcoming Interviews widget -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
               <div class="flex items-center justify-between mb-4">
                 <div>
@@ -216,7 +227,7 @@
                   </button>
                 </div>
               </div>
-              <div id="widget-interviews-list" class="space-y-2 min-h-[80px]">
+                <div id="widget-interviews-list" class="space-y-2 min-h-[80px] overflow-hidden">
                 <div class="text-sm text-gray-400 py-4 text-center">Loading...</div>
               </div>
             </div>
@@ -266,7 +277,6 @@
               Create new job
             </button>
           </div>
-          <!-- Create/Edit Job Form -->
           <div id="create-job-form-wrap" class="hidden mb-5">
             <div class="bg-white rounded-xl border border-orange-200 shadow-sm p-5">
               <div class="flex items-center justify-between mb-4">
@@ -277,7 +287,6 @@
               </div>
               <input type="hidden" id="edit-job-id">
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                <!-- Job Title - dual input combobox -->
                 <div>
                   <label class="block text-xs font-semibold text-gray-600 mb-1">Job Title (Designation) *</label>
                   <div class="combo-wrap">
@@ -288,19 +297,26 @@
                     <div id="combo-designation" class="combo-dropdown hidden"></div>
                   </div>
                 </div>
-                <!-- Location -->
                 <div>
                   <label class="block text-xs font-semibold text-gray-600 mb-1">Location *</label>
-                  <input type="text" id="jf-location" placeholder="e.g. Lagos"
-                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                  <div class="combo-wrap">
+                    <input type="text" id="jf-location" placeholder="e.g. Lagos"
+                      oninput="filterCombo('jf-location','combo-location')"
+                      onfocus="openCombo('combo-location')" autocomplete="off"
+                      class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                    <div id="combo-location" class="combo-dropdown hidden"></div>
+                  </div>
                 </div>
-                <!-- Experience -->
                 <div>
                   <label class="block text-xs font-semibold text-gray-600 mb-1">Years of Experience *</label>
-                  <input type="text" id="jf-experience" placeholder="e.g. 3 to 5 Years"
-                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                  <div class="combo-wrap">
+                    <input type="text" id="jf-experience" placeholder="e.g. 3 to 5 Years"
+                      oninput="filterCombo('jf-experience','combo-experience')"
+                      onfocus="openCombo('combo-experience')" autocomplete="off"
+                      class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                    <div id="combo-experience" class="combo-dropdown hidden"></div>
+                  </div>
                 </div>
-                <!-- Department - dual input combobox -->
                 <div>
                   <label class="block text-xs font-semibold text-gray-600 mb-1">Department *</label>
                   <div class="combo-wrap">
@@ -311,13 +327,16 @@
                     <div id="combo-department" class="combo-dropdown hidden"></div>
                   </div>
                 </div>
-                <!-- Country -->
                 <div>
                   <label class="block text-xs font-semibold text-gray-600 mb-1">Country *</label>
-                  <input type="text" id="jf-country" placeholder="e.g. Nigeria"
-                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                  <div class="combo-wrap">
+                    <input type="text" id="jf-country" placeholder="e.g. Nigeria"
+                      oninput="filterCombo('jf-country','combo-country')"
+                      onfocus="openCombo('combo-country')" autocomplete="off"
+                      class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+                    <div id="combo-country" class="combo-dropdown hidden"></div>
+                  </div>
                 </div>
-                <!-- Nature -->
                 <div>
                   <label class="block text-xs font-semibold text-gray-600 mb-1">Nature *</label>
                   <select id="jf-nature" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400 bg-white">
@@ -375,7 +394,7 @@
             <p class="text-gray-400 text-sm">Loading jobs...</p>
           </div>
           <div id="jobs-list" class="space-y-3 hidden px-1"></div>
-          <div id="jobs-empty" class="hidden text-center py-16 text-gray-400 text-sm">No job postings yet. Create your first job above.</div>
+          <div id="jobs-empty" class="hidden text-center py-16 text-gray-400 text-sm">No job postings yet.</div>
         </div>
 
         <!-- APPLICATIONS -->
@@ -458,6 +477,21 @@
     </div>
   </div>
 
+  <!-- Toggle Live Modal -->
+  <div id="modal-toggle-live" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-md" onclick="event.stopPropagation()">
+    <div class="p-6">
+      <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <h3 id="toggle-live-title" class="text-center font-bold text-gray-900 text-lg mb-2"></h3>
+      <p id="toggle-live-msg" class="text-center text-gray-500 text-sm mb-6"></p>
+      <div class="flex gap-3">
+        <button onclick="closeModal('modal-toggle-live')" class="flex-1 border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+        <button id="confirm-toggle-live-btn" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2.5 rounded-lg transition">Confirm</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Mark Inbox Read Modal -->
   <div id="modal-inbox-read" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-md" onclick="event.stopPropagation()">
     <div class="p-6">
@@ -484,6 +518,48 @@
       <div class="flex gap-3">
         <button onclick="closeModal('modal-delete-inbox')" class="flex-1 border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-lg hover:bg-gray-50 transition">Cancel</button>
         <button id="confirm-delete-inbox-btn" class="flex-1 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-2.5 rounded-lg transition">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Job Title Modal -->
+  <div id="modal-del-jobtitle" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-md" onclick="event.stopPropagation()">
+    <div class="p-6">
+      <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      </div>
+      <h3 id="del-jobtitle-title" class="text-center font-bold text-gray-900 text-lg mb-2"></h3>
+      <p id="del-jobtitle-msg" class="text-center text-gray-500 text-sm mb-4"></p>
+      <div id="del-jobtitle-error" class="hidden mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-center"></div>
+      <div class="flex gap-3">
+        <button onclick="closeModal('modal-del-jobtitle')" class="flex-1 border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+        <button onclick="confirmDeleteJobTitle()" class="flex-1 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-2.5 rounded-lg transition">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+<!-- CV Preview Modal -->
+  <div id="modal-cv-preview" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
+      <div>
+        <h3 id="cv-preview-title" class="font-bold text-gray-900"></h3>
+        <p id="cv-preview-sub" class="text-xs text-gray-400 mt-0.5"></p>
+      </div>
+      <div class="flex items-center gap-2">
+        <a id="cv-download-btn" href="#" target="_blank"
+          class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Download
+        </a>
+        <button onclick="closeModal('modal-cv-preview')" class="text-gray-400 hover:text-gray-600 p-1 rounded">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="cv-preview-body" class="flex-1 overflow-auto p-4 min-h-[400px] flex items-center justify-center bg-gray-50">
+      <div id="cv-preview-loading" class="text-center">
+        <svg class="spinner w-8 h-8 text-orange-400 mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4"/></svg>
+        <p class="text-gray-400 text-sm">Loading preview...</p>
       </div>
     </div>
   </div>
@@ -530,35 +606,32 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyg14iQvC4dnaTTSRlL8
 const S = {
   admin: null,
   currentSection: 'dashboard',
-  previousSection: null,
   dashboard: null,
-  dashTimeframe: '1week',
-  inboxData: [],        // current session display data (includes 'new' display_status for migrated)
+  dashTimeframe: '1day',
+  inboxData: [],
   inboxSelected: new Set(),
+  inboxLoaded: false,
   jobsData: [],
   jobsLoaded: false,
   appsData: [],
   appsLoaded: false,
-  newAppIds: [],
+  appsNewIds: [],           // FIX: was appsNewIds from data.new_apply_ids — now data.new_ids
+  dashLoaded: false,
   widgetJobsPage: 0,
   widgetInterviewsPage: 0,
-  widgetPageSize: 4,
+  widgetPageSize: 3,
   pendingDeleteJobId: null,
-  pendingDeleteJobName: '',
+  pendingToggleLiveJobId: null,
   pendingInboxIds: [],
   pendingAppId: null,
   expandedAppIds: new Set(),
   expandedInboxIds: new Set(),
-  // section loaded flags
-  inboxLoaded: false,
-  dashLoaded: false,
-  // job meta for combos
   jobMeta: { designations: [], departments: [] },
-  // search
+  openingsMeta: { locations: [], countries: [], experiences: [] },
   searchResults: [],
   searchHighlightIdx: -1,
-  // inline refresh tracking
-  sectionNeedsRefresh: { dashboard: false, inbox: false, jobs: false, applications: false }
+  // SPA optimisation: track in-flight requests to avoid duplicate concurrent fetches
+  _fetching: {}
 };
 
 // ============================================================
@@ -580,19 +653,17 @@ function initAdminUI() {
   document.getElementById('dash-hello-name').textContent = a.full_name || 'Admin';
   const initials = (a.full_name || 'A').split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
   document.getElementById('admin-initials').textContent = initials;
-  // Profile pic
   if (a.profile_pic) {
     const av = document.getElementById('admin-avatar');
     av.innerHTML = `<img src="./profile/${esc(a.profile_pic)}" class="w-full h-full object-cover" onerror="this.style.display='none'">`;
   }
-  // Load all sections in background on startup — staggered so they don't all fire at once.
-  // Dashboard loads immediately (it's the landing page).
-  // Others load silently behind the scenes so they're ready when you click.
-  loadDashboard();
+  // Kick off all background loads in parallel — SPA optimisation
+  // Jobs loads first because the sidebar tree depends on it
   loadJobMeta();
-  setTimeout(() => loadInbox(),        800);
-  setTimeout(() => loadJobs(),         1600);
-  setTimeout(() => loadApplications(), 2400);
+  loadOpeningsMeta();
+  loadJobs(false);
+  loadAllJobTitles();
+  loadDashboard(true);      // with spinner (landing section)
 }
 
 function handleLogout() {
@@ -601,32 +672,17 @@ function handleLogout() {
 }
 
 // ============================================================
-// NAVIGATION + INLINE REFRESH
+// NAVIGATION
 // ============================================================
 function navigate(section) {
-  // Trigger inbox migration when navigating to inbox or jobs
-  if (section === 'inbox' || section === 'jobs') {
-    migrateInboxSilently();
-  }
-
-  // Always silently refresh the section we're leaving so it's fresh on return
-  if (S.currentSection && S.currentSection !== section) {
-    silentRefreshSection(S.currentSection);
-    S.sectionNeedsRefresh[S.currentSection] = false;
-  }
-
-  S.previousSection = S.currentSection;
   S.currentSection = section;
 
   ['dashboard','inbox','jobs','applications'].forEach(s => {
     const el = document.getElementById(`nav-${s}`);
     if (!el) return;
-    el.classList.remove('active','text-orange-500');
-    el.classList.add('text-gray-600');
-    if (s === section) {
-      el.classList.add('active','text-orange-500');
-      el.classList.remove('text-gray-600');
-    }
+    el.classList.toggle('active', s === section);
+    el.classList.toggle('text-orange-500', s === section);
+    el.classList.toggle('text-gray-600', s !== section);
   });
 
   document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
@@ -639,94 +695,21 @@ function navigate(section) {
   }
   document.getElementById('main-scroll').scrollTop = 0;
 
-  const tree = document.getElementById('app-tree');
-  if (section === 'applications') tree.classList.remove('hidden');
-  else tree.classList.add('hidden');
-
-  if (section === 'dashboard') {
-    if (!S.dashLoaded) {
-      loadDashboard();
-    } else {
-      // Show cached data instantly, then silently refresh in background
-      renderKPIs(S.dashboard.kpis);
-      renderWidgetJobs(S.dashboard.active_jobs || []);
-      renderWidgetInterviews(S.dashboard.upcoming_interviews || []);
-      silentRefreshDashboard();
-    }
-  }
-  if (section === 'inbox') {
-    if (!S.inboxLoaded) {
-      loadInbox();
-    } else {
-      renderInboxList();
-      loadInbox(); // silent — shows cached, fetches fresh behind it
-    }
-  }
-  if (section === 'jobs') {
-    if (!S.jobsLoaded) {
-      loadJobs();
-    } else {
-      renderJobsList();
-      loadJobs();
-    }
-  }
-  if (section === 'applications') {
-    if (!S.appsLoaded) {
-      loadApplications();
-    } else {
-      buildAppTree();
-      renderAppTable();
-      loadApplications();
-    }
-  }
+  if (section === 'dashboard') loadDashboard(false);
+  if (section === 'inbox')     loadInbox(!S.inboxLoaded);
+  if (section === 'jobs')      loadJobs(!S.jobsLoaded);
+  if (section === 'applications') loadApplications(!S.appsLoaded);
+  if (section !== 'applications') { S._appDeptFilter = ''; S._appDesigFilter = ''; document.querySelectorAll('.tree-item').forEach(el => el.classList.remove('selected')); }
 
   closeSearchDropdown();
   closeSidebar();
 }
 
-// Silently trigger migration without full reload
-async function migrateInboxSilently() {
-  try {
-    const data = await api({ action: 'getInboxes', trigger: 'nav' });
-    if (data.success && data.newly_migrated_ids && data.newly_migrated_ids.length > 0) {
-      // Merge newly migrated as 'new' display_status into existing data
-      if (S.inboxLoaded) {
-        data.newly_migrated_ids.forEach(id => {
-          const existing = S.inboxData.find(m => String(m.box_id) === String(id));
-          if (!existing) {
-            const newItem = data.inboxes.find(m => String(m.box_id) === String(id));
-            if (newItem) S.inboxData.unshift({ ...newItem, display_status: 'new', status: 'new' });
-          }
-        });
-      }
-    }
-  } catch(e) {}
-}
-
-// After an action in one section, silently refresh related sections in the background.
-// Sections currently visible get refreshed immediately; others are flagged and refreshed now too.
-function markSectionsStale(...sections) {
-  sections.forEach(s => {
-    S.sectionNeedsRefresh[s] = true;
-    // Kick off a background refresh right away (unless it's the current section —
-    // the caller handles that separately to avoid double-fetching)
-    if (s !== S.currentSection) {
-      silentRefreshSection(s);
-    }
-  });
-}
-
 // ============================================================
 // SIDEBAR (mobile)
 // ============================================================
-function openSidebar() {
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('sidebar-overlay').classList.remove('hidden');
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.add('hidden');
-}
+function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebar-overlay').classList.remove('hidden'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.add('hidden'); }
 
 // ============================================================
 // GLOBAL SEARCH
@@ -735,83 +718,82 @@ let _searchTimer = null;
 function handleGlobalSearch(val) {
   clearTimeout(_searchTimer);
   if (!val || val.trim().length < 2) { closeSearchDropdown(); return; }
-  _searchTimer = setTimeout(() => doGlobalSearch(val.trim()), 280);
+  doLocalSearch(val.trim());
+  _searchTimer = setTimeout(() => doRemoteSearch(val.trim()), 350);
 }
 
-async function doGlobalSearch(q) {
+function doLocalSearch(q) {
+  const ql = q.toLowerCase();
+  const results = [];
+  S.jobsData.forEach(j => {
+    if ((j.designation||'').toLowerCase().includes(ql) || (j.department||'').toLowerCase().includes(ql))
+      results.push({ type: 'job', section: 'jobs', id: j.job_id, label: j.designation, sub: j.department });
+  });
+  S.appsData.forEach(a => {
+    if ((a.full_name||'').toLowerCase().includes(ql) || (a.email||'').toLowerCase().includes(ql) || (a.designation||'').toLowerCase().includes(ql))
+      results.push({ type: 'application', section: 'applications', id: a.app_id, label: a.full_name, sub: a.designation });
+  });
+  S.inboxData.forEach(m => {
+    if ((m.name||'').toLowerCase().includes(ql) || (m.subject||'').toLowerCase().includes(ql) || (m.email||'').toLowerCase().includes(ql))
+      results.push({ type: 'message', section: 'inbox', id: m.box_id, label: m.name, sub: m.subject });
+  });
+  S.searchResults = results.slice(0, 12);
+  S.searchHighlightIdx = -1;
+  renderSearchDropdown();
+}
+
+async function doRemoteSearch(q) {
   try {
     const data = await api({ action: 'globalSearch', q });
     if (!data.success) return;
-    S.searchResults = data.results || [];
-    S.searchHighlightIdx = -1;
-    renderSearchDropdown(q);
+    const existing = new Set(S.searchResults.map(r => `${r.type}-${r.id}`));
+    const merged = [...S.searchResults];
+    (data.results || []).forEach(r => { if (!existing.has(`${r.type}-${r.id}`)) merged.push(r); });
+    S.searchResults = merged.slice(0, 12);
+    renderSearchDropdown();
   } catch(e) {}
 }
 
-function renderSearchDropdown(q) {
+function renderSearchDropdown() {
   const dd = document.getElementById('search-dropdown');
   if (!S.searchResults.length) { closeSearchDropdown(); return; }
   const icons = { job: '💼', application: '📋', message: '✉️' };
   dd.innerHTML = S.searchResults.map((r, i) => `
     <div class="search-result-item" data-idx="${i}" onclick="selectSearchResult(${i})">
-      <span class="text-base mr-2">${icons[r.type] || '🔍'}</span>
+      <span class="text-base">${icons[r.type] || '🔍'}</span>
       <div class="flex-1 min-w-0">
         <p class="text-sm font-semibold text-gray-900 truncate">${esc(r.label)}</p>
         <p class="text-xs text-gray-400 truncate">${esc(r.sub)}</p>
       </div>
       <span class="text-xs text-orange-400 font-medium ml-2 capitalize">${r.type}</span>
-    </div>
-  `).join('');
+    </div>`).join('');
   dd.classList.remove('hidden');
 }
 
-function showSearchDropdown() {
-  if (S.searchResults.length) document.getElementById('search-dropdown').classList.remove('hidden');
-}
-
-function closeSearchDropdown() {
-  document.getElementById('search-dropdown').classList.add('hidden');
-  S.searchResults = [];
-  S.searchHighlightIdx = -1;
-}
+function showSearchDropdown() { if (S.searchResults.length) document.getElementById('search-dropdown').classList.remove('hidden'); }
+function closeSearchDropdown() { document.getElementById('search-dropdown').classList.add('hidden'); S.searchResults = []; S.searchHighlightIdx = -1; }
 
 function searchKeyNav(e) {
   const dd = document.getElementById('search-dropdown');
   if (dd.classList.contains('hidden')) return;
-  if (e.key === 'ArrowDown') {
-    e.preventDefault();
-    S.searchHighlightIdx = Math.min(S.searchHighlightIdx + 1, S.searchResults.length - 1);
-    highlightSearchResult();
-  } else if (e.key === 'ArrowUp') {
-    e.preventDefault();
-    S.searchHighlightIdx = Math.max(S.searchHighlightIdx - 1, -1);
-    highlightSearchResult();
-  } else if (e.key === 'Enter') {
-    if (S.searchHighlightIdx >= 0) selectSearchResult(S.searchHighlightIdx);
-    else if (S.searchResults.length > 0) selectSearchResult(0);
-  } else if (e.key === 'Escape') {
-    closeSearchDropdown();
-  }
+  if (e.key === 'ArrowDown') { e.preventDefault(); S.searchHighlightIdx = Math.min(S.searchHighlightIdx + 1, S.searchResults.length - 1); highlightSearchResult(); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); S.searchHighlightIdx = Math.max(S.searchHighlightIdx - 1, -1); highlightSearchResult(); }
+  else if (e.key === 'Enter') { if (S.searchHighlightIdx >= 0) selectSearchResult(S.searchHighlightIdx); else if (S.searchResults.length > 0) selectSearchResult(0); }
+  else if (e.key === 'Escape') closeSearchDropdown();
 }
-
 function highlightSearchResult() {
-  document.querySelectorAll('.search-result-item').forEach((el, i) => {
-    el.style.background = i === S.searchHighlightIdx ? '#fff7ed' : '';
-  });
+  document.querySelectorAll('.search-result-item').forEach((el, i) => { el.style.background = i === S.searchHighlightIdx ? '#fff7ed' : ''; });
 }
-
 function selectSearchResult(idx) {
   const r = S.searchResults[idx];
   if (!r) return;
   document.getElementById('global-search').value = '';
   closeSearchDropdown();
-  // Navigate to section and pre-fill search
   navigate(r.section);
   setTimeout(() => {
     if (r.section === 'inbox') {
       const el = document.getElementById('inbox-search');
       if (el) { el.value = r.label; renderInboxList(); }
-      // Expand the matching card
       S.expandedInboxIds.add(String(r.id));
       renderInboxList();
     } else if (r.section === 'applications') {
@@ -820,19 +802,12 @@ function selectSearchResult(idx) {
       S.expandedAppIds.add(r.id);
       renderAppTable();
     } else if (r.section === 'jobs') {
-      // scroll to job card
-      setTimeout(() => {
-        const card = document.getElementById(`job-card-${r.id}`);
-        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 400);
+      setTimeout(() => { const card = document.getElementById(`job-card-${r.id}`); if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 400);
     }
   }, 300);
 }
 
-// Close dropdown when clicking outside
-document.addEventListener('click', (e) => {
-  if (!document.getElementById('search-wrap').contains(e.target)) closeSearchDropdown();
-});
+document.addEventListener('click', (e) => { if (!document.getElementById('search-wrap').contains(e.target)) closeSearchDropdown(); });
 
 // ============================================================
 // MODAL HELPERS
@@ -843,13 +818,13 @@ function openModal(id) {
 }
 function closeModal(id) {
   document.getElementById(id).classList.add('hidden');
-  const anyOpen = ['modal-job-view','modal-delete-job','modal-inbox-read','modal-delete-inbox','modal-app-status']
+  const anyOpen = ['modal-job-view','modal-delete-job','modal-toggle-live','modal-inbox-read','modal-delete-inbox','modal-app-status','modal-del-jobtitle','modal-cv-preview']
     .some(m => !document.getElementById(m).classList.contains('hidden'));
   if (!anyOpen) document.getElementById('modal-backdrop').classList.add('hidden');
 }
 function closeAllModals(e) {
   if (e && e.target !== document.getElementById('modal-backdrop')) return;
-  ['modal-job-view','modal-delete-job','modal-inbox-read','modal-delete-inbox','modal-app-status']
+  ['modal-job-view','modal-delete-job','modal-toggle-live','modal-inbox-read','modal-delete-inbox','modal-app-status','modal-del-jobtitle','modal-cv-preview']
     .forEach(m => document.getElementById(m).classList.add('hidden'));
   document.getElementById('modal-backdrop').classList.add('hidden');
 }
@@ -857,6 +832,48 @@ function closeAllModals(e) {
 // ============================================================
 // UTIL
 // ============================================================
+async function openCv(filename) {
+  // Show modal immediately with loading state
+  document.getElementById('cv-preview-title').textContent = filename;
+  document.getElementById('cv-preview-sub').textContent = 'Fetching from Drive...';
+  document.getElementById('cv-preview-body').innerHTML = `
+    <div class="text-center">
+      <svg class="spinner w-8 h-8 text-orange-400 mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4"/></svg>
+      <p class="text-gray-400 text-sm">Loading preview...</p>
+    </div>`;
+  document.getElementById('cv-download-btn').href = '#';
+  openModal('modal-cv-preview');
+
+  try {
+    const data = await api({ action: 'getCvUrl', filename });
+    if (!data.success) {
+      document.getElementById('cv-preview-body').innerHTML = `<p class="text-red-500 text-sm">${esc(data.error || 'File not found')}</p>`;
+      return;
+    }
+
+    const url  = data.url;
+    const view = data.view_url;
+    const ext  = filename.split('.').pop().toLowerCase();
+
+    document.getElementById('cv-download-btn').href = url;
+    document.getElementById('cv-preview-sub').textContent = filename;
+
+    let previewHTML = '';
+    if (['jpg','jpeg','png','gif','webp'].includes(ext)) {
+      previewHTML = `<img src="${url}" alt="CV Preview" class="max-w-full max-h-[70vh] rounded-lg shadow object-contain">`;
+    } else if (ext === 'pdf') {
+      previewHTML = `<iframe src="${view}" class="w-full rounded-lg border border-gray-200" style="height:65vh;" frameborder="0"></iframe>`;
+    } else {
+      // doc, docx, xlsx etc — use Google Docs viewer
+      previewHTML = `<iframe src="${view}" class="w-full rounded-lg border border-gray-200" style="height:65vh;" frameborder="0"></iframe>`;
+    }
+    document.getElementById('cv-preview-body').innerHTML = previewHTML;
+
+  } catch(e) {
+    document.getElementById('cv-preview-body').innerHTML = `<p class="text-red-500 text-sm">Network error loading CV.</p>`;
+  }
+}
+
 function esc(s) {
   if (!s) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -886,7 +903,33 @@ function displayToDateInput(val) {
 }
 
 // ============================================================
-// JOB META (for comboboxes)
+// FIX: Parse "Mon, 25 May 2026 - 3:00PM" format used by backend formatDateTime()
+// Standard new Date() cannot parse this format — it returns Invalid Date.
+// This parser is used for inbox sort order and any display-formatted date comparisons.
+// ============================================================
+function parseNonderaDate(s) {
+  if (!s) return null;
+  const str = String(s).trim();
+  // Try native first (handles M/d/yyyy, ISO, etc.)
+  const native = new Date(str);
+  if (!isNaN(native.getTime())) return native;
+  // Parse "Mon, 25 May 2026 - 3:00PM" or "Mon, 5 May 2026 - 10:30AM"
+  const re = /^[A-Za-z]+,\s*(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\s*-\s*(\d{1,2}):(\d{2})(AM|PM)$/i;
+  const m = str.match(re);
+  if (!m) return null;
+  const months = { jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11 };
+  const mo = months[m[2].toLowerCase().slice(0,3)];
+  if (mo === undefined) return null;
+  let h = parseInt(m[4]);
+  const min = parseInt(m[5]);
+  const ampm = m[6].toUpperCase();
+  if (ampm === 'PM' && h !== 12) h += 12;
+  if (ampm === 'AM' && h === 12) h = 0;
+  return new Date(parseInt(m[3]), mo, parseInt(m[1]), h, min, 0, 0);
+}
+
+// ============================================================
+// JOB META
 // ============================================================
 async function loadJobMeta() {
   try {
@@ -895,56 +938,65 @@ async function loadJobMeta() {
   } catch(e) {}
 }
 
-function openCombo(comboId) {
-  const combo = document.getElementById(comboId);
-  const inputId = comboId === 'combo-designation' ? 'jf-designation' : 'jf-department';
-  const list = comboId === 'combo-designation' ? S.jobMeta.designations : S.jobMeta.departments;
-  renderComboOptions(combo, list, inputId, '');
-  combo.classList.remove('hidden');
-  // Close other combos
-  document.querySelectorAll('.combo-dropdown').forEach(c => { if (c.id !== comboId) c.classList.add('hidden'); });
+async function loadOpeningsMeta() {
+  try {
+    const data = await api({ action: 'getOpeningsMeta' });
+    if (data.success) S.openingsMeta = data;
+  } catch(e) {}
 }
 
+function getComboList(comboId) {
+  switch(comboId) {
+    case 'combo-designation': return S.jobMeta.designations;
+    case 'combo-department':  return S.jobMeta.departments;
+    case 'combo-location':    return S.openingsMeta.locations;
+    case 'combo-experience':  return S.openingsMeta.experiences;
+    case 'combo-country':     return S.openingsMeta.countries;
+    default: return [];
+  }
+}
+function openCombo(comboId) {
+  const inputId = comboId.replace('combo-', 'jf-');
+  const list = getComboList(comboId);
+  const combo = document.getElementById(comboId);
+  renderComboOptions(combo, list, inputId, '');
+  combo.classList.remove('hidden');
+  document.querySelectorAll('.combo-dropdown').forEach(c => { if (c.id !== comboId) c.classList.add('hidden'); });
+}
 function filterCombo(inputId, comboId) {
   const val = document.getElementById(inputId).value.toLowerCase();
   const combo = document.getElementById(comboId);
-  const list = comboId === 'combo-designation' ? S.jobMeta.designations : S.jobMeta.departments;
+  const list = getComboList(comboId);
   renderComboOptions(combo, list, inputId, val);
   combo.classList.remove('hidden');
 }
-
 function renderComboOptions(combo, list, inputId, filter) {
   const filtered = list.filter(x => x.toLowerCase().includes(filter));
   if (!filtered.length) { combo.classList.add('hidden'); return; }
-  combo.innerHTML = filtered.map(x =>
-    `<div class="combo-option" onclick="selectComboOption('${inputId}','${esc(x)}')">${esc(x)}</div>`
-  ).join('');
+  combo.innerHTML = filtered.map(x => `<div class="combo-option" onclick="selectComboOption('${inputId}','${esc(x)}')">${esc(x)}</div>`).join('');
 }
-
 function selectComboOption(inputId, val) {
   document.getElementById(inputId).value = val;
-  const comboId = inputId === 'jf-designation' ? 'combo-designation' : 'combo-department';
-  document.getElementById(comboId).classList.add('hidden');
+  const comboId = inputId.replace('jf-', 'combo-');
+  const el = document.getElementById(comboId);
+  if (el) el.classList.add('hidden');
 }
-
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.combo-wrap')) {
-    document.querySelectorAll('.combo-dropdown').forEach(c => c.classList.add('hidden'));
-  }
-});
+document.addEventListener('click', (e) => { if (!e.target.closest('.combo-wrap')) document.querySelectorAll('.combo-dropdown').forEach(c => c.classList.add('hidden')); });
 
 // ============================================================
 // TIMEFRAME PICKER
 // ============================================================
 function onTimeframeChange() {
   S.dashTimeframe = document.getElementById('kpi-timeframe').value;
-  loadDashboard();
+  loadDashboard(false);
 }
 
 // ============================================================
 // DASHBOARD
 // ============================================================
-async function loadDashboard() {
+async function loadDashboard(showSpinner) {
+  if (S._fetching['dashboard']) return;
+  S._fetching['dashboard'] = true;
   S.dashLoaded = true;
   try {
     const data = await api({ action: 'getDashboardData', timeframe: S.dashTimeframe });
@@ -954,19 +1006,31 @@ async function loadDashboard() {
     renderWidgetJobs(data.active_jobs || []);
     renderWidgetInterviews(data.upcoming_interviews || []);
   } catch(e) { console.error('Dashboard load failed', e); }
+  finally { S._fetching['dashboard'] = false; }
 }
 
 function renderKPIs(kpis) {
+  const tf = S.dashTimeframe;
+  const tfLabel = { '1day':'today', '1week':'last 7d', '2weeks':'last 14d', '1month':'last 30d' }[tf] || 'today';
+
+  const totalApps = kpis.total_applications || 0;
+  const newApps   = kpis.new_applications  || 0;
+  const totalMsgs = kpis.total_messages    || 0;
+  const newMsgs   = kpis.new_messages      || 0;
+
+  const appPct = totalApps > 0 ? Math.round((newApps / totalApps) * 100) : 0;
+  const msgPct = totalMsgs > 0 ? Math.round((newMsgs / totalMsgs) * 100) : 0;
+
   const defs = [
-    { key: 'total_applications', newKey: 'new_applications', pctKey: 'app_pct', label: 'Total Applications', icon: '📋', section: 'applications' },
-    { key: 'new_applications',   newKey: 'new_applications', pctKey: 'app_pct', label: 'New Applications',   icon: '📥', section: 'applications' },
-    { key: 'total_messages',     newKey: 'new_messages',     pctKey: 'msg_pct', label: 'Total Messages',     icon: '💬', section: 'inbox' },
-    { key: 'new_messages',       newKey: 'new_messages',     pctKey: 'msg_pct', label: 'New Messages',       icon: '📩', section: 'inbox' },
+    { value: totalApps, sub: `${newApps} in ${tfLabel}`,  pct: appPct, label: 'Total Applications', icon: '📋', section: 'applications' },
+    { value: newApps,   sub: `of ${totalApps} total`,      pct: appPct, label: 'New Applications',   icon: '📥', section: 'applications' },
+    { value: totalMsgs, sub: `${newMsgs} in ${tfLabel}`,  pct: msgPct, label: 'Total Messages',     icon: '💬', section: 'inbox' },
+    { value: newMsgs,   sub: `of ${totalMsgs} total`,      pct: msgPct, label: 'New Messages',       icon: '📩', section: 'inbox' },
   ];
-  const tfLabel = { '1day':'today', '1week':'7d', '2weeks':'14d', '1month':'30d' }[S.dashTimeframe] || '7d';
+
   document.getElementById('kpi-grid').innerHTML = defs.map(d => {
-    const pct = kpis[d.pctKey] || 0;
-    const pctColor = pct > 0 ? 'text-green-600 bg-green-50' : pct < 0 ? 'text-red-600 bg-red-50' : 'text-gray-500 bg-gray-100';
+    const pct = d.pct;
+    const pctColor = pct > 0 ? 'text-green-600 bg-green-50' : 'text-gray-500 bg-gray-100';
     const pctSign = pct > 0 ? '+' : '';
     return `
       <div class="kpi-card bg-white rounded-xl p-5 shadow-sm border border-gray-100" onclick="navigate('${d.section}')">
@@ -974,16 +1038,16 @@ function renderKPIs(kpis) {
           <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-xl">${d.icon}</div>
           <span class="text-xs font-bold ${pctColor} px-2 py-0.5 rounded-full">${pctSign}${pct}%</span>
         </div>
-        <div class="text-2xl font-bold text-gray-900 mb-0.5">${(kpis[d.key] || 0).toLocaleString()}</div>
+        <div class="text-2xl font-bold text-gray-900 mb-0.5">${(d.value).toLocaleString()}</div>
         <div class="text-xs text-gray-400 font-medium">${d.label}</div>
-        <div class="text-xs text-gray-300 mt-0.5">${pctSign}${kpis[d.newKey]||0} in last ${tfLabel}</div>
+        <div class="text-xs text-gray-300 mt-0.5">${esc(d.sub)}</div>
       </div>`;
   }).join('');
 }
 
 function renderWidgetJobs(jobs) {
   document.getElementById('widget-jobs-count').textContent = jobs.length;
-  S._widgetJobs = jobs; // already sorted open-first from backend
+  S._widgetJobs = jobs;
   S.widgetJobsPage = 0;
   renderWidgetJobsPage();
 }
@@ -1029,16 +1093,18 @@ function widgetPrev(w) {
 }
 function widgetNext(w) {
   if (w === 'jobs') { if ((S.widgetJobsPage + 1) * S.widgetPageSize < (S._widgetJobs||[]).length) { S.widgetJobsPage++; renderWidgetJobsPage(); } }
-  else { if ((S.widgetInterviewsPage + 1) * S.widgetPageSize < (S._widgetInterviews||[]).length) { S.widgetInterviewsPage++; renderWidgetInterviewsPage(); } }
+  else { const total = (S._widgetInterviews||[]).length; if (total > S.widgetPageSize && (S.widgetInterviewsPage + 1) * S.widgetPageSize < total) { S.widgetInterviewsPage++; renderWidgetInterviewsPage(); } }
 }
 
 // ============================================================
 // INBOX
+// FIX: Sort uses parseNonderaDate() instead of parseFlexDate() so the
+//      "Mon, 25 May 2026 - 3:00PM" format is correctly parsed.
+//      Newest messages always appear at the top.
 // ============================================================
-async function loadInbox() {
-  S.inboxLoaded = true;
-  // Only show spinner if admin is looking at inbox right now with no data yet
-  const showSpinner = S.currentSection === 'inbox' && S.inboxData.length === 0;
+async function loadInbox(showSpinner) {
+  if (S._fetching['inbox']) return;
+  S._fetching['inbox'] = true;
   if (showSpinner) {
     document.getElementById('inbox-loading').classList.remove('hidden');
     document.getElementById('inbox-list').innerHTML = '';
@@ -1046,19 +1112,31 @@ async function loadInbox() {
   }
   try {
     const data = await api({ action: 'getInboxes', trigger: 'inbox_nav' });
-    // Always hide spinner — whether we showed it or it was leftover from HTML default
     document.getElementById('inbox-loading').classList.add('hidden');
     if (!data.success) return;
-    S.inboxData = (data.inboxes || []).map(i => ({
+
+    const allItems = (data.inboxes || []).map(i => ({
       ...i,
       status: i.display_status || i.status
     }));
+
+    // FIX: Sort newest first using our custom date parser
+    allItems.sort((a, b) => {
+      const da = parseNonderaDate(a.submit_date);
+      const db = parseNonderaDate(b.submit_date);
+      if (!da && !db) return 0;
+      if (!da) return 1;   // items without dates go to bottom
+      if (!db) return -1;
+      return db - da;      // descending: newest first
+    });
+
+    S.inboxData = allItems;
+    S.inboxLoaded = true;
     S.inboxSelected.clear();
-    // Render if admin is currently on inbox (covers: they arrived while fetch was running)
     if (S.currentSection === 'inbox') renderInboxList();
   } catch(e) {
     document.getElementById('inbox-loading').classList.add('hidden');
-  }
+  } finally { S._fetching['inbox'] = false; }
 }
 
 function renderInboxList() {
@@ -1119,20 +1197,15 @@ function renderInboxList() {
 
 function toggleInboxExpand(id) {
   const sid = String(id);
-  if (S.expandedInboxIds.has(sid)) S.expandedInboxIds.delete(sid);
-  else S.expandedInboxIds.add(sid);
+  if (S.expandedInboxIds.has(sid)) S.expandedInboxIds.delete(sid); else S.expandedInboxIds.add(sid);
   renderInboxList();
 }
 function toggleInboxSelect(id, checked) {
   const sid = String(id);
-  if (checked) S.inboxSelected.add(sid);
-  else S.inboxSelected.delete(sid);
+  if (checked) S.inboxSelected.add(sid); else S.inboxSelected.delete(sid);
   updateBatchBar();
 }
-function clearInboxSelection() {
-  S.inboxSelected.clear();
-  renderInboxList();
-}
+function clearInboxSelection() { S.inboxSelected.clear(); renderInboxList(); }
 function updateBatchBar() {
   const bar = document.getElementById('inbox-batch-bar');
   const cnt = document.getElementById('batch-count');
@@ -1152,13 +1225,9 @@ function confirmMarkRead(isBatch) {
     const idx = S.inboxData.findIndex(m => String(m.box_id) === id);
     if (idx >= 0) S.inboxData[idx].status = 'read';
   });
-  ids.forEach(id => { post({ action: 'updateInboxStatus', box_id: id, status: 'read', all_new_ids: [] }).catch(() => {}); });
-  if (isBatch) S.inboxSelected.clear();
-  else S.pendingInboxIds = [];
+  if (isBatch) S.inboxSelected.clear(); else S.pendingInboxIds = [];
   renderInboxList();
-  // Inline refresh dashboard + applications (message counts changed)
-  markSectionsStale('dashboard', 'applications');
-  if (S.dashLoaded) silentRefreshDashboard();
+  ids.forEach(id => post({ action: 'updateInboxStatus', box_id: id, status: 'read' }).catch(() => {}));
 }
 function batchMarkRead() {
   if (!S.inboxSelected.size) return;
@@ -1183,17 +1252,21 @@ async function confirmDeleteInbox() {
   S.inboxData = S.inboxData.filter(m => !ids.includes(String(m.box_id)));
   ids.forEach(id => S.inboxSelected.delete(id));
   renderInboxList();
-  try { await post({ action: 'deleteInboxes', box_ids: ids }); } catch {}
-  markSectionsStale('dashboard', 'applications');
-  if (S.dashLoaded) silentRefreshDashboard();
+  post({ action: 'deleteInboxes', box_ids: ids }).catch(() => {});
 }
 
 // ============================================================
 // JOBS
+// FIX: confirmToggleLive sends live as a boolean (true/false),
+//      not the string 'yes'/'no', so the backend's `live ? 'yes' : 'no'`
+//      evaluates correctly. Sending 'no' (truthy string) was causing the
+//      backend to always set 'yes'.
+// Also: buildAppTree() is called after jobs load, using ALL jobs from the
+//       openings sheet grouped by department — not just those with applications.
 // ============================================================
-async function loadJobs() {
-  S.jobsLoaded = true;
-  const showSpinner = S.currentSection === 'jobs' && S.jobsData.length === 0;
+async function loadJobs(showSpinner) {
+  if (S._fetching['jobs']) return;
+  S._fetching['jobs'] = true;
   if (showSpinner) {
     document.getElementById('jobs-loading').classList.remove('hidden');
     document.getElementById('jobs-list').classList.add('hidden');
@@ -1201,13 +1274,208 @@ async function loadJobs() {
   }
   try {
     const data = await api({ action: 'getJobs' });
-    document.getElementById('jobs-loading').classList.add('hidden');
+
     if (!data.success) return;
+
     S.jobsData = data.jobs || [];
-    if (S.currentSection === 'jobs') renderJobsList();
-  } catch {
+    S.jobsLoaded = true;
+
+    buildAppTreeFromJobs();
+
+    if (S.currentSection === 'jobs') {
+      renderJobsList();
+    }
+
+  } catch (e) {
+    console.error(e);
+
+  } finally {
     document.getElementById('jobs-loading').classList.add('hidden');
+    S._fetching['jobs'] = false;
   }
+}
+
+// ============================================================
+// FIX: Sidebar tree — built from ALL jobs in the openings sheet,
+//      grouped by department. Shows every department and every job
+//      title under it, regardless of live/closed status.
+//      Order: Bids and Tender → Administration → Staff → others
+// ============================================================
+async function loadAllJobTitles() {
+  try {
+    const data = await api({ action: 'getAllJobTitles' });
+    if (!data.success) return;
+    S._allJobTitlesDeptMap = data.deptMap;
+    buildAppTreeFromJobs();
+  } catch(e) {}
+}
+
+function openDeleteJobTitleModal(job_id, jobName, dept_id, deptName, isDept) {
+  S._pendingDeleteJobTitle = { job_id, jobName, dept_id, deptName, isDept };
+  const title = isDept ? `Delete Department: "${deptName}"?` : `Delete Job: "${jobName}"?`;
+  const msg = isDept
+    ? `This will remove the <strong>${esc(deptName)}</strong> department and all its job titles from the submenu.`
+    : `This will remove <strong>${esc(jobName)}</strong> from the submenu.`;
+  document.getElementById('del-jobtitle-title').textContent = title;
+  document.getElementById('del-jobtitle-msg').innerHTML = msg;
+  document.getElementById('del-jobtitle-error').classList.add('hidden');
+  document.getElementById('del-jobtitle-error').textContent = '';
+  openModal('modal-del-jobtitle');
+}
+
+async function confirmDeleteJobTitle() {
+  const { job_id, jobName, dept_id, deptName, isDept } = S._pendingDeleteJobTitle || {};
+  const errEl = document.getElementById('del-jobtitle-error');
+  errEl.classList.add('hidden');
+
+  if (!isDept && job_id) {
+    try {
+      const check = await api({ action: 'checkJobInOpenings', job_id });
+      if (check.exists) {
+        errEl.textContent = `Cannot delete "${jobName}" — it exists in active job postings. Remove it from Jobs section first.`;
+        errEl.classList.remove('hidden');
+        return;
+      }
+    } catch(e) {
+      errEl.textContent = 'Network error. Please try again.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+  }
+
+  if (isDept && dept_id) {
+    const deptData = S._allJobTitlesDeptMap ? S._allJobTitlesDeptMap[deptName] : null;
+    const jobIds = deptData ? deptData.jobs.map(j => j.job_id).filter(Boolean) : [];
+    for (const jid of jobIds) {
+      try {
+        const check = await api({ action: 'checkJobInOpenings', job_id: jid });
+        if (check.exists) {
+          errEl.textContent = `Cannot delete "${deptName}" — it still has jobs in active postings. Remove them from Jobs section first.`;
+          errEl.classList.remove('hidden');
+          return;
+        }
+      } catch(e) {
+        errEl.textContent = 'Network error. Please try again.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+    }
+  }
+
+  closeModal('modal-del-jobtitle');
+  await post({ action: 'deleteJobTitle', job_id: isDept ? null : job_id, dept_id: isDept ? dept_id : null });
+  await loadAllJobTitles();
+}
+
+function buildAppTreeFromJobs() {
+  const DEPT_ORDER = ['bids and tender', 'administration', 'staff'];
+
+  // Use jobs sheet master list if available, else fall back to openings
+  const deptMap = {};
+  if (S._allJobTitlesDeptMap && Object.keys(S._allJobTitlesDeptMap).length) {
+    Object.entries(S._allJobTitlesDeptMap).forEach(([dept, info]) => {
+      deptMap[dept] = new Set((info.jobs || []).map(j => j.job));
+    });
+  } else {
+    S.jobsData.forEach(j => {
+      const dept = (j.department || 'Other').trim();
+      if (!deptMap[dept]) deptMap[dept] = new Set();
+      deptMap[dept].add((j.designation || 'Unknown').trim());
+    });
+  }
+
+  // Sort departments: known order first, then alphabetical remainder
+  const depts = Object.keys(deptMap).sort((a, b) => {
+    const ai = DEPT_ORDER.indexOf(a.toLowerCase());
+    const bi = DEPT_ORDER.indexOf(b.toLowerCase());
+    if (ai !== -1 && bi !== -1) return ai - bi;
+    if (ai !== -1) return -1;
+    if (bi !== -1) return 1;
+    return a.localeCompare(b);
+  });
+
+  const tree = document.getElementById('app-tree');
+  const catSelect = document.getElementById('app-category-filter');
+
+  let treeHTML = '';
+  let catOptions = '<option value="">All Categories</option>';
+
+  depts.forEach(dept => {
+    const designations = [...deptMap[dept]].sort();
+    const deptInfo = S._allJobTitlesDeptMap ? S._allJobTitlesDeptMap[dept] : null;
+    const dept_id  = deptInfo ? (deptInfo.dept_id || '') : '';
+    const jobsList = deptInfo ? deptInfo.jobs : designations.map(d => ({ job: d, job_id: '' }));
+
+    treeHTML += `
+      <div class="mt-0.5">
+        <div class="flex items-center group">
+          <button onclick="filterAppByDept('${esc(dept)}', this)"
+            class="tree-item flex-1 text-left px-3 py-1.5 text-xs font-bold text-gray-600 uppercase tracking-wide rounded-lg transition">
+            ${esc(dept)}
+          </button>
+          <button onclick="event.stopPropagation(); openDeleteJobTitleModal('','${esc(dept)}','${esc(dept_id)}','${esc(dept)}',true)"
+            class="opacity-0 group-hover:opacity-100 flex-shrink-0 w-5 h-5 flex items-center justify-center text-gray-300 hover:text-red-500 transition mr-1 rounded"
+            title="Remove department">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="pl-2">
+          ${jobsList.map(jObj => {
+            const jName = typeof jObj === 'string' ? jObj : jObj.job;
+            const jId   = typeof jObj === 'string' ? '' : (jObj.job_id || '');
+            return `
+            <div class="flex items-center group">
+              <button onclick="filterAppByDesig('${esc(jName)}', this)"
+                class="tree-item flex-1 text-left px-3 py-1.5 text-xs text-gray-500 rounded-lg transition">
+                ${esc(jName)}
+              </button>
+              <button onclick="event.stopPropagation(); openDeleteJobTitleModal('${esc(jId)}','${esc(jName)}','${esc(dept_id)}','${esc(dept)}',false)"
+                class="opacity-0 group-hover:opacity-100 flex-shrink-0 w-5 h-5 flex items-center justify-center text-gray-300 hover:text-red-500 transition mr-1 rounded"
+                title="Remove job">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    catOptions += `<optgroup label="${esc(dept)}">${designations.map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('')}</optgroup>`;
+  });
+
+  tree.innerHTML = treeHTML || '<span class="text-xs text-gray-400 px-3">No jobs yet</span>';
+  if (catSelect) catSelect.innerHTML = catOptions;
+}
+
+function filterAppByDept(dept) {
+  const isActive = S._appDeptFilter === dept;
+  document.querySelectorAll('.tree-item').forEach(el => el.classList.remove('selected'));
+  if (isActive) {
+    S._appDeptFilter = '';
+    S._appDesigFilter = '';
+  } else {
+    event.currentTarget.classList.add('selected');
+    const catSelect = document.getElementById('app-category-filter');
+    if (catSelect) catSelect.value = '';
+    S._appDeptFilter = dept;
+    S._appDesigFilter = '';
+  }
+  if (S.currentSection !== 'applications') { navigate('applications'); return; }
+  renderAppTable();
+}
+function filterAppByDesig(desig) {
+  const isActive = S._appDesigFilter === desig;
+  document.querySelectorAll('.tree-item').forEach(el => el.classList.remove('selected'));
+  if (isActive) {
+    S._appDeptFilter = '';
+    S._appDesigFilter = '';
+  } else {
+    event.currentTarget.classList.add('selected');
+    const catSelect = document.getElementById('app-category-filter');
+    if (catSelect) catSelect.value = desig;
+    S._appDeptFilter = '';
+    S._appDesigFilter = desig;
+  }
+  if (S.currentSection !== 'applications') { navigate('applications'); return; }
+  renderAppTable();
 }
 
 function renderJobsList() {
@@ -1225,6 +1493,7 @@ function renderJobsList() {
             <div class="flex items-center gap-2 mb-0.5">
               <div class="w-2.5 h-2.5 rounded-full flex-shrink-0 ${isLive ? 'bg-green-500' : 'bg-gray-300'}"></div>
               <h4 class="font-bold text-gray-900">${esc(j.designation)}</h4>
+              <span class="status-badge ${isLive ? 'status-open' : 'status-closed'}">${isLive ? 'Live' : 'Not Live'}</span>
             </div>
             <p class="text-xs text-gray-400 mb-2">${[j.department, j.location, j.country, j.nature].filter(Boolean).map(esc).join(' • ')}</p>
             ${j.summary ? `<p class="text-sm text-gray-700 mb-2">${esc(j.summary.slice(0,120))}${j.summary.length>120?'…':''}</p>` : ''}
@@ -1236,17 +1505,18 @@ function renderJobsList() {
             </div>
           </div>
           <div class="flex items-center gap-1.5 flex-shrink-0">
-            <!-- View -->
             <button onclick="openJobViewModal('${j.job_id}', false)" title="View"
               class="w-8 h-8 rounded-lg bg-gray-50 text-gray-500 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center transition">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             </button>
-            <!-- Edit -->
+            <button onclick="openToggleLiveModal('${j.job_id}')" title="${isLive ? 'Make Not Live' : 'Make Live'}"
+              class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center transition ${isLive ? 'text-green-600 hover:bg-red-50 hover:text-red-500' : 'text-gray-400 hover:bg-green-50 hover:text-green-600'}">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </button>
             <button onclick="openJobViewModal('${j.job_id}', true)" title="Edit"
               class="w-8 h-8 rounded-lg bg-gray-50 text-gray-500 hover:bg-orange-50 hover:text-orange-600 flex items-center justify-center transition">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             </button>
-            <!-- Delete -->
             <button onclick="openDeleteJobModal('${j.job_id}','${esc(j.designation)}')" title="Delete"
               class="w-8 h-8 rounded-lg bg-gray-50 text-gray-500 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -1255,6 +1525,46 @@ function renderJobsList() {
         </div>
       </div>`;
   }).join('');
+}
+
+function openToggleLiveModal(jobId) {
+  const j = S.jobsData.find(x => x.job_id === jobId);
+  if (!j) return;
+  S.pendingToggleLiveJobId = jobId;
+  const isLive = String(j.live).toLowerCase() === 'yes';
+  document.getElementById('toggle-live-title').textContent = isLive ? 'Remove from Live?' : 'Make Job Live?';
+  document.getElementById('toggle-live-msg').textContent = isLive
+    ? `"${j.designation}" will no longer be visible to applicants.`
+    : `"${j.designation}" will become visible to applicants immediately.`;
+  document.getElementById('confirm-toggle-live-btn').textContent = isLive ? 'Yes, Remove' : 'Yes, Make Live';
+  document.getElementById('confirm-toggle-live-btn').onclick = confirmToggleLive;
+  openModal('modal-toggle-live');
+}
+
+async function confirmToggleLive() {
+  closeModal('modal-toggle-live');
+  const id = S.pendingToggleLiveJobId;
+  const idx = S.jobsData.findIndex(j => j.job_id === id);
+  if (idx < 0) return;
+  const wasLive = String(S.jobsData[idx].live).toLowerCase() === 'yes';
+  const newLive = !wasLive;                       // boolean true/false
+  // Optimistic update
+  S.jobsData[idx].live = newLive ? 'yes' : 'no';
+  renderJobsList();
+  // FIX: Send boolean true/false so backend's `live ? 'yes' : 'no'` evaluates correctly.
+  // Previously sent string 'yes'/'no' which are both truthy → backend always set 'yes'.
+  try {
+    const result = await post({ action: 'toggleJobLive', job_id: id, live: newLive });
+    if (!result.success) throw new Error(result.error || 'toggle failed');
+    // Silently refresh dashboard so active jobs widget reflects new live status
+    S.dashLoaded = false;
+    loadDashboard(false);
+  } catch(e) {
+    // Revert on failure
+    S.jobsData[idx].live = wasLive ? 'yes' : 'no';
+    renderJobsList();
+    console.error('toggleJobLive failed:', e);
+  }
 }
 
 function openJobViewModal(jobId, editable) {
@@ -1266,7 +1576,7 @@ function openJobViewModal(jobId, editable) {
     const skills = j.skill ? String(j.skill).split(';').map(s=>s.trim()).filter(Boolean) : [];
     document.getElementById('job-view-content').innerHTML = `
       <div class="grid grid-cols-2 gap-4 text-sm">
-        ${[['Designation',j.designation],['Department',j.department],['Location',j.location],['Country',j.country],['Nature',j.nature],['Experience',j.years_of_experience],['Open Date',j.open_date],['Close Date',j.close_date],['Posted',j.time_posted],['Status',j.live==='yes'?'Live':'Not Live']].map(([k,v])=>v?`<div><p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">${esc(k)}</p><p class="font-medium text-gray-800 mt-0.5">${esc(v)}</p></div>`:'').join('')}
+        ${[['Designation',j.designation],['Department',j.department],['Location',j.location],['Country',j.country],['Nature',j.nature],['Experience',j.years_of_experience],['Open Date',j.open_date],['Close Date',j.close_date],['Posted',j.time_posted],['Status',String(j.live).toLowerCase()==='yes'?'Live':'Not Live']].map(([k,v])=>v?`<div><p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">${esc(k)}</p><p class="font-medium text-gray-800 mt-0.5">${esc(v)}</p></div>`:'').join('')}
       </div>
       ${j.summary?`<div><p class="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-1">Summary</p><p class="text-sm text-gray-700">${esc(j.summary)}</p></div>`:''}
       ${quals.length?`<div><p class="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-2">Qualifications</p><ul class="space-y-1">${quals.map(q=>`<li class="flex gap-2 text-sm text-gray-700"><span class="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 flex-shrink-0"></span>${esc(q)}</li>`).join('')}</ul></div>`:''}
@@ -1352,21 +1662,18 @@ async function submitJobForm() {
   const errEl = document.getElementById('job-form-error');
   errEl.classList.add('hidden');
   if (!designation) { errEl.textContent = 'Job title is required.'; errEl.classList.remove('hidden'); return; }
-  if (!location) { errEl.textContent = 'Location is required.'; errEl.classList.remove('hidden'); return; }
-  if (!department) { errEl.textContent = 'Department is required.'; errEl.classList.remove('hidden'); return; }
+  if (!location)    { errEl.textContent = 'Location is required.';  errEl.classList.remove('hidden'); return; }
+  if (!department)  { errEl.textContent = 'Department is required.'; errEl.classList.remove('hidden'); return; }
   const btn = document.getElementById('job-form-submit-btn');
   btn.disabled = true; btn.textContent = 'Saving...';
   try {
     const data = await post({ action: editId ? 'updateJob' : 'createJob', job_id: editId||undefined, designation, location, years_of_experience: experience, department, country, nature, qualification, skill, summary, open_date: openDate, close_date: closeDate });
     if (data.success) {
-      // Update job meta combos with any new title/dept
       if (!S.jobMeta.designations.includes(designation)) S.jobMeta.designations.push(designation);
       if (!S.jobMeta.departments.includes(department)) S.jobMeta.departments.push(department);
       toggleCreateJobForm();
-      S.jobsLoaded = false;
-      loadJobs();
-      markSectionsStale('dashboard', 'inbox', 'applications');
-      if (S.dashLoaded) silentRefreshDashboard();
+      loadJobs(false);
+      loadAllJobTitles();
     } else {
       errEl.textContent = data.error || 'Failed to save job.'; errEl.classList.remove('hidden');
     }
@@ -1377,28 +1684,36 @@ async function submitJobForm() {
 }
 
 function openDeleteJobModal(jobId, jobName) {
+  const job = S.jobsData.find(j => j.job_id === jobId);
+  if (job && String(job.live).toLowerCase() === 'yes') {
+    alert(`"${jobName}" is currently live. Please turn it off before deleting.`);
+    return;
+  }
   S.pendingDeleteJobId = jobId;
   document.getElementById('delete-job-name').textContent = `"${jobName}"`;
   openModal('modal-delete-job');
 }
+
 async function confirmDeleteJob() {
   closeModal('modal-delete-job');
   const id = S.pendingDeleteJobId;
   S.jobsData = S.jobsData.filter(j => j.job_id !== id);
+  buildAppTreeFromJobs();
   renderJobsList();
-  try {
-    await post({ action: 'deleteJob', job_id: id });
-    markSectionsStale('dashboard', 'inbox', 'applications');
-    if (S.dashLoaded) silentRefreshDashboard();
-  } catch { S.jobsLoaded = false; loadJobs(); }
+  post({ action: 'deleteJob', job_id: id }).catch(() => loadJobs(false));
 }
 
 // ============================================================
 // APPLICATIONS
+// FIX 1: Use data.new_ids (not data.new_apply_ids) — matches backend response key.
+// FIX 2: new_apply items are pre-migrated by the backend's getAndMigrateApplications,
+//        so they land in data.applications with is_new:true AND their ids in data.new_ids.
+//        The "new" badge renders based on S.appsNewIds which is now populated correctly.
+// FIX 3: The sidebar tree is now driven by S.jobsData (ALL jobs), not S.appsData.
 // ============================================================
-async function loadApplications() {
-  S.appsLoaded = true;
-  const showSpinner = S.currentSection === 'applications' && S.appsData.length === 0;
+async function loadApplications(showSpinner) {
+  if (S._fetching['apps']) return;
+  S._fetching['apps'] = true;
   if (showSpinner) {
     document.getElementById('apps-loading').classList.remove('hidden');
     document.getElementById('apps-table-wrap').classList.add('hidden');
@@ -1406,56 +1721,48 @@ async function loadApplications() {
   }
   try {
     const data = await api({ action: 'getApplications' });
-    document.getElementById('apps-loading').classList.add('hidden');
+    if (showSpinner) document.getElementById('apps-loading').classList.add('hidden');
     if (!data.success) return;
+
     S.appsData = data.applications || [];
-    S.newAppIds = data.new_ids || [];
-    buildAppTree();
+    // FIX: backend returns { new_ids: [...] } — was incorrectly read as data.new_apply_ids
+    S.appsNewIds = data.new_ids || [];
+    S.appsLoaded = true;
+
+    // Rebuild category filter dropdown from jobs data (already loaded)
+    buildAppCategoryFilter();
     if (S.currentSection === 'applications') renderAppTable();
   } catch {
-    document.getElementById('apps-loading').classList.add('hidden');
-  }
+    if (showSpinner) document.getElementById('apps-loading').classList.add('hidden');
+  } finally { S._fetching['apps'] = false; }
 }
 
-function buildAppTree() {
-  const departments = {};
+// Rebuild only the category <select> — tree is built from jobs data separately
+function buildAppCategoryFilter() {
+  const catSelect = document.getElementById('app-category-filter');
+  if (!catSelect) return;
+  const deptMap = {};
   S.appsData.forEach(a => {
     const dept = a.department || 'Other';
     const desig = a.designation || 'Unknown';
-    if (!departments[dept]) departments[dept] = new Set();
-    departments[dept].add(desig);
+    if (!deptMap[dept]) deptMap[dept] = new Set();
+    deptMap[dept].add(desig);
   });
-  const tree = document.getElementById('app-tree');
-  const catSelect = document.getElementById('app-category-filter');
-  let treeHTML = '';
   let catOptions = '<option value="">All Categories</option>';
-  Object.entries(departments).forEach(([dept, designSet]) => {
-    treeHTML += `
-      <div class="mt-1">
-        <button onclick="filterAppByCategory('${esc(dept)}','')"
-          class="tree-item w-full text-left px-3 py-1.5 text-xs font-bold text-gray-600 uppercase tracking-wide hover:bg-orange-50 rounded-lg transition">${esc(dept)}</button>
-        <div class="pl-3">
-          ${[...designSet].map(d=>`
-            <button onclick="filterAppByCategory('${esc(dept)}','${esc(d)}')"
-              class="tree-item w-full text-left px-3 py-1.5 text-xs text-gray-600 rounded-lg transition">${esc(d)}</button>`).join('')}
-        </div>
-      </div>`;
+  Object.entries(deptMap).forEach(([dept, designSet]) => {
     catOptions += `<optgroup label="${esc(dept)}">${[...designSet].map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('')}</optgroup>`;
   });
-  tree.innerHTML = treeHTML;
   catSelect.innerHTML = catOptions;
-}
-
-function filterAppByCategory(dept, desig) {
-  document.querySelectorAll('.tree-item').forEach(el => el.classList.remove('selected'));
-  document.getElementById('app-category-filter').value = desig || dept;
-  renderAppTable();
 }
 
 function renderAppTable() {
   const search = (document.getElementById('app-search')?.value || '').toLowerCase();
   const statusF = document.getElementById('app-status-filter')?.value || '';
   const catF = document.getElementById('app-category-filter')?.value || '';
+  // Tree sidebar filters
+  const deptF = S._appDeptFilter || '';
+  const desigF = S._appDesigFilter || '';
+
   let items = S.appsData;
   if (search) items = items.filter(a =>
     (a.full_name||'').toLowerCase().includes(search) ||
@@ -1463,36 +1770,43 @@ function renderAppTable() {
     (a.designation||'').toLowerCase().includes(search)
   );
   if (statusF) items = items.filter(a => (a.status||'').toLowerCase() === statusF);
-  if (catF) items = items.filter(a =>
+  if (desigF) items = items.filter(a => (a.designation||'').toLowerCase() === desigF.toLowerCase());
+  else if (deptF) items = items.filter(a => (a.department||'').toLowerCase() === deptF.toLowerCase());
+  else if (catF) items = items.filter(a =>
     (a.designation||'').toLowerCase() === catF.toLowerCase() ||
     (a.department||'').toLowerCase() === catF.toLowerCase()
   );
+
   const wrap = document.getElementById('apps-table-wrap');
   const empty = document.getElementById('apps-empty');
   const tbody = document.getElementById('apps-tbody');
   if (!items.length) { wrap.classList.add('hidden'); empty.classList.remove('hidden'); return; }
   empty.classList.add('hidden');
   wrap.classList.remove('hidden');
+
   tbody.innerHTML = items.map(a => {
     const isExpanded = S.expandedAppIds.has(a.app_id);
-    const isNew = S.newAppIds.includes(a.app_id);
+    // FIX: isNew uses S.appsNewIds which is now correctly populated from data.new_ids
+    const isNew = S.appsNewIds.includes(a.app_id);
     const isInterviewing = (a.status||'').toLowerCase() === 'interviewing';
-    // CV: use filename as pointer - display as {app_id}_{full_name}.pdf
     const cvDisplay = a.cv || '';
     const cvCell = cvDisplay
-      ? `<a href="./cvs/${esc(cvDisplay)}" target="_blank" onclick="event.stopPropagation()"
+      ? `<button onclick="event.stopPropagation(); openCv('${esc(cvDisplay)}')"
            class="flex items-center gap-1.5 text-xs text-orange-500 hover:text-orange-600 font-medium">
            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg>
            <span class="truncate max-w-[120px]">${esc(cvDisplay)}</span>
-         </a>`
+         </button>`
       : '<span class="text-xs text-gray-300">—</span>';
+
     return `
       <tr class="app-row border-b border-gray-100 ${isExpanded?'app-row-expanded':''}" onclick="toggleAppExpand('${a.app_id}')">
         <td class="px-5 py-3">
           <div class="flex items-start gap-1.5">
-            ${isNew ? '<span class="status-badge status-new mt-0.5">new</span>' : ''}
             <div>
-              <p class="font-semibold text-gray-900 text-sm">${esc(a.full_name)}</p>
+              <div class="flex items-center gap-1.5">
+                <p class="font-semibold text-gray-900 text-sm">${esc(a.full_name)}</p>
+                ${isNew ? '<span class="status-badge status-new">new</span>' : ''}
+              </div>
               <p class="text-xs text-gray-400">${esc(a.email)}</p>
               ${isExpanded ? `<p class="text-xs text-gray-500 mt-1">📞 ${esc(a.phone||'—')}</p>
                 ${isInterviewing
@@ -1518,8 +1832,7 @@ function renderAppTable() {
 }
 
 function toggleAppExpand(appId) {
-  if (S.expandedAppIds.has(appId)) S.expandedAppIds.delete(appId);
-  else S.expandedAppIds.add(appId);
+  if (S.expandedAppIds.has(appId)) S.expandedAppIds.delete(appId); else S.expandedAppIds.add(appId);
   renderAppTable();
 }
 
@@ -1534,67 +1847,33 @@ function openStatusModal(appId, name, currentStatus) {
 function handleStatusSelectChange() {
   const val = document.getElementById('modal-app-status-select').value;
   const grp = document.getElementById('interview-date-group');
-  if (val === 'interviewing') grp.classList.remove('hidden');
-  else grp.classList.add('hidden');
+  if (val === 'interviewing') grp.classList.remove('hidden'); else grp.classList.add('hidden');
 }
 async function confirmStatusChange() {
   const newStatus = document.getElementById('modal-app-status-select').value;
   const interviewDt = document.getElementById('modal-interview-dt').value;
-  if (newStatus === 'interviewing' && !interviewDt) {
-    document.getElementById('modal-interview-dt').focus(); return;
-  }
+  if (newStatus === 'interviewing' && !interviewDt) { document.getElementById('modal-interview-dt').focus(); return; }
   const id = S.pendingAppId;
   closeModal('modal-app-status');
+  // Optimistic update
   const idx = S.appsData.findIndex(a => a.app_id === id);
   if (idx >= 0) {
     S.appsData[idx].status = newStatus;
     if (interviewDt) {
-      // Format interview date for display: "Mon, 25 May 2026 - 3:00PM"
       const d = new Date(interviewDt);
       const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      let h = d.getHours(), m = d.getMinutes();
+      let h = d.getHours(), mn = d.getMinutes();
       const ampm = h >= 12 ? 'PM' : 'AM';
       h = h % 12; if (h===0) h=12;
-      const ms = m < 10 ? '0'+m : String(m);
+      const ms = mn < 10 ? '0'+mn : String(mn);
       S.appsData[idx].interview_date = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} - ${h}:${ms}${ampm}`;
     }
+    // Once a status is set, the "new" badge should clear
+    S.appsNewIds = S.appsNewIds.filter(nid => nid !== id);
   }
   renderAppTable();
-  try {
-    await post({ action: 'updateApplicationStatus', app_id: id, status: newStatus, interview_date: interviewDt ? new Date(interviewDt).toLocaleString() : '' });
-    markSectionsStale('dashboard', 'inbox', 'jobs');
-    if (S.dashLoaded) silentRefreshDashboard();
-  } catch {}
-}
-
-// ============================================================
-// SILENT BACKGROUND LOADERS (no spinners, update state in place)
-// ============================================================
-
-// Generic dispatcher — all sections use their main load function.
-// The load functions themselves decide whether to show a spinner (first load only).
-function silentRefreshSection(section) {
-  if (section === 'dashboard')    silentRefreshDashboard();
-  if (section === 'inbox')        loadInbox();
-  if (section === 'jobs')         loadJobs();
-  if (section === 'applications') loadApplications();
-}
-
-// SILENT DASHBOARD REFRESH (background, no flicker)
-// ============================================================
-async function silentRefreshDashboard() {
-  try {
-    const data = await api({ action: 'getDashboardData', timeframe: S.dashTimeframe });
-    if (!data.success) return;
-    S.dashboard = data;
-    if (S.currentSection === 'dashboard') {
-      renderKPIs(data.kpis);
-      renderWidgetJobs(data.active_jobs || []);
-      renderWidgetInterviews(data.upcoming_interviews || []);
-    }
-    S.sectionNeedsRefresh.dashboard = false;
-  } catch(e) {}
+  post({ action: 'updateApplicationStatus', app_id: id, status: newStatus, interview_date: interviewDt ? new Date(interviewDt).toLocaleString() : '' }).catch(() => {});
 }
 
 </script>
