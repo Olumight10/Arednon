@@ -756,12 +756,15 @@
 
             </div>
             <!-- ── end col_12_34 ── -->
-            <a href="admin-login.html" title="">
-                <div
-                    class="mt-16 relative left-1/2 -translate-x-1/2 w-screen h-5"
-                    style="background:linear-gradient(105deg,#7B0000 74%,#F9D30D 74%);">
-                </div>
-            </a>
+            <div class="mt-16 relative left-1/2 -translate-x-1/2 w-screen"
+                 style="background:linear-gradient(105deg,#7B0000 74%,#F9D30D 74%); min-height:2.5rem; display:flex; align-items:center; position:relative;">
+                <!-- Copyright text: centered across full bar width -->
+                <p class="text-xs text-white/80 py-2 text-center w-full">
+                    © 2026 Nondera Energy Services | Designed by <a href="https://www.behance.net/chiamakannaji" target="_blank" class="underline text-white hover:text-yellow-200 transition">Amaka Designs</a>
+                </p>
+                <!-- Yellow part: secret admin link, invisible, no cursor change -->
+                <a href="admin.html" title="" style="position:absolute; right:0; top:0; width:26%; height:100%; cursor:default;"></a>
+            </div>
 
         </div>
     </footer>
