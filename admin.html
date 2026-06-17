@@ -113,6 +113,13 @@
           <!-- Permanent tree — built from ALL jobs in openings sheet, grouped by dept -->
           <div id="app-tree" class="pl-3 pb-1 text-xs text-gray-400 px-5 py-1 overflow-y-auto min-h-0 flex-1 max-h-[40vh]">Loading…</div>
         </div>
+
+        <!-- Admins — sp_admin only, hidden by default -->
+        <button onclick="navigate('admins')" id="nav-admins"
+          class="nav-item hidden w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-3-6.65"/></svg>
+          Admins
+        </button>
       </div>
 
       <!-- Logout pinned at bottom -->
@@ -143,7 +150,7 @@
           class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400 bg-gray-50">
         <div id="search-dropdown" class="hidden"></div>
       </div>
-      <div class="flex items-center gap-3 ml-auto">
+      <div class="flex items-center gap-3 ml-auto group relative">
         <div id="admin-avatar" class="w-9 h-9 rounded-full bg-orange-100 border-2 border-orange-200 overflow-hidden flex items-center justify-center flex-shrink-0">
           <span id="admin-initials" class="text-orange-600 font-bold text-sm"></span>
         </div>
@@ -151,6 +158,10 @@
           <p id="admin-name-display" class="text-sm font-semibold text-gray-900"></p>
           <p id="admin-email-display" class="text-xs text-gray-400 truncate max-w-[160px]"></p>
         </div>
+        <button onclick="openAdminEditModal(S.admin.email)" title="Edit profile"
+          class="opacity-0 group-hover:opacity-100 transition-opacity w-7 h-7 rounded-full bg-gray-50 hover:bg-orange-50 text-gray-400 hover:text-orange-500 flex items-center justify-center flex-shrink-0">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        </button>
       </div>
     </header>
   
@@ -442,6 +453,32 @@
           <div id="apps-empty" class="hidden text-center py-16 text-gray-400 text-sm">No applications found.</div>
         </div>
 
+        <!-- ADMINS — sp_admin only -->
+        <div id="section-admins" class="section fade-in">
+          <h2 class="text-xl font-bold text-gray-900 mb-5">Manage Admins</h2>
+          <div id="admins-loading" class="text-center py-12">
+            <svg class="spinner w-8 h-8 text-orange-400 mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4"/></svg>
+            <p class="text-gray-400 text-sm">Loading admins...</p>
+          </div>
+          <div id="admins-table-wrap" class="hidden bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th class="text-left px-5 py-3">Admin</th>
+                    <th class="text-left px-4 py-3">Role</th>
+                    <th class="text-left px-4 py-3">Confirmed</th>
+                    <th class="text-left px-4 py-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admins-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="admins-empty" class="hidden text-center py-16 text-gray-400 text-sm">No admins found.</div>
+          <div id="admins-error" class="hidden text-center py-16 text-red-400 text-sm"></div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -594,6 +631,74 @@
     </div>
   </div>
 
+  <!-- Edit Admin Profile Modal -->
+  <div id="modal-admin-edit" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-md" onclick="event.stopPropagation()">
+    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+      <h3 id="admin-edit-modal-title" class="font-bold text-gray-900">Edit Profile</h3>
+      <button onclick="closeModal('modal-admin-edit')" class="text-gray-400 hover:text-gray-600 p-1 rounded">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="p-6">
+      <input type="hidden" id="admin-edit-original-email">
+      <div class="flex items-center gap-4 mb-5">
+        <div id="admin-edit-pic-preview" class="w-16 h-16 rounded-full bg-orange-100 border-2 border-orange-200 overflow-hidden flex items-center justify-center flex-shrink-0"></div>
+        <div>
+          <label for="admin-edit-pic-input" class="text-xs font-semibold text-orange-500 hover:text-orange-600 cursor-pointer">Change photo</label>
+          <input type="file" id="admin-edit-pic-input" accept="image/*" class="hidden" onchange="handleAdminPicSelect(this)">
+          <p class="text-xs text-gray-400 mt-0.5">JPG or PNG</p>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-xs font-semibold text-gray-600 mb-1">Full Name</label>
+        <input type="text" id="admin-edit-name"
+          class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+      </div>
+      <div class="mb-4">
+        <label class="block text-xs font-semibold text-gray-600 mb-1">Email</label>
+        <input type="email" id="admin-edit-email"
+          class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400">
+      </div>
+      <div id="admin-edit-error" class="hidden mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2"></div>
+      <div class="flex gap-3">
+        <button onclick="closeModal('modal-admin-edit')" class="flex-1 border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+        <button onclick="submitAdminEdit()" id="admin-edit-save-btn" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2.5 rounded-lg transition">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toggle Admin Confirmed Modal -->
+  <div id="modal-admin-confirm-toggle" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-md" onclick="event.stopPropagation()">
+    <div class="p-6">
+      <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <h3 id="admin-confirm-toggle-title" class="text-center font-bold text-gray-900 text-lg mb-2"></h3>
+      <p id="admin-confirm-toggle-msg" class="text-center text-gray-500 text-sm mb-6"></p>
+      <div class="flex gap-3">
+        <button onclick="closeModal('modal-admin-confirm-toggle')" class="flex-1 border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+        <button id="confirm-admin-toggle-btn" onclick="confirmAdminConfirmedToggle()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2.5 rounded-lg transition">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Admin Modal -->
+  <div id="modal-delete-admin" class="hidden bg-white rounded-2xl shadow-2xl w-full max-w-md" onclick="event.stopPropagation()">
+    <div class="p-6">
+      <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <h3 class="text-center font-bold text-gray-900 text-lg mb-2">Delete Admin?</h3>
+      <p class="text-center text-gray-500 text-sm mb-1">You are about to delete <strong id="delete-admin-name" class="text-gray-800"></strong>.</p>
+      <p class="text-center text-red-500 text-xs mb-6">⚠ This will permanently remove them from the admin_detail sheet.</p>
+      <div id="delete-admin-error" class="hidden mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-center"></div>
+      <div class="flex gap-3">
+        <button onclick="closeModal('modal-delete-admin')" class="flex-1 border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+        <button onclick="confirmDeleteAdmin()" class="flex-1 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-2.5 rounded-lg transition">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -615,6 +720,8 @@ const S = {
   jobsLoaded: false,
   appsData: [],
   appsLoaded: false,
+  allAdmins: [],
+  adminsLoaded: false,
   appsNewIds: [],           // FIX: was appsNewIds from data.new_apply_ids — now data.new_ids
   dashLoaded: false,
   widgetJobsPage: 0,
@@ -624,6 +731,11 @@ const S = {
   pendingToggleLiveJobId: null,
   pendingInboxIds: [],
   pendingAppId: null,
+  pendingAdminEditEmail: null,
+  pendingAdminEditPic: null,
+  pendingAdminConfirmEmail: null,
+  pendingAdminConfirmValue: null,
+  pendingDeleteAdminEmail: null,
   expandedAppIds: new Set(),
   expandedInboxIds: new Set(),
   jobMeta: { designations: [], departments: [] },
@@ -647,15 +759,9 @@ const S = {
 })();
 
 function initAdminUI() {
-  const a = S.admin;
-  document.getElementById('admin-name-display').textContent = a.full_name || 'Admin';
-  document.getElementById('admin-email-display').textContent = a.email || '';
-  document.getElementById('dash-hello-name').textContent = a.full_name || 'Admin';
-  const initials = (a.full_name || 'A').split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
-  document.getElementById('admin-initials').textContent = initials;
-  if (a.profile_pic) {
-    const av = document.getElementById('admin-avatar');
-    av.innerHTML = `<img src="./profile/${esc(a.profile_pic)}" class="w-full h-full object-cover" onerror="this.style.display='none'">`;
+  refreshAdminHeaderUI();
+  if (String(S.admin.status || '').toLowerCase() === 'sp_admin') {
+    document.getElementById('nav-admins').classList.remove('hidden');
   }
   // Kick off all background loads in parallel — SPA optimisation
   // Jobs loads first because the sidebar tree depends on it
@@ -666,9 +772,110 @@ function initAdminUI() {
   loadDashboard(true);      // with spinner (landing section)
 }
 
+function refreshAdminHeaderUI() {
+  const a = S.admin;
+  document.getElementById('admin-name-display').textContent = a.full_name || 'Admin';
+  document.getElementById('admin-email-display').textContent = a.email || '';
+  document.getElementById('dash-hello-name').textContent = a.full_name || 'Admin';
+  const initials = (a.full_name || 'A').split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
+  const av = document.getElementById('admin-avatar');
+  av.innerHTML = a.profile_pic
+    ? `<img src="${adminPicSrc(a.profile_pic)}" class="w-full h-full object-cover" onerror="this.remove()">`
+    : `<span id="admin-initials" class="text-orange-600 font-bold text-sm">${initials}</span>`;
+}
+
 function handleLogout() {
   sessionStorage.removeItem('nondera_admin');
   window.location.replace('admin-login.html');
+}
+
+// ============================================================
+// ADMIN PROFILE — self edit (header pen icon) and, once Bit 5/6
+// land, sp_admin editing other admins through the Admins list.
+// ============================================================
+function openAdminEditModal(targetEmail) {
+  S.pendingAdminEditEmail = targetEmail;
+  S.pendingAdminEditPic = null;
+  document.getElementById('admin-edit-error').classList.add('hidden');
+
+  const isSelf = targetEmail === S.admin.email;
+  let sourceName, sourceEmail, sourcePic;
+  if (isSelf) {
+    sourceName = S.admin.full_name || '';
+    sourceEmail = S.admin.email || '';
+    sourcePic = S.admin.profile_pic || '';
+  } else {
+    const rec = (S.allAdmins || []).find(a => a.email === targetEmail);
+    sourceName = rec ? rec.full_name : '';
+    sourceEmail = rec ? rec.email : '';
+    sourcePic = rec ? rec.profile_pic : '';
+  }
+
+  document.getElementById('admin-edit-modal-title').textContent = isSelf ? 'Edit Profile' : ('Edit ' + sourceName);
+  document.getElementById('admin-edit-original-email').value = targetEmail;
+  document.getElementById('admin-edit-name').value = sourceName;
+  document.getElementById('admin-edit-email').value = sourceEmail;
+
+  const preview = document.getElementById('admin-edit-pic-preview');
+  const initials = (sourceName || '?').split(' ').map(p => p[0]).slice(0,2).join('').toUpperCase();
+  preview.innerHTML = sourcePic
+    ? `<img src="${adminPicSrc(sourcePic)}" class="w-full h-full object-cover" onerror="this.remove()">`
+    : `<span class="text-orange-600 font-bold text-lg">${initials}</span>`;
+
+  openModal('modal-admin-edit');
+}
+
+function handleAdminPicSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function() {
+    S.pendingAdminEditPic = { data: reader.result.split(',')[1], mime: file.type, filename: file.name };
+    document.getElementById('admin-edit-pic-preview').innerHTML = `<img src="${reader.result}" class="w-full h-full object-cover">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function submitAdminEdit() {
+  const originalEmail = document.getElementById('admin-edit-original-email').value;
+  const newName  = document.getElementById('admin-edit-name').value.trim();
+  const newEmail = document.getElementById('admin-edit-email').value.trim();
+  const errEl = document.getElementById('admin-edit-error');
+  errEl.classList.add('hidden');
+  if (!newName)  { errEl.textContent = 'Name is required.';  errEl.classList.remove('hidden'); return; }
+  if (!newEmail) { errEl.textContent = 'Email is required.'; errEl.classList.remove('hidden'); return; }
+
+  const btn = document.getElementById('admin-edit-save-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  const payload = { action: 'updateAdminProfile', requester_email: S.admin.email, email: originalEmail, full_name: newName, new_email: newEmail };
+  if (S.pendingAdminEditPic) {
+    payload.profile_pic_data = S.pendingAdminEditPic.data;
+    payload.profile_pic_mime = S.pendingAdminEditPic.mime;
+    payload.profile_pic_filename = S.pendingAdminEditPic.filename;
+  }
+
+  try {
+    const data = await post(payload);
+    if (!data.success) {
+      errEl.textContent = data.error || 'Failed to save changes.';
+      errEl.classList.remove('hidden');
+      btn.disabled = false; btn.textContent = 'Save Changes';
+      return;
+    }
+    if (originalEmail === S.admin.email) {
+      S.admin = Object.assign({}, S.admin, data.admin);
+      sessionStorage.setItem('nondera_admin', JSON.stringify(S.admin));
+      refreshAdminHeaderUI();
+    } else if (typeof loadAdmins === 'function') {
+      loadAdmins(false);
+    }
+    closeModal('modal-admin-edit');
+  } catch(e) {
+    errEl.textContent = 'Network error. Please try again.';
+    errEl.classList.remove('hidden');
+  }
+  btn.disabled = false; btn.textContent = 'Save Changes';
 }
 
 // ============================================================
@@ -677,7 +884,7 @@ function handleLogout() {
 function navigate(section) {
   S.currentSection = section;
 
-  ['dashboard','inbox','jobs','applications'].forEach(s => {
+  ['dashboard','inbox','jobs','applications','admins'].forEach(s => {
     const el = document.getElementById(`nav-${s}`);
     if (!el) return;
     el.classList.toggle('active', s === section);
@@ -699,6 +906,7 @@ function navigate(section) {
   if (section === 'inbox')     loadInbox(!S.inboxLoaded);
   if (section === 'jobs')      loadJobs(!S.jobsLoaded);
   if (section === 'applications') loadApplications(!S.appsLoaded);
+  if (section === 'admins')    loadAdmins(!S.adminsLoaded);
   if (section !== 'applications') { S._appDeptFilter = ''; S._appDesigFilter = ''; document.querySelectorAll('.tree-item').forEach(el => el.classList.remove('selected')); }
 
   closeSearchDropdown();
@@ -818,13 +1026,13 @@ function openModal(id) {
 }
 function closeModal(id) {
   document.getElementById(id).classList.add('hidden');
-  const anyOpen = ['modal-job-view','modal-delete-job','modal-toggle-live','modal-inbox-read','modal-delete-inbox','modal-app-status','modal-del-jobtitle','modal-cv-preview']
+  const anyOpen = ['modal-job-view','modal-delete-job','modal-toggle-live','modal-inbox-read','modal-delete-inbox','modal-app-status','modal-del-jobtitle','modal-cv-preview','modal-admin-edit','modal-admin-confirm-toggle','modal-delete-admin']
     .some(m => !document.getElementById(m).classList.contains('hidden'));
   if (!anyOpen) document.getElementById('modal-backdrop').classList.add('hidden');
 }
 function closeAllModals(e) {
   if (e && e.target !== document.getElementById('modal-backdrop')) return;
-  ['modal-job-view','modal-delete-job','modal-toggle-live','modal-inbox-read','modal-delete-inbox','modal-app-status','modal-del-jobtitle','modal-cv-preview']
+  ['modal-job-view','modal-delete-job','modal-toggle-live','modal-inbox-read','modal-delete-inbox','modal-app-status','modal-del-jobtitle','modal-cv-preview','modal-admin-edit','modal-admin-confirm-toggle','modal-delete-admin']
     .forEach(m => document.getElementById(m).classList.add('hidden'));
   document.getElementById('modal-backdrop').classList.add('hidden');
 }
@@ -873,6 +1081,12 @@ async function openCv(filename) {
     document.getElementById('cv-preview-body').innerHTML = `<p class="text-red-500 text-sm">Network error loading CV.</p>`;
   }
 }
+
+function adminPicSrc(pic) {
+  if (!pic) return '';
+  return /^https?:\/\//i.test(pic) ? pic : ('./profile/' + pic);
+}
+
 
 function esc(s) {
   if (!s) return '';
@@ -1874,6 +2088,157 @@ async function confirmStatusChange() {
   }
   renderAppTable();
   post({ action: 'updateApplicationStatus', app_id: id, status: newStatus, interview_date: interviewDt ? new Date(interviewDt).toLocaleString() : '' }).catch(() => {});
+}
+
+// ============================================================
+// ADMINS — sp_admin only. Confirm-toggle and delete wiring lands
+// in Bit 6; this gives a working list + edit (reuses Bit 4's modal).
+// ============================================================
+async function loadAdmins(showSpinner) {
+  if (S._fetching['admins']) return;
+  S._fetching['admins'] = true;
+  if (showSpinner) {
+    document.getElementById('admins-loading').classList.remove('hidden');
+    document.getElementById('admins-table-wrap').classList.add('hidden');
+    document.getElementById('admins-empty').classList.add('hidden');
+    document.getElementById('admins-error').classList.add('hidden');
+  }
+  try {
+    const data = await api({ action: 'getAllAdmins', requester_email: S.admin.email });
+    if (showSpinner) document.getElementById('admins-loading').classList.add('hidden');
+    if (!data.success) {
+      document.getElementById('admins-error').textContent = data.error || 'Failed to load admins.';
+      document.getElementById('admins-error').classList.remove('hidden');
+      return;
+    }
+    S.allAdmins = data.admins || [];
+    S.adminsLoaded = true;
+    if (S.currentSection === 'admins') renderAdminsList();
+  } catch(e) {
+    if (showSpinner) document.getElementById('admins-loading').classList.add('hidden');
+    document.getElementById('admins-error').textContent = 'Network error loading admins.';
+    document.getElementById('admins-error').classList.remove('hidden');
+  } finally { S._fetching['admins'] = false; }
+}
+
+function renderAdminsList() {
+  const wrap = document.getElementById('admins-table-wrap');
+  const empty = document.getElementById('admins-empty');
+  const tbody = document.getElementById('admins-tbody');
+  if (!S.allAdmins.length) { wrap.classList.add('hidden'); empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  wrap.classList.remove('hidden');
+
+  tbody.innerHTML = S.allAdmins.map(a => {
+    const initials = (a.full_name || '?').split(' ').map(p => p[0]).slice(0,2).join('').toUpperCase();
+    const isSpAdmin = String(a.status||'').toLowerCase() === 'sp_admin';
+    const isConfirmed = String(a.confirmed||'').toLowerCase() === 'yes';
+    const isSelf = a.email === S.admin.email;
+    const avatar = a.profile_pic
+      ? `<img src="${adminPicSrc(a.profile_pic)}" class="w-full h-full object-cover" onerror="this.remove()">`
+      : `<span class="text-orange-600 font-bold text-sm">${initials}</span>`;
+
+    return `
+      <tr class="border-b border-gray-100">
+        <td class="px-5 py-3">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-orange-100 border border-orange-200 overflow-hidden flex items-center justify-center flex-shrink-0">${avatar}</div>
+            <div>
+              <p class="font-semibold text-gray-900 text-sm">${esc(a.full_name)}${isSelf ? ' <span class="text-xs text-gray-400 font-normal">(you)</span>' : ''}</p>
+              <p class="text-xs text-gray-400">${esc(a.email)}</p>
+            </div>
+          </div>
+        </td>
+        <td class="px-4 py-3 text-sm text-gray-700">${isSpAdmin ? 'Super Admin' : 'Admin'}</td>
+        <td class="px-4 py-3">
+          <button onclick="openAdminConfirmToggle('${esc(a.email)}','${esc(a.full_name)}',${isConfirmed})"
+            class="status-badge ${isConfirmed ? 'status-open' : 'status-closed'} cursor-pointer hover:opacity-80 transition">${isConfirmed ? 'Yes' : 'No'}</button>
+        </td>
+        <td class="px-4 py-3">
+          <div class="flex items-center gap-2">
+            <button onclick="openAdminEditModal('${esc(a.email)}')" title="Edit"
+              class="w-8 h-8 rounded-lg bg-gray-50 text-gray-500 hover:bg-orange-50 hover:text-orange-600 flex items-center justify-center transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            </button>
+            <button onclick="openDeleteAdminModal('${esc(a.email)}','${esc(a.full_name)}',${isSpAdmin})" title="Delete"
+              class="w-8 h-8 rounded-lg bg-gray-50 text-gray-500 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+function openAdminConfirmToggle(email, name, currentlyConfirmed) {
+  const newValue = !currentlyConfirmed;
+  if (email === S.admin.email && !newValue) {
+    alert('You cannot set your own confirmed status to No.');
+    return;
+  }
+  S.pendingAdminConfirmEmail = email;
+  S.pendingAdminConfirmValue = newValue;
+  document.getElementById('admin-confirm-toggle-title').textContent = newValue ? 'Confirm this admin?' : 'Unconfirm this admin?';
+  document.getElementById('admin-confirm-toggle-msg').textContent = newValue
+    ? `"${name}" will be able to log in to the admin portal.`
+    : `"${name}" will no longer be able to log in to the admin portal.`;
+  openModal('modal-admin-confirm-toggle');
+}
+
+async function confirmAdminConfirmedToggle() {
+  closeModal('modal-admin-confirm-toggle');
+  const email = S.pendingAdminConfirmEmail;
+  const newValue = S.pendingAdminConfirmValue;
+  const idx = S.allAdmins.findIndex(a => a.email === email);
+  const prevValue = idx >= 0 ? S.allAdmins[idx].confirmed : '';
+  if (idx >= 0) S.allAdmins[idx].confirmed = newValue ? 'Yes' : 'No';
+  renderAdminsList();
+  try {
+    const result = await post({ action: 'updateAdminConfirmed', requester_email: S.admin.email, email, confirmed: newValue ? 'Yes' : 'No' });
+    if (!result.success) throw new Error(result.error || 'Update failed');
+  } catch(e) {
+    if (idx >= 0) S.allAdmins[idx].confirmed = prevValue;
+    renderAdminsList();
+    alert(e.message || 'Failed to update confirmed status.');
+  }
+}
+
+function openDeleteAdminModal(email, name, isSpAdmin) {
+  if (email === S.admin.email) {
+    alert('You cannot delete your own admin account.');
+    return;
+  }
+  if (isSpAdmin) {
+    const spAdminCount = S.allAdmins.filter(a => String(a.status||'').toLowerCase() === 'sp_admin').length;
+    if (spAdminCount <= 1) {
+      alert('Cannot delete the only remaining sp_admin.');
+      return;
+    }
+  }
+  S.pendingDeleteAdminEmail = email;
+  document.getElementById('delete-admin-name').textContent = `"${name}"`;
+  document.getElementById('delete-admin-error').classList.add('hidden');
+  openModal('modal-delete-admin');
+}
+
+async function confirmDeleteAdmin() {
+  const email = S.pendingDeleteAdminEmail;
+  const errEl = document.getElementById('delete-admin-error');
+  errEl.classList.add('hidden');
+  try {
+    const result = await post({ action: 'deleteAdmin', requester_email: S.admin.email, email });
+    if (!result.success) {
+      errEl.textContent = result.error || 'Failed to delete admin.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    closeModal('modal-delete-admin');
+    S.allAdmins = S.allAdmins.filter(a => a.email !== email);
+    renderAdminsList();
+  } catch(e) {
+    errEl.textContent = 'Network error. Please try again.';
+    errEl.classList.remove('hidden');
+  }
 }
 
 </script>
